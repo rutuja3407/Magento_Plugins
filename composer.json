@@ -2,10 +2,6 @@
     "name": "miniorange/saml-single-sign-on",
     "description": "SAML 2.0 Service Provider Plugin to support SSO into Magento using an external Identity Provider",
     "keywords": ["SAML", "Service Provider", "Identity Provider", "SSO", "Single Sign On", "Authentication"],
-    "require": {
-      "php": "~5.5.0|~5.6.0|~7.0.0|~8.1.13",
-      "magento/framework": "~100.0.4"
-    },
     "type": "magento2-module",
     "version": "13.1.0",
      "license": [
