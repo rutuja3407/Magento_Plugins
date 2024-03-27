@@ -1,19 +1,23 @@
 <?php
 
-
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
+
+/**
+ * Exception denotes that user has not configured a SP.
+ */
 class NoIdentityProviderConfiguredException extends \Exception
 {
     public function __construct()
     {
-        $by = SPMessages::parse("\x4e\x4f\x5f\111\104\120\137\x43\x4f\116\x46\111\x47");
-        $qk = 101;
-        parent::__construct($by, $qk, NULL);
+        $message = SPMessages::parse('NO_IDP_CONFIG');
+        $code = 101;
+        parent::__construct($message, $code, NULL);
     }
+
     public function __toString()
     {
-        return __CLASS__ . "\x3a\x20\x5b{$this->code}\x5d\x3a\40{$this->message}\xa";
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }

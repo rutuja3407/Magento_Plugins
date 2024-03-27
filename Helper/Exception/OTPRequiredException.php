@@ -1,19 +1,24 @@
 <?php
 
-
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
+
+/**
+ * Exception denotes that user has not entered
+ * OTP for validation.
+ */
 class OTPRequiredException extends \Exception
 {
     public function __construct()
     {
-        $by = SPMessages::parse("\122\105\121\x55\x49\x52\105\104\x5f\117\x54\x50");
-        $qk = 113;
-        parent::__construct($by, $qk, NULL);
+        $message = SPMessages::parse('REQUIRED_OTP');
+        $code = 113;
+        parent::__construct($message, $code, NULL);
     }
+
     public function __toString()
     {
-        return __CLASS__ . "\72\x20\x5b{$this->code}\x5d\x3a\x20{$this->message}\12";
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }

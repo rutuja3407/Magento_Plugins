@@ -1,87 +1,152 @@
 <?php
 
-
 namespace MiniOrange\SP\Controller\Actions;
 
-use MiniOrange\SP\Helper\Curl;
 use MiniOrange\SP\Block\Sp;
+use MiniOrange\SP\Helper\Curl;
+use MiniOrange\SP\Helper\Exception\OTPSendingFailedException;
+use MiniOrange\SP\Helper\Exception\PasswordMismatchException;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPMessages;
-use MiniOrange\SP\Helper\Exception\PasswordMismatchException;
-use MiniOrange\SP\Helper\Exception\OTPSendingFailedException;
+
+/**
+ * Handles registration of new user account. This is called when the
+ * registration form is submitted. Process the credentials and
+ * information provided by the admin.
+ *
+ * This action class first checks if a customer exists with the email
+ * address provided. If no customer exists then send OTP to the email
+ * and start the validation process.
+ */
 class RegisterNewUserAction extends BaseAdminAction
 {
+    protected $sp;
     private $REQUEST;
     private $loginExistingUserAction;
-    protected $sp;
-    public function __construct(\Magento\Backend\App\Action\Context $Gc, \Magento\Framework\View\Result\PageFactory $VM, \MiniOrange\SP\Helper\SPUtility $Kx, \Magento\Framework\Message\ManagerInterface $c0, \Psr\Log\LoggerInterface $hI, \MiniOrange\SP\Controller\Actions\LoginExistingUserAction $iw, Sp $vT)
+
+    public function __construct(\Magento\Backend\App\Action\Context                       $context,
+                                \Magento\Framework\View\Result\PageFactory                $resultPageFactory,
+                                \MiniOrange\SP\Helper\SPUtility                           $spUtility,
+                                \Magento\Framework\Message\ManagerInterface               $messageManager,
+                                \Psr\Log\LoggerInterface                                  $logger,
+                                \MiniOrange\SP\Controller\Actions\LoginExistingUserAction $loginExistingUserAction,
+                                Sp                                                        $sp)
     {
-        parent::__construct($Gc, $VM, $Kx, $c0, $hI, $vT);
-        $this->loginExistingUserAction = $iw;
-        $this->sp = $vT;
+        //You can use dependency injection to get any class this observer may need.
+        parent::__construct($context, $resultPageFactory, $spUtility, $messageManager, $logger, $sp);
+        $this->loginExistingUserAction = $loginExistingUserAction;
+        $this->sp = $sp;
     }
+
+
+    /**
+     * Execute function to execute the classes function.
+     *
+     * @throws \Exception
+     */
     public function execute()
     {
-        $this->checkIfRequiredFieldsEmpty(array("\x65\155\x61\151\x6c" => $this->REQUEST, "\x70\x61\x73\163\x77\157\x72\x64" => $this->REQUEST, "\x63\x6f\156\x66\151\x72\155\120\141\x73\163\167\x6f\162\144" => $this->REQUEST));
-        $fx = $this->REQUEST["\145\155\x61\151\154"];
-        $Ya = $this->REQUEST["\160\x61\163\x73\x77\x6f\162\x64"];
-        $K9 = $this->REQUEST["\143\157\x6e\146\x69\x72\x6d\120\x61\x73\163\x77\x6f\x72\x64"];
-        $GC = $this->REQUEST["\143\157\155\x70\x61\156\171\116\141\155\145"];
-        $Aq = $this->REQUEST["\x66\151\x72\x73\164\x4e\x61\155\145"];
-        $ko = $this->REQUEST["\x6c\141\163\164\x4e\x61\155\x65"];
-        if (!(strcasecmp($K9, $Ya) != 0)) {
-            goto pi;
-        }
-        throw new PasswordMismatchException();
-        pi:
-        $Up = $this->checkIfUserExists($fx);
-        if (strcasecmp($Up["\163\164\x61\164\x75\x73"], "\103\125\123\x54\117\x4d\105\122\x5f\116\117\124\137\x46\117\125\116\x44") == 0) {
-            goto I4;
-        }
-        $this->loginExistingUserAction->setRequestParam($this->REQUEST)->execute();
-        goto z4;
-        I4:
-        $this->startVerificationProcess($Up, $fx, $GC, $Aq, $ko);
-        z4:
+        $this->checkIfRequiredFieldsEmpty(array('email' => $this->REQUEST, 'password' => $this->REQUEST,
+            'confirmPassword' => $this->REQUEST));
+        $email = $this->REQUEST['email'];
+        $password = $this->REQUEST['password'];
+        $confirmPassword = $this->REQUEST['confirmPassword'];
+        $companyName = $this->REQUEST['companyName'];
+        $firstName = $this->REQUEST['firstName'];
+        $lastName = $this->REQUEST['lastName'];
+        if (strcasecmp($confirmPassword, $password) != 0) throw new PasswordMismatchException;
+        $result = $this->checkIfUserExists($email);
+        if (strcasecmp($result['status'], 'CUSTOMER_NOT_FOUND') == 0)
+            $this->startVerificationProcess($result, $email, $companyName, $firstName, $lastName);
+        else
+            $this->loginExistingUserAction
+                ->setRequestParam($this->REQUEST)
+                ->execute();
     }
-    private function checkIfUserExists($fx)
+
+
+    /**
+     * Function is used to make a cURL call which will check
+     * if a user exists with the given credentials. If a user
+     * is found then his details are fetched automatically and
+     * saved.
+     *
+     * @param $email
+     */
+    private function checkIfUserExists($email)
     {
-        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_EMAIL, $fx);
-        $Ge = Curl::check_customer($fx);
-        return json_decode((string) $Ge, true);
+        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_EMAIL, $email);
+        $content = Curl::check_customer($email);
+        return json_decode((string)$content, true);
     }
-    private function startVerificationProcess($Up, $fx, $GC, $Aq, $ko)
+
+
+    /**
+     * Customer doesn't exist in the miniOrange system. So the
+     * user needs to be verified. This function starts the
+     * verification process by sending OTP to his email.
+     *
+     * @param $result
+     * @param $email
+     * @param $companyName
+     * @param $firstName
+     * @param $lastName
+     */
+    private function startVerificationProcess($result, $email, $companyName, $firstName, $lastName)
     {
-        $Up = Curl::mo_send_otp_token(SPConstants::OTP_TYPE_EMAIL, $fx);
-        $Up = json_decode((string) $Up, true);
-        if (strcasecmp($Up["\x73\164\x61\x74\x75\x73"], "\123\x55\x43\103\105\x53\123") == 0) {
-            goto Fd;
-        }
-        $this->handleOTPSendFailed();
-        goto w8;
-        Fd:
-        $this->handleOTPSentSuccess($Up, $fx, $GC, $Aq, $ko);
-        w8:
+        $result = Curl::mo_send_otp_token(SPConstants::OTP_TYPE_EMAIL, $email);
+        $result = json_decode((string)$result, true);
+        if (strcasecmp($result['status'], 'SUCCESS') == 0)
+            $this->handleOTPSentSuccess($result, $email, $companyName, $firstName, $lastName);
+        else
+            $this->handleOTPSendFailed();
     }
-    private function handleOTPSentSuccess($Up, $fx, $GC, $Aq, $ko)
+
+
+    /**
+     * This function is called to handle what should happen
+     * after OTP has been sent successfully to the user's
+     * email address. Show him the validate OTP screen.
+     * Set the Transaction ID and otpType in session so
+     * that it can fetched later on.
+     *
+     * @param $result
+     * @param $email
+     * @param $companyName
+     * @param $firstName
+     * @param $lastName
+     */
+    private function handleOTPSentSuccess($result, $email, $companyName, $firstName, $lastName)
     {
-        $this->spUtility->setStoreConfig(SPConstants::TXT_ID, $Up["\164\170\111\144"]);
-        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_EMAIL, $fx);
-        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_CNAME, $GC);
-        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_FIRSTNAME, $Aq);
-        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_LASTNAME, $ko);
+        // set session and database values
+        $this->spUtility->setStoreConfig(SPConstants::TXT_ID, $result['txId']);
+        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_EMAIL, $email);
+        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_CNAME, $companyName);
+        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_FIRSTNAME, $firstName);
+        $this->spUtility->setStoreConfig(SPConstants::SAMLSP_LASTNAME, $lastName);
         $this->spUtility->setStoreConfig(SPConstants::OTP_TYPE, SPConstants::OTP_TYPE_EMAIL);
         $this->spUtility->setStoreConfig(SPConstants::REG_STATUS, SPConstants::STATUS_VERIFY_EMAIL);
-        $this->messageManager->addSuccessMessage(SPMessages::parse("\105\115\x41\x49\114\137\117\x54\x50\x5f\123\x45\x4e\124", array("\145\x6d\x61\151\x6c" => $fx)));
+        $this->messageManager->addSuccessMessage(SPMessages::parse('EMAIL_OTP_SENT', array('email' => $email)));
     }
+
+
+    /**
+     * This function is called to handle what should happen
+     * after sending of OTP fails for an email address.
+     *
+     * @param $content
+     */
     private function handleOTPSendFailed()
     {
         $this->spUtility->setStoreConfig(SPConstants::REG_STATUS, SPConstants::STATUS_VERIFY_EMAIL);
-        throw new OTPSendingFailedException();
+        throw new OTPSendingFailedException;
     }
-    public function setRequestParam($nD)
+
+
+    /** Setter for the request Parameter */
+    public function setRequestParam($request)
     {
-        $this->REQUEST = $nD;
+        $this->REQUEST = $request;
         return $this;
     }
 }

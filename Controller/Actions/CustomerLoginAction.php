@@ -1,18 +1,20 @@
 <?php
 
-
 namespace MiniOrange\SP\Controller\Actions;
 
-use Magento\Framework\UrlInterface;
-use Magento\Framework\DataObject;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Quote\Model\QuoteFactory;
 use Magento\Backend\App\Action\Context;
-use MiniOrange\SP\Helper\SPUtility;
-use Magento\Framework\App\ResponseFactory;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseFactory;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\UrlInterface;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use MiniOrange\SP\Helper\SPConstants;
+use MiniOrange\SP\Helper\SPUtility;
+
 class CustomerLoginAction extends BaseAction
 {
     protected $relayState;
@@ -22,62 +24,175 @@ class CustomerLoginAction extends BaseAction
     protected $customerId;
     protected $accountId;
     protected $request;
-    public function __construct(Context $Gc, QuoteFactory $Ly, SPUtility $Kx, \Magento\Customer\Model\Session $FK, ResponseFactory $XF, StoreManagerInterface $Wl, ResultFactory $UZ, RequestInterface $nD)
+    protected $tokenModelFactory;
+
+    public function __construct(
+        Context                         $context,
+        QuoteFactory                    $quoteFactory,
+        SPUtility                       $spUtility,
+        \Magento\Customer\Model\Session $customerSession,
+        ResponseFactory                 $responseFactory,
+        StoreManagerInterface           $storeManager,
+        ResultFactory                   $resultFactory,
+        RequestInterface                $request,
+        TokenFactory                    $tokenModelFactory
+    )
     {
-        $this->customerSession = $FK;
-        $this->responseFactory = $XF;
-        $this->request = $nD;
-        parent::__construct($Gc, $Kx, $Wl, $UZ, $XF);
+        $this->customerSession = $customerSession;
+        $this->responseFactory = $responseFactory;
+        $this->tokenModelFactory = $tokenModelFactory;
+        $this->request = $request;
+        parent::__construct($context, $spUtility, $storeManager, $resultFactory, $responseFactory);
     }
+
+    /**
+     * Execute function to execute the classes function.
+     */
+
     public function execute()
     {
-        $this->spUtility->log_debug("\x43\165\163\164\157\x6d\145\162\114\x6f\x67\151\x6e\x41\143\x74\151\x6f\156\x20\x3a\x20\145\x78\145\x63\x75\164\145\x3a\40\162\x65\154\x61\x79\163\x74\141\164\x65\72\40" . $this->relayState);
+        $idpName = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $this->spUtility->log_debug("CustomerLoginAction", $idpName);
+        $idpDetails = $this->getIdpDetails($idpName);
+        $this->spUtility->log_debug("CustomerLoginAction : execute: relaystate: " . $this->relayState);
         $this->customerSession->setCustomerAsLoggedIn($this->user);
-        $Gh = $this->spUtility->getCustomer($this->customerId);
-        $SR = $this->spUtility->getStoreById($Gh->getStoreId());
-        $EB = new DataObject(["\143\165\x73\164\x6f\x6d\x65\x72\137\151\144" => $this->customerId]);
-        $As = $this->request->getParams();
-        $this->spUtility->update_customer_id_in_customer_visitor($this->customerId);
-        if (empty($As["\160\x61\x72\x65\x6e\164\137\x61\143\143\157\165\156\x74\x5f\151\144"])) {
-            goto S_;
+
+        $customer = $this->spUtility->getCustomer($this->customerId);
+        $store = $this->spUtility->getStoreById($customer->getStoreId());
+        $customerData = new DataObject(['customer_id' => $this->customerId]);
+        $params = $this->request->getParams();
+
+        if (!empty($params['parent_account_id'])) {
+            $this->customerSession->setIsAdmin(true);
+            $this->_eventManager->dispatch('customer_save_after', ['customer' => $params]);
         }
-        $this->customerSession->setIsAdmin(true);
-        $this->_eventManager->dispatch("\x63\x75\163\x74\157\155\145\x72\x5f\x73\x61\x76\x65\137\x61\x66\164\x65\x72", ["\143\x75\x73\164\157\155\145\162" => $As]);
-        S_:
-        $tZ = $this->customerSession->isLoggedIn() && $this->customerSession->getIsAdmin();
-        $this->_eventManager->dispatch("\163\160\x5f\x63\x75\163\x74\x6f\x6d\x65\x72\137\154\x6f\147\151\x6e", ["\143\x75\163\164\x6f\155\x65\x72\137\144\141\164\x61" => $EB]);
-        $this->spUtility->log_debug("\x43\x75\x73\x74\157\x6d\145\x72\114\x6f\147\x69\156\x41\143\x74\x69\157\156\x20\x3a\40\145\170\145\143\165\x74\145\50\x29\x3a\40\40\105\x76\x65\156\x74\40\104\151\163\160\141\164\143\150\145\x64");
-        $JN = $this->spUtility->isBlank($this->relayState) ? $SR->getBaseUrl() : $this->relayState;
-        $this->spUtility->log_debug("\x43\165\x73\164\157\x6d\x65\162\x4c\157\147\151\156\x41\x63\164\151\x6f\156\x20\72\x20\x65\x78\x65\x63\165\x74\x65\x3a\40\x72\145\144\151\162\x65\143\164\125\162\154\56\40" . $JN);
-        $this->spUtility->messageManager->addSuccess("\x59\157\165\x20\141\162\145\40\154\x6f\x67\x67\145\x64\x20\x69\x6e\40\123\165\x63\143\145\163\x73\146\x75\154\154\x79\x2e");
-        $this->responseFactory->create()->setRedirect($JN)->sendResponse();
+        $isAdmin = $this->customerSession->isLoggedIn() && $this->customerSession->getIsAdmin();
+        $this->_eventManager->dispatch('sp_customer_login', ['customer_data' => $customerData]);
+        $this->spUtility->log_debug("CustomerLoginAction : execute():  Event Dispatched");
+
+        $redirectUrl = $this->spUtility->isBlank($this->relayState) ? $store->getBaseUrl() : $this->relayState;
+        $this->spUtility->log_debug("CustomerLoginAction : execute: redirectUrl. " . $redirectUrl);
+
+        if (!empty($idpDetails) && $idpDetails['mo_saml_headless_sso']) {
+            if (!empty($idpDetails['mo_saml_frontend_post_url'])) {
+                $this->handleHeadlessSSO($idpDetails);
+            } else {
+                $this->spUtility->messageManager->addErrorMessage('You have enabled the HeadlessSSO but Frontend URL is not provided in the configuration.');
+                $this->responseFactory->create()->setRedirect($redirectUrl)->sendResponse();
+                exit;
+            }
+
+        }
+
+        $this->spUtility->messageManager->addSuccessMessage('You are logged in Successfully.');
+        $this->responseFactory->create()->setRedirect($redirectUrl)->sendResponse();
         exit;
     }
+
+    protected function getIdpDetails($idpName)
+    {
+        $collection = $this->spUtility->getIDPApps();
+        foreach ($collection as $item) {
+            if ($item->getData()["idp_name"] === $idpName) {
+                return $item->getData();
+            }
+        }
+
+        return null;
+    }
+
+    protected function handleHeadlessSSO($idpDetails)
+    {
+        $this->spUtility->log_debug("CustomerLoginAction: HeadLessSSO Enabled session ");
+
+        if ($this->customerSession->isLoggedIn()) {
+            $this->spUtility->log_debug("CustomerLoginAction: Customer session exists");
+            $customerId = $this->customerSession->getCustomer()->getId();
+            $this->spUtility->log_debug("CustomerLoginAction: CustomerID ", $customerId);
+
+            $customerToken = $this->generateCustomerToken($customerId);
+
+            if ($customerToken) {
+
+                $frontendUrl = $this->generateFrontendPostUrl($idpDetails['mo_saml_frontend_post_url'], $customerToken);
+
+            } else {
+                // Redirect to the frontend URL with an error code
+                $this->spUtility->log_debug("CustomerLoginAction: customer Token is Empty ");
+                $frontendUrl = $this->generateFrontendPostUrl($idpDetails['mo_saml_frontend_post_url'], null, 'Failed to generate customer token');
+
+            }
+        } else {
+            // Redirect to the frontend URL with an error code
+            $this->spUtility->log_debug("CustomerLoginAction: customer Session is not Created");
+            $frontendUrl = $this->generateFrontendPostUrl($idpDetails['mo_saml_frontend_post_url'], null, 'Customer not logged in');
+        }
+        // Redirect to the frontend URL
+        $this->responseFactory->create()->setRedirect($frontendUrl)->sendResponse();
+        exit;
+
+    }
+
+    private function generateCustomerToken($customerId)
+    {
+        try {
+            $customerToken = $this->tokenModelFactory->create()->createCustomerToken($customerId)->getToken();
+            $this->spUtility->log_debug("CustomerLoginAction: Customer token created");
+            return $customerToken;
+        } catch (\Exception $e) {
+            $this->spUtility->log_debug("CustomerLoginAction: Token creation error - " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Generate the frontend URL with customer token and additional parameters.
+     *
+     * @param string $frontendUrl
+     * @param string|null $customerToken
+     * @param array $additionalParams
+     * @return string
+     */
+    protected function generateFrontendPostUrl($frontendUrl, $customerToken = null, $additionalParams = [])
+    {
+        $params = ['customer_token' => $customerToken] + $additionalParams;
+        return $frontendUrl . '?' . http_build_query($params);
+    }
+
+    /** Setter for the user Parameter */
     public function setUser($user)
     {
         $this->user = $user;
-        $this->spUtility->log_debug("\163\x65\164\164\151\x6e\147\x20\125\x73\145\162\x3a\x20");
+        $this->spUtility->log_debug("setting User: ");
         return $this;
     }
-    public function setCustomerId($lA)
+
+    /** Setter for the customerId Parameter */
+    public function setCustomerId($id)
     {
-        $this->customerId = $lA;
-        $this->spUtility->log_debug("\163\x65\164\x74\x69\x6e\x67\x20\x63\x75\x73\x74\x6f\155\x65\x72\x49\144\x3a\x20" . $lA);
+        $this->customerId = $id;
+        $this->spUtility->log_debug("setting customerId: " . $id);
         return $this;
     }
-    public function setRelayState($qY)
+
+    /** Setter for the RelayState Parameter */
+    public function setRelayState($relayState)
     {
-        $this->relayState = $qY;
+        $this->relayState = $relayState;
         return $this;
     }
-    public function setAxCompanyId($ay)
+
+    public function setAxCompanyId($accountId)
     {
-        $this->accountId = $ay;
+        $this->accountId = $accountId;
         return $this;
     }
-    public function setScope($X0)
+
+    public function setScope($isAdminScope)
     {
-        $this->isAdminScope = $X0;
+        $this->isAdminScope = $isAdminScope;
         return $this;
     }
+
+
 }

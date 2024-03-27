@@ -1,39 +1,79 @@
 <?php
 
-
 namespace MiniOrange\SP\Controller\Adminhtml\Metadata;
 
 use Magento\Backend\App\Action\Context;
-use MiniOrange\SP\Helper\SPConstants;
-use MiniOrange\SP\Helper\SPMessages;
-use MiniOrange\SP\Helper\Saml2\SAML2Utilities;
-use MiniOrange\SP\Helper\Saml2\MetadataGenerator;
-use MiniOrange\SP\Controller\Actions\BaseAdminAction;
-use MiniOrange\SP\Block\Sp;
-use MiniOrange\SP\Helper\SPUtility;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Message\ManagerInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\Result\PageFactory;
+use MiniOrange\SP\Block\Sp;
+use MiniOrange\SP\Controller\Actions\BaseAdminAction;
+use MiniOrange\SP\Helper\Saml2\MetadataGenerator;
+use MiniOrange\SP\Helper\SPConstants;
+use MiniOrange\SP\Helper\SPUtility;
+use Psr\Log\LoggerInterface;
+
+/**
+ * This class handles the action for endpoint: mospsaml/metadata/Index
+ * Extends the \Magento\Backend\App\Action for Admin Actions which
+ * inturn extends the \Magento\Framework\App\Action\Action class necessary
+ * for each Controller class
+ */
 class Index extends BaseAdminAction
 {
+
     private $fileSystem;
-    public function __construct(Context $Gc, PageFactory $VM, SPUtility $Kx, ManagerInterface $c0, LoggerInterface $hI, File $PC, Sp $vT)
+
+    public function __construct(
+        Context          $context,
+        PageFactory      $resultPageFactory,
+        SPUtility        $spUtility,
+        ManagerInterface $messageManager,
+        LoggerInterface  $logger,
+        File             $fileSystem,
+        Sp               $sp)
     {
-        parent::__construct($Gc, $VM, $Kx, $c0, $hI, $vT);
-        $this->fileSystem = $PC;
-        $this->sp = $vT;
+        //You can use dependency injection to get any class this observer may need.
+        parent::__construct($context, $resultPageFactory, $spUtility, $messageManager, $logger, $sp);
+        $this->fileSystem = $fileSystem;
+        $this->sp = $sp;
     }
+
+
+    /**
+     * The first function to be called when a Controller class is invoked.
+     * Usually, has all our controller logic. Returns a view/page/template
+     * to be shown to the users.
+     *
+     * This function gets and prepares all our SP config data from the
+     * database. It's called when you visis the moasaml/metadata/Index
+     * URL. It prepares all the values required on the SP setting
+     * page in the backend and returns the block to be displayed.
+     *
+     * @deprecated - don't use this
+     *
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
     public function execute()
     {
-        $gP = $this->spUtility->getIssuerUrl();
-        $pW = $this->spUtility->getAcsUrl();
-        $Vv = $this->spUtility->getFileContents($this->spUtility->getResourcePath("\163\x70\55\143\x65\x72\164\151\x66\151\x63\x61\164\145\56\143\x72\x74"));
-        $Vv = $this->spUtility->desanitizeCert($Vv);
-        $Xe = new MetadataGenerator($gP, TRUE, TRUE, $Vv, $pW, $pW, $pW, $pW, $pW);
-        $Xe = $Xe->generateSPMetadata();
-        $this->fileSystem->filePutContents($this->spUtility->getMetadataFilePath(), $Xe);
+        $entity_id = $this->spUtility->getIssuerUrl();
+        $acs_url = $this->spUtility->getAcsUrl();
+        $certificate = $this->spUtility->getFileContents($this->spUtility->getResourcePath('sp-certificate.crt'));
+        $certificate = $this->spUtility->desanitizeCert($certificate);
+
+        $metadata = new MetadataGenerator($entity_id, TRUE, TRUE, $certificate, $acs_url, $acs_url, $acs_url, $acs_url, $acs_url);
+        $metadata = $metadata->generateSPMetadata();
+        $this->fileSystem->filePutContents($this->spUtility->getMetadataFilePath(), $metadata);
     }
+
+
+    /**
+     * Is the user allowed to view the Metadata File.
+     * This is based on the ACL set by the admin in the backend.
+     * Works in conjugation with acl.xml
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(SPConstants::MODULE_DIR . SPConstants::METADATA_DOWNLOAD);

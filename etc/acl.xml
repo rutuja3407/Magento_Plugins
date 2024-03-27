@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
     <!-- Defines the Access Control for the Settings and Modules -->
     <acl>
@@ -8,7 +8,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::content">
                     <!-- SAML 2.0 SP ACL Settings Definition -->
-                    <resource id="MiniOrange_SP::SP" title="SAML 2.0 SP" sortOrder="10" >
+                    <resource id="MiniOrange_SP::SP" title="SAML 2.0 SP" sortOrder="10">
                         <!-- Service Provider Settings ACL definition -->
                         <resource id="MiniOrange_SP::sp_settings" title="SP Settings" sortOrder="1"/>
                         <!-- Identity Provider Settings ACL definition -->

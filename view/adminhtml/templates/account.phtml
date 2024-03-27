@@ -1,42 +1,49 @@
-<?php
-/*   __________________________________________________
-    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
-    |              on 2024-02-06 06:59:56              |
-    |    GitHub: https://github.com/pk-fr/yakpro-po    |
-    |__________________________________________________|
-*/
+<!--
+    This template file is for the account settings.
+    File acts as a view file for our Account.
+-->
 
-echo "\x3c\41\x2d\55\40\15\xa\x20\40\x20\40\124\150\x69\x73\x20\164\x65\x6d\160\x6c\x61\164\x65\x20\146\x69\154\145\40\x69\163\40\x66\157\x72\x20\x74\x68\x65\x20\x61\x63\x63\157\x75\x6e\x74\x20\x73\145\x74\164\151\x6e\x67\163\56\xd\12\x20\x20\x20\x20\106\x69\x6c\x65\40\x61\143\164\x73\x20\x61\x73\x20\141\40\166\x69\145\x77\40\146\x69\154\x65\x20\146\x6f\x72\x20\157\x75\162\40\101\143\143\x6f\x75\x6e\164\56\xd\xa\x2d\x2d\76\15\xa\15\12";
-$RK = $this->getRegistrationStatus();
-$cN = $this->getCurrentAdminUser()->getEmail();
-echo "\x9\x3c\x64\151\166\x20\x63\x6c\141\x73\x73\75\42\162\157\x77\42\x3e\xd\12\x3c\144\x69\x76\40\x63\x6c\141\x73\163\75\42\x63\157\154\55\163\x6d\55\70\42\x3e\40\40\40\15\12\74\x64\151\x76\40\x63\x6c\x61\x73\163\x3d\42\x70\x61\147\145\x22\40\x69\x64\75\x22\141\143\x63\x6f\x75\156\164\x22\76\x9\11\xd\12\40\40\x20\x20\x20\x20\40\x20\40\x20\40\40\x3c\x64\x69\x76\x20\143\154\141\163\163\x3d\x22\x6d\x6f\163\160\x5f\x74\x61\x62\x6c\x65\137\x6c\141\171\157\x75\x74\42\x3e";
-if ($RK == '') {
-    goto B5k;
+<?php
+// initialize all values required on this page
+$status = $this->getRegistrationStatus();
+$userEmail = $this->getCurrentAdminUser()->getEmail();
+
+echo '	<div class="row">
+<div class="col-sm-8">
+<div class="page" id="account">
+            <div class="mosp_table_layout">';
+
+if ($status == '') {
+    echo $this->getLayout()
+        ->createBlock("MiniOrange\SP\Block\Sp")
+        ->setTemplate("MiniOrange_SP::verify.phtml")
+        ->toHtml();
+} else if (strcmp($status, 'MO_OTP_EMAIL_VALIDATE') == 0
+    || strcmp($status, 'MO_OTP_PHONE_VALIDATE') == 0
+    || strcmp($status, 'MO_OTP_DELIVERED_FAILURE') == 0) {
+    echo $this->getLayout()
+        ->createBlock("MiniOrange\SP\Block\Sp")
+        ->setTemplate("MiniOrange_SP::validate.phtml")
+        ->toHtml();
+} else if ($status == 'MO_VERIFY_CUSTOMER') {
+    echo $this->getLayout()
+        ->createBlock("MiniOrange\SP\Block\Sp")
+        ->setTemplate("MiniOrange_SP::verify.phtml")
+        ->toHtml();
+} else if (!$this->isVerified()) {
+    /*===========================================================================================
+                        THIS IS PREMIUM PLUGIN SPECIFIC
+    =============================================================================================*/
+    echo $this->getLayout()
+        ->createBlock("MiniOrange\SP\Block\Sp")
+        ->setTemplate("MiniOrange_SP::verifylk.phtml")
+        ->toHtml();
+} else {
+    echo $this->getLayout()
+        ->createBlock("MiniOrange\SP\Block\Sp")
+        ->setTemplate("MiniOrange_SP::profile.phtml")
+        ->toHtml();
 }
-if (strcmp($RK, "\115\117\137\117\124\x50\x5f\105\x4d\101\x49\x4c\137\x56\101\x4c\x49\x44\101\124\x45") == 0 || strcmp($RK, "\x4d\x4f\x5f\x4f\124\x50\137\120\110\x4f\116\x45\x5f\126\x41\x4c\x49\x44\x41\x54\x45") == 0 || strcmp($RK, "\x4d\x4f\x5f\117\x54\120\x5f\x44\x45\114\x49\x56\105\x52\x45\x44\137\106\x41\x49\x4c\x55\x52\105") == 0) {
-    goto eK1;
-}
-if ($RK == "\115\x4f\137\x56\x45\x52\111\x46\131\137\103\x55\123\x54\x4f\x4d\105\122") {
-    goto n8n;
-}
-if (!$this->isVerified()) {
-    goto gU1;
-}
-echo $this->getLayout()->createBlock("\x4d\x69\x6e\x69\117\162\141\x6e\147\145\x5c\123\x50\134\x42\154\157\x63\x6b\134\x53\x70")->setTemplate("\x4d\x69\x6e\151\117\162\141\156\147\145\x5f\123\x50\72\x3a\x70\x72\157\x66\x69\x6c\x65\x2e\160\150\x74\x6d\x6c")->toHtml();
-goto Abk;
-gU1:
-echo $this->getLayout()->createBlock("\x4d\x69\156\151\117\162\141\x6e\147\x65\134\123\120\x5c\x42\154\157\143\153\x5c\x53\x70")->setTemplate("\115\151\x6e\151\x4f\162\141\156\147\145\137\123\120\x3a\72\x76\x65\162\151\x66\x79\x6c\153\56\160\x68\x74\155\154")->toHtml();
-Abk:
-goto Drm;
-n8n:
-echo $this->getLayout()->createBlock("\x4d\x69\156\151\x4f\x72\x61\156\147\x65\134\123\120\x5c\x42\x6c\x6f\x63\153\134\x53\160")->setTemplate("\115\x69\156\151\x4f\x72\x61\156\x67\x65\x5f\x53\120\x3a\72\x76\145\x72\151\x66\171\56\x70\x68\x74\155\154")->toHtml();
-Drm:
-goto B2h;
-eK1:
-echo $this->getLayout()->createBlock("\x4d\151\156\x69\117\162\x61\x6e\147\145\134\x53\120\134\x42\x6c\157\143\x6b\134\x53\x70")->setTemplate("\x4d\x69\x6e\151\117\162\x61\x6e\147\145\x5f\123\x50\72\72\166\x61\x6c\151\x64\x61\164\145\x2e\x70\x68\164\x6d\154")->toHtml();
-B2h:
-goto wdP;
-B5k:
-echo $this->getLayout()->createBlock("\x4d\x69\x6e\151\117\162\141\156\x67\x65\x5c\x53\120\x5c\102\x6c\157\143\x6b\x5c\123\160")->setTemplate("\115\151\x6e\x69\x4f\162\x61\x6e\147\145\x5f\123\120\x3a\x3a\x76\x65\162\151\146\x79\x2e\160\x68\164\155\154")->toHtml();
-wdP:
-echo "\40\40\40\40\40\40\40\x3c\x2f\144\x69\166\x3e\xd\xa\x20\x20\x20\40\40\40\x20\40\x3c\x2f\x64\151\166\x3e";
+
+echo '       </div>
+        </div>';

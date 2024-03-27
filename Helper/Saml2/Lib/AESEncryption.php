@@ -1,45 +1,43 @@
 <?php
 
-
 namespace MiniOrange\SP\Helper\Saml2\Lib;
 
+/**
+ * @package    miniOrange
+ * @author     miniOrange Security Software Pvt. Ltd.
+ * @license    GNU/GPLv3
+ * @copyright  Copyright 2015 miniOrange. All Rights Reserved.
+ *
+ *
+ * This file is part of miniOrange plugin.
+ */
 class AESEncryption
 {
-    public static function encrypt_data($WV, $TV)
+    public static function encrypt_data($string, $pass)
     {
-        $Up = '';
-        $X5 = 0;
-        q4:
-        if (!($X5 < strlen($WV))) {
-            goto Hw;
+        $result = '';
+        for ($i = 0; $i < strlen($string); $i++) {
+            $char = substr($string, $i, 1);
+            $keychar = substr($pass, ($i % strlen($pass)) - 1, 1);
+            $char = chr(ord($char) + ord($keychar));
+            $result .= $char;
         }
-        $Pa = substr($WV, $X5, 1);
-        $Ls = substr($TV, $X5 % strlen($TV) - 1, 1);
-        $Pa = chr(ord($Pa) + ord($Ls));
-        $Up .= $Pa;
-        kD:
-        $X5++;
-        goto q4;
-        Hw:
-        return base64_encode($Up);
+
+        return base64_encode($result);
     }
-    public static function decrypt_data($WV, $TV)
+
+    public static function decrypt_data($string, $pass)
     {
-        $Up = '';
-        $WV = base64_decode((string) $WV);
-        $X5 = 0;
-        Gv:
-        if (!($X5 < strlen($WV))) {
-            goto st;
+        $result = '';
+        $string = base64_decode((string)$string);
+
+        for ($i = 0; $i < strlen($string); $i++) {
+            $char = substr($string, $i, 1);
+            $keychar = substr($pass, ($i % strlen($pass)) - 1, 1);
+            $char = chr(ord($char) - ord($keychar));
+            $result .= $char;
         }
-        $Pa = substr($WV, $X5, 1);
-        $Ls = substr($TV, $X5 % strlen($TV) - 1, 1);
-        $Pa = chr(ord($Pa) - ord($Ls));
-        $Up .= $Pa;
-        JY:
-        $X5++;
-        goto Gv;
-        st:
-        return $Up;
+
+        return $result;
     }
 }

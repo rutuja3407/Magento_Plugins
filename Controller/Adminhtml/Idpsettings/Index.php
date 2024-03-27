@@ -1,72 +1,112 @@
 <?php
 
-
 namespace MiniOrange\SP\Controller\Adminhtml\Idpsettings;
 
 use Magento\Backend\App\Action\Context;
-use MiniOrange\SP\Helper\SPConstants;
-use MiniOrange\SP\Helper\SPMessages;
 use MiniOrange\SP\Controller\Actions\BaseAdminAction;
-use MiniOrange\SP\Helper\Saml2\MetadataGenerator;
-use MiniOrange\SP\Block\Sp;
 use MiniOrange\SP\Helper\Curl;
+use MiniOrange\SP\Helper\Saml2\MetadataGenerator;
+use MiniOrange\SP\Helper\SPConstants;
+
+/**
+ * This class handles the action for endpoint: mospsaml/idpsettings/Index
+ * Extends the \Magento\Backend\App\Action for Admin Actions which
+ * inturn extends the \Magento\Framework\App\Action\Action class necessary
+ * for each Controller class
+ */
 class Index extends BaseAdminAction
 {
+
+    /**
+     * The first function to be called when a Controller class is invoked.
+     * Usually, has all our controller logic. Returns a view/page/template
+     * to be shown to the users.
+     *
+     * This function gets and prepares all our SP config data from the
+     * database. It's called when you visis the moasaml/idpsettings/Index
+     * URL. It prepares all the values required on the SP setting
+     * page in the backend and returns the block to be displayed.
+     *
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
     public function execute()
     {
-        $As = $this->getRequest()->getParams();
-        if (!$this->spUtility->check_license_plan(4)) {
-            goto so;
-        }
-        $bc = $this->spUtility->getStoreConfig(SPConstants::SEND_EMAIL);
-        if (!($bc == NULL)) {
-            goto RR;
-        }
-        $MG = $this->spUtility->getCurrentAdminUser()->getData();
-        $zG = $this->spUtility->getMagnetoVersion();
-        $cN = $MG["\x65\x6d\x61\151\x6c"];
-        $Aq = $MG["\146\151\x72\163\164\156\141\x6d\145"];
-        $ko = $MG["\x6c\x61\x73\x74\x6e\x61\155\145"];
-        $Lu = $this->spUtility->getBaseUrl();
-        $D7 = array($Aq, $ko, $zG, $Lu);
-        $this->spUtility->setStoreConfig(SPConstants::SEND_EMAIL, 1);
-        Curl::submit_to_magento_team($cN, "\111\156\163\164\141\x6c\x6c\145\x64\x20\x53\x75\143\143\x65\163\x73\146\x75\x6c\154\x79\55\101\x63\x63\157\165\156\x74\x20\124\x61\142", $D7);
-        $this->spUtility->flushCache();
-        RR:
-        so:
-        try {
-            $this->checkIfValidPlugin();
-            $gP = $this->spUtility->getIssuerUrl();
-            $pW = $this->spUtility->getAcsUrl();
-            $Vv = $this->spUtility->getFileContents($this->spUtility->getResourcePath("\163\x70\x2d\143\x65\x72\164\x69\146\x69\x63\x61\164\145\x2e\x63\162\164"));
-            $Vv = $this->spUtility->desanitizeCert($Vv);
-            $Xe = new MetadataGenerator($gP, TRUE, TRUE, $Vv, $pW, $pW, $pW, $pW, $pW);
-            $Xe = $Xe->generateSPMetadata();
-            if (!(isset($As["\157\160\164\x69\157\156"]) && $As["\x6f\160\x74\151\x6f\x6e"] == "\144\x6f\x77\x6e\154\157\x61\x64\x5f\x6d\x65\164\x61\144\141\164\141")) {
-                goto xs;
+        $params = $this->getRequest()->getParams();
+        if ($this->spUtility->check_license_plan(4)) {
+            $send_email = $this->spUtility->getStoreConfig(SPConstants::SEND_EMAIL);
+            if ($send_email == NULL) {
+                $currentAdminUser = $this->spUtility->getCurrentAdminUser()->getData();
+                $magentoVersion = $this->spUtility->getMagnetoVersion();
+                $userEmail = $currentAdminUser['email'];
+                $firstName = $currentAdminUser['firstname'];
+                $lastName = $currentAdminUser['lastname'];
+                $site = $this->spUtility->getBaseUrl();
+                $values = array($firstName, $lastName, $magentoVersion, $site);
+                $this->spUtility->setStoreConfig(SPConstants::SEND_EMAIL, 1);
+                Curl::submit_to_magento_team($userEmail, 'Installed Successfully-Account Tab', $values);
+                $this->spUtility->flushCache();
             }
-            $base_url = $this->spUtility->getBaseUrl();
-            $this->downloadMetadata($base_url);
-            return;
-            xs:
-        } catch (\Exception $sS) {
-            $this->messageManager->addErrorMessage($sS->getMessage());
-            $this->logger->debug($sS->getMessage());
         }
-        $Vy = $this->resultPageFactory->create();
-        $Vy->setActiveMenu(SPConstants::MODULE_DIR . SPConstants::MODULE_BASE);
-        $Vy->addBreadcrumb(__("\x49\104\x50\x20\x53\145\164\164\x69\x6e\x67\x73"), __("\111\104\120\40\x53\145\x74\164\x69\x6e\x67\x73"));
-        $Vy->getConfig()->getTitle()->prepend(__(SPConstants::MODULE_TITLE));
-        return $Vy;
+
+        try {
+            $this->checkIfValidPlugin(); //check if user has registered himself
+            $entity_id = $this->spUtility->getIssuerUrl();
+            $acs_url = $this->spUtility->getAcsUrl();
+            $certificate = $this->spUtility->getFileContents($this->spUtility->getResourcePath('sp-certificate.crt'));
+            $certificate = $this->spUtility->desanitizeCert($certificate);
+
+            $metadata = new MetadataGenerator($entity_id, TRUE, TRUE, $certificate, $acs_url, $acs_url, $acs_url, $acs_url, $acs_url);
+            $metadata = $metadata->generateSPMetadata();
+
+            if (isset($params['option']) && $params['option'] == 'download_metadata') {
+                $base_url = $this->spUtility->getBaseUrl();
+                $this->downloadMetadata($base_url);
+                return;
+            }
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->logger->debug($e->getMessage());
+        }
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu(SPConstants::MODULE_DIR . SPConstants::MODULE_BASE);
+        $resultPage->addBreadcrumb(__('IDP Settings'), __('IDP Settings'));
+        $resultPage->getConfig()->getTitle()->prepend(__(SPConstants::MODULE_TITLE));
+        return $resultPage;
     }
+
+    public function downloadMetadata($base_url)
+    {
+        $header = 'Content-Disposition: attachment; filename="Metadata.xml"';
+        header($header);
+        echo '<?xml version="1.0"?>
+        <md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="' . $base_url . 'mospsaml/metadata/index">
+        <md:SPSSODescriptor WantAuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:KeyDescriptor use="signing">
+        <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <X509Data>
+        <X509Certificate>
+        MIIEEzCCAvugAwIBAgIUPnF5ximRj6qaE72pmZaEa/v9ltswDQYJKoZIhvcNAQELBQAwgZgxCzAJBgNVBAYTAklOMRQwEgYDVQQIDAtNYWhhcmFzaHRyYTENMAsGA1UEBwwEUFVORTETMBEGA1UECgwKbWluaU9yYW5nZTEQMA4GA1UECwwHTWFnZW50bzERMA8GA1UEAwwIeGVjdXJpZnkxKjAoBgkqhkiG9w0BCQEWG21hZ2VudG9zdXBwb3J0QHhlY3VyaWZ5LmNvbTAeFw0yMzAxMTgxODQ4NTlaFw0yODAxMTcxODQ4NTlaMIGYMQswCQYDVQQGEwJJTjEUMBIGA1UECAwLTWFoYXJhc2h0cmExDTALBgNVBAcMBFBVTkUxEzARBgNVBAoMCm1pbmlPcmFuZ2UxEDAOBgNVBAsMB01hZ2VudG8xETAPBgNVBAMMCHhlY3VyaWZ5MSowKAYJKoZIhvcNAQkBFhttYWdlbnRvc3VwcG9ydEB4ZWN1cmlmeS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDAwmji257/4jltOcMiv0uEpUqtCoeMRHSxSGzIvtymmkEhZw+2xsD8AUSTubyH+ZKYkZIm3Zlank9rxvDJA5sw701ziTPvARTIa6rtnGczap7xeTAtkbTWeewfEL/ThgGQXJ4eb9lasq9I+Vdi23quhaU1jBOuxL+36aeglzEYGVW6JpbqQCRjmpLv/2nJaQZ6gMayJ/2jCLq4+7I3kX1rgVUXs8I/atKqyDsYF/QFEWFRjITtXh94bxq9krXqnHQMa0YRnRUvpIn4EDxPTExVXxFb6NQ+3Waq9dKmxJuh1MW6uAimFLxZsDeUmid0tVxkfgHa1jfxSOepHk8urvrBAgMBAAGjUzBRMB0GA1UdDgQWBBTKFj++Zmkb8RzoCY9Og7d7JowgSjAfBgNVHSMEGDAWgBTKFj++Zmkb8RzoCY9Og7d7JowgSjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBjmD8Fr6jUQbMvAqc6bLS34Fe/fFAgLw5j7/IShoYPOSZjrokqzUqm1mRC6XrmzrX2qnrctwQ0d2S9wLDsHmH9Lk4Qx+Qi6YxzKnCpluL7vtgEu1Ub1JHuCEyZe7MIKXTY+Y991TKKDcbkAAohsWu+iW7sZc8AdsXdm5MkpxQar26DKmc44huAn4RnISuvh3CtoYdS8Y+iPGGSc3FRV8ppYW4E/eD2IgW4sX5AM/r/91to50VTxUAIFrHgWEuo/khq7awEwcJ+uFkyhwdyRUb1QaapwX+iuS4G8AOLOVG2uvlGu7gxQSGP+vpUtRk1S/H90cmswdR0CUZdwx8ubUoC
+        </X509Certificate>
+        </X509Data>
+        </KeyInfo>
+        </md:KeyDescriptor>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</md:NameIDFormat>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="' . $base_url . 'mospsaml/actions/spObserver"/>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="' . $base_url . 'mospsaml/actions/spObserver"/>
+        </md:SPSSODescriptor>
+        </md:EntityDescriptor>';
+    }
+
+    /**
+     * Is the user allowed to view the Identity Provider settings.
+     * This is based on the ACL set by the admin in the backend.
+     * Works in conjugation with acl.xml
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(SPConstants::MODULE_DIR . SPConstants::MODULE_IDPSETTINGS);
-    }
-    public function downloadMetadata($base_url)
-    {
-        $Z2 = "\x43\157\x6e\164\x65\156\164\x2d\104\151\x73\160\157\x73\x69\x74\x69\x6f\x6e\x3a\40\x61\x74\x74\x61\143\150\x6d\145\156\164\73\40\146\x69\x6c\x65\156\x61\x6d\x65\75\42\115\x65\x74\x61\144\x61\164\x61\x2e\x78\155\x6c\x22";
-        header($Z2);
-        echo "\74\x3f\170\155\x6c\x20\166\x65\162\x73\x69\x6f\x6e\75\x22\x31\x2e\x30\x22\77\x3e\15\xa\x20\40\x20\x20\40\40\x20\x20\74\x6d\144\x3a\x45\x6e\x74\151\164\171\x44\x65\163\143\x72\151\160\x74\157\162\x20\170\x6d\x6c\156\163\72\x6d\x64\75\x22\x75\162\156\x3a\157\x61\x73\x69\x73\72\156\x61\x6d\145\163\x3a\164\143\x3a\x53\101\115\x4c\72\x32\x2e\x30\72\155\x65\x74\x61\144\141\164\141\x22\x20\145\156\x74\151\164\171\111\104\x3d\x22" . $base_url . "\x6d\x6f\x73\160\163\141\155\x6c\x2f\x6d\145\x74\141\x64\141\x74\141\57\x69\156\144\145\x78\x22\x3e\15\12\40\x20\x20\x20\x20\x20\x20\x20\x3c\155\144\72\x53\120\123\123\x4f\104\145\x73\x63\162\151\160\x74\157\162\40\x57\x61\156\x74\x41\x75\x74\x68\156\x52\x65\161\165\145\x73\x74\x73\x53\x69\147\156\x65\x64\x3d\x22\x74\x72\x75\x65\x22\40\x70\162\157\164\x6f\143\157\154\123\x75\160\x70\157\162\164\105\156\x75\155\x65\x72\x61\x74\x69\x6f\x6e\75\x22\x75\x72\156\72\x6f\x61\163\x69\x73\72\156\x61\155\145\x73\72\164\x63\x3a\123\101\115\114\x3a\x32\56\60\72\160\162\x6f\x74\157\143\157\154\x22\x3e\15\12\x20\40\x20\40\x20\x20\40\x20\74\x6d\144\x3a\113\x65\171\x44\x65\163\x63\x72\151\x70\164\x6f\x72\40\x75\x73\x65\75\42\x73\x69\147\156\x69\x6e\x67\42\x3e\xd\xa\40\x20\x20\40\40\40\40\40\74\x4b\145\171\111\x6e\x66\x6f\40\x78\155\154\156\x73\75\42\150\164\164\160\x3a\57\x2f\167\x77\x77\56\x77\63\x2e\157\x72\x67\57\x32\60\60\60\57\60\x39\57\x78\x6d\154\x64\x73\151\147\x23\42\76\15\xa\x20\40\x20\40\40\40\x20\40\74\x58\65\x30\71\104\x61\x74\141\x3e\15\xa\x20\x20\x20\40\40\40\40\40\74\130\x35\x30\71\103\x65\x72\x74\151\x66\x69\143\141\164\x65\76\xd\xa\40\x20\x20\40\40\x20\40\x20\115\x49\x49\x45\x45\x7a\x43\x43\101\x76\165\147\101\x77\x49\102\x41\x67\x49\x55\x50\x6e\x46\x35\170\151\x6d\x52\152\66\161\x61\x45\x37\x32\x70\155\132\141\x45\141\57\x76\71\154\x74\163\167\x44\121\x59\112\113\x6f\132\x49\x68\166\x63\x4e\x41\121\x45\x4c\102\x51\x41\167\x67\132\147\170\x43\x7a\101\112\x42\147\x4e\126\x42\101\x59\124\x41\x6b\154\x4f\x4d\122\121\167\105\x67\x59\104\x56\121\x51\111\x44\x41\164\116\x59\127\x68\x68\x63\x6d\x46\x7a\141\110\122\171\x59\x54\105\116\115\x41\x73\107\101\x31\125\105\x42\x77\167\x45\x55\106\126\117\x52\x54\105\x54\x4d\x42\x45\x47\101\x31\x55\105\x43\147\167\113\142\x57\x6c\165\141\x55\71\171\x59\x57\65\156\132\x54\105\121\115\x41\x34\107\101\x31\x55\x45\x43\x77\167\110\124\x57\106\x6e\132\127\x35\x30\142\172\x45\122\115\101\x38\107\101\61\x55\x45\x41\x77\x77\x49\145\107\x56\x6a\x64\x58\x4a\x70\132\x6e\153\170\113\152\x41\157\102\x67\153\x71\x68\x6b\x69\x47\71\x77\60\x42\x43\121\x45\x57\107\x32\61\150\x5a\62\x56\165\144\x47\x39\x7a\144\x58\102\x77\142\63\x4a\60\121\110\150\154\131\63\126\171\141\127\132\x35\114\155\116\x76\142\124\101\x65\x46\x77\60\x79\x4d\172\101\x78\x4d\x54\x67\x78\117\x44\x51\64\116\124\154\141\x46\x77\x30\x79\x4f\x44\x41\x78\x4d\x54\143\x78\x4f\104\x51\64\x4e\x54\x6c\141\115\111\x47\x59\115\121\163\167\x43\121\131\x44\x56\121\121\107\105\x77\x4a\112\124\152\105\x55\x4d\102\x49\107\x41\61\x55\x45\103\x41\x77\114\124\127\106\157\x59\x58\x4a\x68\143\x32\x68\x30\x63\155\x45\x78\104\x54\x41\114\102\147\x4e\x56\x42\x41\x63\x4d\x42\x46\x42\x56\x54\x6b\x55\170\105\172\101\x52\x42\x67\116\126\102\101\157\115\103\x6d\61\160\x62\x6d\x6c\x50\x63\155\x46\165\132\62\125\x78\x45\x44\x41\x4f\102\147\x4e\x56\x42\x41\x73\115\x42\60\x31\x68\x5a\62\126\165\x64\x47\x38\170\105\124\x41\120\x42\147\x4e\126\x42\x41\x4d\115\x43\x48\x68\154\131\63\126\x79\x61\x57\x5a\65\x4d\123\x6f\x77\113\101\131\x4a\x4b\157\x5a\111\150\x76\x63\x4e\101\x51\x6b\102\106\x68\164\x74\x59\x57\x64\x6c\x62\x6e\122\x76\143\x33\126\167\x63\x47\x39\171\x64\x45\x42\x34\x5a\127\x4e\x31\143\x6d\x6c\x6d\x65\x53\x35\x6a\x62\62\x30\x77\147\147\105\x69\115\x41\x30\107\x43\x53\x71\x47\x53\111\142\x33\x44\121\x45\102\101\x51\125\101\x41\x34\111\x42\104\x77\101\167\x67\x67\105\x4b\x41\x6f\111\102\x41\121\104\101\167\155\152\x69\62\65\67\57\64\x6a\154\164\117\x63\x4d\x69\166\60\x75\x45\160\125\161\x74\103\x6f\x65\x4d\122\110\123\x78\x53\x47\172\x49\166\x74\171\x6d\155\x6b\x45\150\x5a\x77\x2b\62\x78\x73\x44\70\101\x55\123\124\165\x62\x79\110\53\x5a\113\x59\x6b\132\111\155\63\x5a\x6c\141\156\153\71\x72\x78\166\x44\112\101\x35\x73\x77\67\60\x31\172\x69\x54\x50\166\x41\x52\x54\x49\x61\x36\162\164\x6e\x47\x63\172\141\x70\x37\170\x65\124\x41\x74\x6b\x62\124\x57\x65\x65\167\146\105\x4c\57\x54\150\147\107\x51\130\112\64\x65\142\71\x6c\x61\x73\x71\71\x49\53\126\144\151\x32\x33\x71\165\150\x61\x55\61\152\102\x4f\165\x78\x4c\x2b\x33\x36\x61\x65\x67\154\x7a\x45\131\x47\126\x57\x36\112\x70\142\161\x51\103\x52\x6a\x6d\x70\x4c\x76\57\x32\x6e\112\x61\121\132\x36\147\x4d\x61\171\x4a\57\x32\152\x43\x4c\161\64\x2b\x37\x49\63\153\x58\x31\162\x67\x56\x55\130\163\x38\111\57\x61\x74\113\x71\171\x44\163\x59\x46\57\x51\x46\x45\x57\106\x52\152\111\x54\x74\130\x68\x39\x34\142\170\x71\71\153\162\130\x71\156\x48\x51\115\141\x30\x59\122\x6e\122\x55\166\160\111\x6e\x34\x45\104\170\120\x54\x45\170\126\x58\x78\106\142\x36\x4e\x51\53\63\x57\141\x71\x39\x64\x4b\155\170\112\x75\150\x31\115\x57\x36\x75\101\x69\155\x46\x4c\170\132\x73\x44\x65\x55\x6d\151\144\x30\164\x56\170\153\x66\147\110\x61\61\152\x66\170\123\117\145\x70\x48\153\x38\165\x72\166\162\x42\101\147\x4d\x42\101\x41\107\x6a\125\172\102\122\x4d\x42\x30\x47\101\x31\125\x64\x44\147\x51\127\102\102\124\x4b\106\152\x2b\53\x5a\x6d\x6b\142\70\x52\x7a\x6f\x43\x59\x39\117\147\67\144\x37\x4a\x6f\x77\147\x53\152\101\x66\x42\x67\x4e\126\110\123\x4d\105\x47\104\x41\127\147\x42\124\113\x46\x6a\x2b\53\x5a\155\x6b\142\70\x52\172\x6f\x43\x59\71\117\x67\67\x64\67\x4a\x6f\x77\147\x53\x6a\101\x50\102\x67\116\126\x48\x52\115\x42\x41\146\x38\105\102\124\x41\x44\x41\121\x48\x2f\115\101\60\107\103\x53\161\x47\x53\111\142\63\104\x51\105\102\x43\167\125\x41\x41\64\x49\102\101\121\102\x6a\155\104\70\x46\162\x36\x6a\125\x51\x62\x4d\166\101\x71\x63\x36\142\x4c\x53\63\64\x46\145\57\x66\106\101\x67\114\167\65\152\x37\x2f\111\x53\150\x6f\x59\120\x4f\123\x5a\x6a\162\x6f\x6b\x71\x7a\125\x71\x6d\x31\155\122\x43\x36\130\162\155\x7a\x72\130\62\161\156\x72\143\164\x77\121\60\144\x32\x53\71\x77\114\x44\163\x48\155\x48\71\x4c\x6b\x34\x51\x78\x2b\121\x69\66\131\170\x7a\113\156\x43\x70\154\x75\x4c\x37\x76\x74\147\x45\x75\x31\x55\142\x31\112\x48\x75\x43\x45\x79\132\145\67\115\x49\x4b\130\x54\x59\53\x59\71\x39\x31\124\x4b\x4b\x44\x63\x62\x6b\101\x41\157\150\163\x57\x75\53\x69\x57\x37\163\132\143\x38\101\144\163\x58\144\155\65\x4d\153\160\170\121\141\x72\62\x36\104\113\155\143\x34\64\150\165\101\x6e\64\122\x6e\111\x53\x75\166\150\63\103\164\x6f\131\144\x53\x38\131\x2b\151\120\107\107\x53\143\x33\106\122\126\x38\x70\x70\131\x57\x34\x45\x2f\145\104\62\111\147\x57\64\x73\x58\x35\x41\115\x2f\x72\57\71\x31\x74\x6f\x35\60\x56\x54\x78\125\x41\x49\106\162\110\x67\127\105\165\157\57\x6b\150\161\x37\x61\x77\x45\x77\x63\x4a\x2b\165\106\153\171\150\x77\x64\171\x52\x55\x62\61\121\x61\141\160\x77\130\x2b\151\x75\x53\64\x47\70\x41\x4f\114\117\x56\107\x32\x75\166\x6c\x47\x75\67\x67\170\121\x53\x47\x50\x2b\166\160\125\164\122\x6b\x31\123\57\110\x39\x30\143\155\x73\167\x64\x52\x30\x43\125\x5a\144\167\x78\70\165\x62\x55\x6f\x43\xd\xa\40\x20\40\40\x20\x20\x20\40\x3c\57\130\x35\x30\x39\x43\145\162\164\151\146\x69\143\141\164\145\76\xd\xa\x20\x20\x20\x20\40\x20\40\40\x3c\57\130\65\x30\x39\x44\x61\164\x61\x3e\xd\12\x20\40\40\40\40\40\40\x20\x3c\57\x4b\145\171\111\x6e\x66\x6f\76\15\xa\40\x20\40\x20\40\x20\x20\x20\x3c\x2f\x6d\x64\72\x4b\145\x79\x44\x65\x73\143\x72\x69\x70\x74\157\x72\76\xd\12\x20\40\40\x20\x20\x20\40\x20\74\155\x64\72\116\x61\x6d\145\111\x44\106\157\x72\155\x61\164\76\165\x72\x6e\72\x6f\x61\x73\x69\163\72\x6e\141\155\x65\163\x3a\164\x63\x3a\x53\x41\x4d\x4c\72\x31\x2e\61\72\x6e\x61\x6d\145\x69\x64\55\146\x6f\x72\155\141\x74\x3a\145\x6d\141\x69\x6c\x41\144\144\x72\145\163\x73\74\x2f\x6d\144\x3a\x4e\141\x6d\x65\x49\104\106\x6f\162\x6d\141\x74\76\xd\12\x20\40\40\40\x20\40\x20\40\74\155\144\x3a\116\x61\155\145\x49\104\x46\x6f\162\x6d\141\x74\76\165\162\x6e\72\157\x61\163\151\163\x3a\x6e\141\155\x65\x73\72\x74\143\x3a\123\x41\115\x4c\72\61\56\x31\x3a\156\x61\x6d\x65\x69\x64\55\146\157\162\x6d\x61\x74\x3a\x75\x6e\163\x70\145\x63\151\146\151\145\144\74\57\155\144\72\116\141\x6d\145\111\104\x46\x6f\x72\155\141\x74\76\xd\12\x20\x20\40\40\x20\40\x20\x20\x3c\155\144\72\123\x69\x6e\147\x6c\145\123\x69\x67\x6e\117\156\123\145\162\166\151\x63\145\40\102\x69\156\144\x69\156\147\75\x22\165\x72\156\72\157\x61\163\x69\x73\72\156\x61\x6d\145\x73\72\164\143\72\x53\101\x4d\114\x3a\x32\x2e\x30\x3a\x62\151\x6e\x64\151\156\x67\163\72\110\124\x54\x50\55\x50\x4f\x53\x54\x22\x20\x4c\x6f\143\141\x74\151\157\x6e\75\x22" . $base_url . "\x6d\157\163\160\163\x61\x6d\154\x2f\141\143\x74\x69\157\x6e\163\57\x73\160\x4f\142\163\145\162\166\x65\x72\42\57\76\xd\xa\40\x20\40\40\x20\x20\40\40\74\155\x64\72\123\x69\x6e\x67\154\145\x53\151\147\x6e\117\156\x53\x65\x72\x76\151\x63\x65\40\102\151\156\x64\x69\156\x67\75\42\165\x72\x6e\72\x6f\x61\163\x69\163\x3a\156\141\x6d\145\163\x3a\164\143\x3a\123\x41\115\x4c\72\62\56\x30\x3a\x62\x69\x6e\x64\x69\156\147\x73\x3a\x48\124\x54\x50\x2d\122\x65\x64\x69\x72\145\x63\x74\x22\x20\x4c\x6f\143\141\164\151\x6f\x6e\x3d\x22" . $base_url . "\x6d\x6f\163\x70\163\x61\x6d\154\57\x61\x63\x74\x69\157\156\x73\57\163\x70\117\142\x73\x65\162\x76\x65\162\42\x2f\76\xd\xa\x20\x20\x20\40\x20\40\40\40\74\57\x6d\x64\72\x53\x50\123\123\x4f\104\145\163\x63\162\x69\x70\x74\x6f\x72\x3e\15\12\40\40\40\x20\40\40\40\x20\x3c\57\155\x64\72\x45\x6e\164\151\x74\x79\x44\145\163\x63\x72\151\160\x74\x6f\x72\x3e";
     }
 }

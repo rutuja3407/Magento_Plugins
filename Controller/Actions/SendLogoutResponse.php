@@ -1,53 +1,62 @@
 <?php
 
-
 namespace MiniOrange\SP\Controller\Actions;
 
 use MiniOrange\SP\Helper\Saml2\LogoutResponse;
 use MiniOrange\SP\Helper\SPConstants;
+
+/**
+ * Handles generation and sending of LogoutRequest to the IDP
+ * for processing. LogoutRequest is generated based on the ID
+ * set in the observer. NameId is fetched and sent in the logout
+ * request based on if the user is admin or customer.
+ */
 class SendLogoutResponse extends BaseAction
 {
     private $isAdmin;
     private $userId;
     private $requestId;
+
+    /**
+     * Execute function to execute the classes function.
+     * @throws NotRegisteredException
+     * @throws \Exception
+     */
     public function execute()
     {
         $this->checkIfValidPlugin();
-        $rQ = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
-        $this->spUtility->log_debug("\x6c\x6f\x67\157\165\x74\162\x65\161\x75\145\163\x74\x3a\40", $rQ);
-        $Lw = $this->spUtility->getIDPApps();
-        $ft = null;
-        foreach ($Lw as $fR) {
-            if (!($fR->getData()["\151\x64\x70\137\x6e\141\x6d\x65"] === $rQ)) {
-                goto LG;
+
+        $idp_name = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $this->spUtility->log_debug("logoutrequest: ", $idp_name);
+        $collection = $this->spUtility->getIDPApps();
+        $idpDetails = null;
+        foreach ($collection as $item) {
+            if ($item->getData()["idp_name"] === $idp_name) {
+                $idpDetails = $item->getData();
             }
-            $ft = $fR->getData();
-            LG:
-            XW:
         }
-        nx:
-        if (!(!$this->spUtility->isSPConfigured() || !$ft["\x73\x61\x6d\x6c\137\154\157\147\157\x75\x74\137\165\x72\154"])) {
-            goto oz;
-        }
-        return;
-        oz:
-        $XS = $this->spUtility->getLogoutUrl();
-        $CR = $ft["\163\141\x6d\x6c\x5f\x6c\157\147\x6f\165\164\137\142\151\x6e\x64\151\156\147"];
-        $p_ = $this->isAdmin ? $this->spUtility->getAdminBaseUrl() : $this->spUtility->getBaseUrl();
-        $wz = $this->spUtility->getIssuerUrl();
-        $TR = (new LogoutResponse($this->requestId, $wz, $XS, $CR))->build();
-        if (empty($CR) || $CR == SPConstants::HTTP_REDIRECT) {
-            goto lE;
-        }
-        $this->sendHTTPPostResponse($TR, $p_, $XS);
-        goto cc;
-        lE:
-        return $this->sendHTTPRedirectResponse($TR, $p_, $XS);
-        cc:
+
+        if (!$this->spUtility->isSPConfigured() || !($idpDetails['saml_logout_url'])) return;
+        //get required values from the database
+        $destination = $this->spUtility->getLogoutUrl();
+        //$bindingType = $this->spUtility->getStoreConfig(SPConstants::LOGOUT_BINDING);
+        $bindingType = $idpDetails['saml_logout_binding'];
+        $sendRelayState = $this->isAdmin ? $this->spUtility->getAdminBaseUrl() : $this->spUtility->getBaseUrl();
+        $issuer = $this->spUtility->getIssuerUrl();
+        //generate the logout request
+        $logoutResponse = (new LogoutResponse($this->requestId, $issuer, $destination, $bindingType))->build();
+        // send saml request over
+        if (empty($bindingType)
+            || $bindingType == SPConstants::HTTP_REDIRECT)
+            return $this->sendHTTPRedirectResponse($logoutResponse, $sendRelayState, $destination);
+        else
+            $this->sendHTTPPostResponse($logoutResponse, $sendRelayState, $destination);
     }
-    public function setRequestId($lA)
+
+    /** The setter function for the request Id Parameter */
+    public function setRequestId($id)
     {
-        $this->requestId = $lA;
+        $this->requestId = $id;
         return $this;
     }
 }

@@ -1,87 +1,120 @@
 <?php
 
-
 namespace MiniOrange\SP\Controller\Actions;
 
-use MiniOrange\SP\Helper\Saml2\SAML2Response;
-use MiniOrange\SP\Helper\Saml2\SAML2Assertion;
-use MiniOrange\SP\Helper\SPConstants;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action\Context;
-use MiniOrange\SP\Helper\SPUtility;
-use MiniOrange\SP\Controller\Actions\ProcessResponseAction;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseFactory;
-use MiniOrange\SP\Controller\Actions\Logout;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use MiniOrange\SP\Helper\Saml2\SAML2Assertion;
+use MiniOrange\SP\Helper\Saml2\SAML2Response;
+use MiniOrange\SP\Helper\SPConstants;
+use MiniOrange\SP\Helper\SPUtility;
+
+/**
+ * Handles reading of SAML Responses from the IDP. Read the SAML Response
+ * from the IDP and process it to detect if it's a valid response from the IDP.
+ * Generate a SAML Response Object and log the user in. Update existing user
+ * attributes and groups if necessary.
+ */
 class ReadResponseAction extends BaseAction implements HttpPostActionInterface, HttpGetActionInterface
 {
+    protected $spUtility;
+    protected $logout;
     private $REQUEST;
     private $POST;
     private $processResponseAction;
-    protected $spUtility;
-    protected $logout;
-    public function __construct(Context $Gc, SPUtility $Kx, ProcessResponseAction $H0, StoreManagerInterface $Wl, ResultFactory $UZ, ResponseFactory $XF, Logout $I2)
+
+    public function __construct(
+        Context               $context,
+        SPUtility             $spUtility,
+        ProcessResponseAction $processResponseAction,
+        StoreManagerInterface $storeManager,
+        ResultFactory         $resultFactory,
+        ResponseFactory       $responseFactory,
+        Logout                $logout)
     {
-        $this->processResponseAction = $H0;
-        $this->logout = $I2;
-        parent::__construct($Gc, $Kx, $Wl, $UZ, $XF);
+        //You can use dependency injection to get any class this observer may need.
+        $this->processResponseAction = $processResponseAction;
+        $this->logout = $logout;
+        parent::__construct($context, $spUtility, $storeManager, $resultFactory, $responseFactory);
     }
+
+    /**
+     * Execute function to execute the classes function.
+     * @throws NotRegisteredException
+     * @throws InvalidSAMLVersionException
+     * @throws MissingIDException
+     * @throws MissingIssuerValueException
+     * @throws MissingNameIdException
+     * @throws InvalidNumberOfNameIDsException
+     * @throws \Exception
+     */
     public function execute()
     {
-        $rQ = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
-        $this->spUtility->log_debug("\162\145\x61\144\x72\x65\163\x70\157\x6e\163\145\101\x63\x74\151\157\x6e", $rQ);
+        $idp_name = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $this->spUtility->log_debug("readresponseAction", $idp_name);
         $this->checkIfValidPlugin();
-        $As = $this->getRequest()->getParams();
-        $CN = $this->REQUEST["\123\101\115\114\x52\x65\x73\x70\157\x6e\163\145"];
-        $aM = base64_decode($_POST["\x53\x41\115\114\x52\145\163\160\x6f\x6e\x73\145"]);
-        $L5 = new \DOMDocument();
-        $L5->loadXML($aM);
-        $nc = $L5->firstChild;
-        $Rx = new SAML2Assertion($nc, $this->spUtility);
-        $wz = $Rx->getIssuer();
-        $Lw = $this->spUtility->getIDPApps();
-        $ft = null;
-        foreach ($Lw as $fR) {
-            if (!($fR->getData()["\151\144\160\x5f\145\156\164\x69\x74\x79\x5f\151\x64"] === $wz)) {
-                goto zp;
+        $params = $this->getRequest()->getParams();
+        // read the response
+        $samlResponse = $this->REQUEST['SAMLResponse'];
+
+        $saml_response = base64_decode($_POST['SAMLResponse']);
+
+        $document = new \DOMDocument();
+        $document->loadXML($saml_response);
+        $saml_response_xml = $document->firstChild;
+        $saml_obj = new SAML2Assertion($saml_response_xml, $this->spUtility);
+        $issuer = $saml_obj->getIssuer();
+
+        $collection = $this->spUtility->getIDPApps();
+        $idpDetails = null;
+        foreach ($collection as $item) {
+            if ($item->getData()["idp_entity_id"] === $issuer) {
+                $idpDetails = $item->getData();
             }
-            $ft = $fR->getData();
-            zp:
-            zI:
         }
-        h1:
-        $this->spUtility->setSessionData(SPConstants::IDP_NAME, $ft["\151\144\x70\137\156\x61\x6d\145"]);
-        $this->spUtility->setAdminSessionData(SPConstants::IDP_NAME, $ft["\x69\144\x70\x5f\x6e\x61\155\x65"]);
-        $qY = !empty($this->REQUEST["\122\x65\154\141\171\x53\x74\141\x74\x65"]) ? $this->REQUEST["\x52\x65\154\141\171\123\164\141\164\145"] : "\57";
-        $CN = base64_decode((string) $CN);
-        $this->spUtility->log_debug("\x73\141\155\x6c\x52\145\163\x70\157\x6e\x73\x65", print_r($CN, true));
-        if (!empty($this->POST["\123\101\115\114\x52\145\163\x70\x6f\x6e\x73\x65"])) {
-            goto A3;
+
+        $this->spUtility->setSessionData(SPConstants::IDP_NAME, $idpDetails['idp_name']);
+        $this->spUtility->setAdminSessionData(SPConstants::IDP_NAME, $idpDetails['idp_name']);
+
+        $relayState = !empty($this->REQUEST['RelayState']) ? $this->REQUEST['RelayState'] : '/';
+
+        //decode the saml response
+        $samlResponse = base64_decode((string)$samlResponse);
+        $this->spUtility->log_debug("samlResponse", print_r($samlResponse, true));
+        if (empty($this->POST['SAMLResponse'])) {
+            $samlResponse = gzinflate($samlResponse);
         }
-        $CN = gzinflate($CN);
-        A3:
-        $L5 = new \DOMDocument();
-        $L5->loadXML($CN);
-        $aB = $L5->firstChild;
-        if (!($aB->localName == "\x4c\x6f\x67\x6f\165\x74\122\145\x73\x70\157\x6e\163\x65")) {
-            goto ED;
+
+        $document = new \DOMDocument();
+        $document->loadXML($samlResponse);
+        $samlResponseXML = $document->firstChild;
+        //if logout response then redirect the user to the relayState
+
+        if ($samlResponseXML->localName == 'LogoutResponse') {
+            $this->logout->setRequestParam($this->REQUEST)->setPostParam($this->POST)->execute();
         }
-        $this->logout->setRequestParam($this->REQUEST)->setPostParam($this->POST)->execute();
-        ED:
-        $CN = new SAML2Response($aB, $this->spUtility);
-        $this->spUtility->log_debug("\x62\x65\146\x6f\162\145\40\160\x72\157\x63\x65\x73\163\x75\x73\x65\x72\x61\x63\x74\x69\x6f\x6e");
-        $this->processResponseAction->setSamlResponse($CN)->setRelayState($qY)->execute();
+
+        $samlResponse = new SAML2Response($samlResponseXML, $this->spUtility);    //convert the xml to SAML2Response object
+        $this->spUtility->log_debug("before processuseraction");
+        $this->processResponseAction->setSamlResponse($samlResponse)
+            ->setRelayState($relayState)->execute();
     }
-    public function setRequestParam($nD)
-    {
-        $this->REQUEST = $nD;
-        return $this;
-    }
+
+    /** Setter for the post Parameter */
     public function setPostParam($post)
     {
         $this->POST = $post;
+        return $this;
+    }
+
+    /** Setter for the request Parameter */
+    public function setRequestParam($request)
+    {
+        $this->REQUEST = $request;
         return $this;
     }
 }
