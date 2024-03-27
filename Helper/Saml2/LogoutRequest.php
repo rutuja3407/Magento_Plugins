@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Saml2;
 
 use MiniOrange\SP\Helper\Exception\InvalidNumberOfNameIDsException;
@@ -7,14 +8,6 @@ use MiniOrange\SP\Helper\Exception\InvalidRequestVersionException;
 use MiniOrange\SP\Helper\Exception\MissingIDException;
 use MiniOrange\SP\Helper\Exception\MissingNameIdException;
 use MiniOrange\SP\Helper\SPConstants;
-
-
-/**
- * This class is used to read the SAML logout request
- * and parse it into an object so that it's values are
- * easily accessible. It can also be used to generate Logout
- * request from the plugin to the IDPs.
- */
 class LogoutRequest
 {
     protected $spUtility;
@@ -32,557 +25,330 @@ class LogoutRequest
     private $sessionIndexes;
     private $bindingType;
     private $requestType = SPConstants::LOGOUT_REQUEST;
-
-    public function __construct(\MiniOrange\SP\Helper\SPUtility $spUtility, \DOMElement $xml = NULL)
+    public function __construct(\MiniOrange\SP\Helper\SPUtility $fR, \DOMElement $xa = NULL)
     {
-        $this->spUtility = $spUtility;
-        $this->xml = new \DOMDocument("1.0", "utf-8");
-
-        if ($xml === NULL) return;
-
-        $this->xml = $xml;
-        $this->tagName = 'LogoutRequest';
+        $this->spUtility = $fR;
+        $this->xml = new \DOMDocument("\61\56\60", "\x75\x74\146\55\70");
+        if (!($xa === NULL)) {
+            goto gR;
+        }
+        return;
+        gR:
+        $this->xml = $xa;
+        $this->tagName = "\x4c\157\x67\157\x75\x74\x52\x65\161\x75\x65\x73\164";
         $this->id = $this->generateUniqueID(40);
         $this->issueInstant = time();
         $this->certificates = array();
         $this->validators = array();
-        $this->issueInstant = SAML2Utilities::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
-
-        $this->parseID($xml);
-        $this->checkSAMLVersion($xml);
-
-        if ($xml->hasAttribute('Destination'))
-            $this->destination = $xml->getAttribute('Destination');
-
-        $this->parseIssuer($xml);
-        $this->parseAndValidateSignature($xml);
-
-        if ($xml->hasAttribute('NotOnOrAfter'))
-            $this->notOnOrAfter = SAML2Utilities::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
-
-        $this->parseNameId($xml);
-        $this->parseSessionIndexes($xml);
-    }
-
-    /**
-     * Function is used to generate a unique ID to
-     * be used to generate unique SAML response IDs.
-     *
-     * @param $length a value to denote the length of unique id.
-     */
-    private function generateUniqueID($length)
-    {
-        return SAML2Utilities::generateRandomAlphanumericValue($length);
-    }
-
-    /**
-     * Parse the XML and set the ID for the request.
-     *
-     * @param $xml - the LogoutRequest
-     * @throws MissingIDException
-     */
-    protected function parseID($xml)
-    {
-        if (!$xml->hasAttribute('ID'))
-            throw new MissingIDException();
-        $this->id = $xml->getAttribute('ID');
-    }
-
-    /**
-     * Check if the SAML version in the Request is 2.0
-     *
-     * @param $xml - the LogoutRequest
-     * @throws InvalidRequestVersionException
-     */
-    protected function checkSAMLVersion($xml)
-    {
-        if ($xml->getAttribute('Version') !== '2.0')
-            throw InvalidRequestVersionException();
-    }
-
-    /**
-     * Parse the XML and set the Issuer for the request
-     *
-     * @param $xml - the LogoutRequest
-     */
-    protected function parseIssuer($xml)
-    {
-        $issuer = SAML2Utilities::xpQuery($xml, './saml_assertion:Issuer');
-        if (!empty($issuer))
-            $this->issuer = trim($issuer[0]->textContent);
-    }
-
-    /**
-     * Parse and Validate the Signature in the request
-     *
-     * @param $xml - the LogoutRequest
-     */
-    protected function parseAndValidateSignature($xml)
-    {
-        $sig = SAML2Utilities::validateElement($xml);
-        if ($sig !== FALSE) {
-            $this->certificates = $sig['Certificates'];
-            $this->validators[] = array(
-                'Function' => array('SAMLUtilities', 'validateSignature'),
-                'Data' => $sig,
-            );
+        $this->issueInstant = SAML2Utilities::xsDateTimeToTimestamp($xa->getAttribute("\x49\x73\x73\x75\145\x49\x6e\163\x74\141\x6e\x74"));
+        $this->parseID($xa);
+        $this->checkSAMLVersion($xa);
+        if (!$xa->hasAttribute("\x44\x65\x73\x74\x69\156\141\164\151\157\x6e")) {
+            goto Wr;
         }
+        $this->destination = $xa->getAttribute("\104\x65\163\164\x69\x6e\x61\164\151\157\x6e");
+        Wr:
+        $this->parseIssuer($xa);
+        $this->parseAndValidateSignature($xa);
+        if (!$xa->hasAttribute("\x4e\157\164\x4f\156\117\x72\101\x66\x74\x65\162")) {
+            goto Mz;
+        }
+        $this->notOnOrAfter = SAML2Utilities::xsDateTimeToTimestamp($xa->getAttribute("\116\x6f\x74\x4f\156\x4f\162\101\x66\164\145\162"));
+        Mz:
+        $this->parseNameId($xa);
+        $this->parseSessionIndexes($xa);
     }
-
-    /**
-     * Parse set the NameID for the request
-     *
-     * @param $xml - the LogoutRequest
-     * @throws MissingNameIdException
-     * @throws InvalidNumberOfNameIDsException
-     */
-    protected function parseNameId($xml)
+    private function generateUniqueID($E4)
     {
-        $nameId = SAML2Utilities::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
-        if (empty($nameId)) {
-            throw new MissingNameIdException();
-        } elseif (count($nameId) > 1) {
-            throw new InvalidNumberOfNameIDsException();
-        }
-
-        $nameId = $nameId[0];
-        if ($nameId->localName === 'EncryptedData') {
-            $this->encryptedNameId = $nameId;
-        } else {
-            $this->nameId = SAML2Utilities::parseNameId($nameId);
-        }
+        return SAML2Utilities::generateRandomAlphanumericValue($E4);
     }
-
-    /**
-     * Parse the XML and set the SessionIndexes for the request
-     *
-     * @param $xml - the LogoutRequest
-     */
-    protected function parseSessionIndexes($xml)
+    protected function parseID($xa)
+    {
+        if ($xa->hasAttribute("\111\x44")) {
+            goto VZ;
+        }
+        throw new MissingIDException();
+        VZ:
+        $this->id = $xa->getAttribute("\x49\x44");
+    }
+    protected function checkSAMLVersion($xa)
+    {
+        if (!($xa->getAttribute("\x56\x65\162\x73\x69\x6f\156") !== "\x32\56\60")) {
+            goto Z3;
+        }
+        throw InvalidRequestVersionException();
+        Z3:
+    }
+    protected function parseIssuer($xa)
+    {
+        $wQ = SAML2Utilities::xpQuery($xa, "\56\x2f\163\141\x6d\x6c\137\141\163\x73\x65\162\164\x69\x6f\x6e\72\111\163\x73\x75\x65\162");
+        if (empty($wQ)) {
+            goto lM;
+        }
+        $this->issuer = trim($wQ[0]->textContent);
+        lM:
+    }
+    protected function parseAndValidateSignature($xa)
+    {
+        $Ud = SAML2Utilities::validateElement($xa);
+        if (!($Ud !== FALSE)) {
+            goto pc;
+        }
+        $this->certificates = $Ud["\x43\x65\x72\x74\x69\146\151\143\x61\164\145\163"];
+        $this->validators[] = array("\x46\x75\156\143\x74\x69\x6f\156" => array("\x53\x41\115\x4c\x55\164\x69\154\x69\164\151\145\163", "\x76\141\154\x69\144\141\x74\145\x53\151\x67\x6e\141\x74\x75\162\145"), "\x44\141\x74\x61" => $Ud);
+        pc:
+    }
+    protected function parseNameId($xa)
+    {
+        $Au = SAML2Utilities::xpQuery($xa, "\x2e\57\x73\141\x6d\154\137\141\x73\x73\x65\162\x74\x69\157\x6e\72\x4e\141\x6d\145\111\x44\x20\x7c\40\x2e\x2f\163\141\x6d\x6c\137\141\163\x73\x65\162\x74\151\x6f\156\x3a\105\156\x63\162\x79\160\164\x65\144\111\x44\57\170\145\x6e\143\x3a\105\156\x63\162\x79\x70\x74\x65\x64\x44\141\x74\x61");
+        if (empty($Au)) {
+            goto xd;
+        }
+        if (count($Au) > 1) {
+            goto YF;
+        }
+        goto DT;
+        xd:
+        throw new MissingNameIdException();
+        goto DT;
+        YF:
+        throw new InvalidNumberOfNameIDsException();
+        DT:
+        $Au = $Au[0];
+        if ($Au->localName === "\105\156\x63\x72\x79\160\164\145\144\104\141\164\x61") {
+            goto Z0;
+        }
+        $this->nameId = SAML2Utilities::parseNameId($Au);
+        goto R3;
+        Z0:
+        $this->encryptedNameId = $Au;
+        R3:
+    }
+    protected function parseSessionIndexes($xa)
     {
         $this->sessionIndexes = array();
-        $sessionIndexes = SAML2Utilities::xpQuery($xml, './saml_protocol:SessionIndex');
-        foreach ($sessionIndexes as $sessionIndex) {
-            $this->sessionIndexes[] = trim($sessionIndex->textContent);
+        $ja = SAML2Utilities::xpQuery($xa, "\56\x2f\163\141\155\154\x5f\x70\162\x6f\x74\157\x63\157\x6c\x3a\x53\145\163\163\x69\x6f\156\111\x6e\144\145\170");
+        foreach ($ja as $lr) {
+            $this->sessionIndexes[] = trim($lr->textContent);
+            AG:
         }
+        dZ:
     }
-
-    /**
-     * This function is used to build our LogoutRequest. Deflate
-     * and encode the LogoutRequest string if the sso binding
-     * type is empty or is of type HTTPREDIRECT.
-     */
     public function build()
     {
-        $requestXmlStr = $this->generateRequest();
-        if (empty($this->bindingType)
-            || $this->bindingType == SPConstants::HTTP_REDIRECT) {
-            $deflatedStr = gzdeflate($requestXmlStr);
-            $base64EncodedStr = base64_encode($deflatedStr);
-            $urlEncoded = urlencode($base64EncodedStr);
-            $requestXmlStr = $urlEncoded;
+        $S5 = $this->generateRequest();
+        if (!(empty($this->bindingType) || $this->bindingType == SPConstants::HTTP_REDIRECT)) {
+            goto FX;
         }
-        return $requestXmlStr;
+        $a1 = gzdeflate($S5);
+        $CN = base64_encode($a1);
+        $AB = urlencode($CN);
+        $S5 = $AB;
+        FX:
+        return $S5;
     }
-
-    /**
-     * This function is used to generate the SAML Logout Request to be
-     * sent to the SPs. Currently the request is unsigned.
-     */
     private function generateRequest()
     {
-        //Build Logout Request
-        $resp = $this->createSAMLLogoutRequest();
-        $this->xml->appendChild($resp);
-
-        //Build Issuer
-        $issuer = $this->buildIssuer();
-        $resp->appendChild($issuer);
-
-        //Build NameID
-        $nameId = $this->buildNameId();
-        $resp->appendChild($nameId);
-
-        $this->spUtility->log_debug("In LogoutRequest: before Build SessionIndex: ");
-        //Build SessionIndex
-        $sessionIndex = $this->buildSessionIndex();
-        $resp->appendChild($sessionIndex);
-        $this->spUtility->log_debug("In LogoutRequest: after Build SessionIndex: ");
-
-        $samlLogoutRequest = $this->xml->saveXML();
-        return $samlLogoutRequest;
+        $QW = $this->createSAMLLogoutRequest();
+        $this->xml->appendChild($QW);
+        $wQ = $this->buildIssuer();
+        $QW->appendChild($wQ);
+        $Au = $this->buildNameId();
+        $QW->appendChild($Au);
+        $this->spUtility->log_debug("\x49\156\x20\x4c\157\147\x6f\165\164\x52\x65\x71\165\145\163\x74\x3a\x20\142\x65\x66\157\162\145\x20\102\165\x69\x6c\x64\x20\123\145\x73\163\x69\x6f\x6e\x49\156\x64\145\170\72\40");
+        $lr = $this->buildSessionIndex();
+        $QW->appendChild($lr);
+        $this->spUtility->log_debug("\111\156\40\114\x6f\x67\157\165\164\x52\145\161\165\x65\x73\x74\72\40\141\x66\164\145\x72\x20\x42\165\x69\154\x64\40\x53\145\163\163\151\157\156\111\x6e\144\145\170\72\x20");
+        $W6 = $this->xml->saveXML();
+        return $W6;
     }
-
-    /**
-     * Create the SAML Logout Request Element with the appropriate attributes
-     * and return it. It needs the ID , version , issueInstant and destination
-     * values.
-     */
     protected function createSAMLLogoutRequest()
     {
-        $resp = $this->xml->createElementNS('urn:oasis:names:tc:SAML:2.0:protocol', 'samlp:LogoutRequest');
-        $resp->setAttribute('ID', $this->generateUniqueID(40));
-        $resp->setAttribute('Version', '2.0');
-        $resp->setAttribute('IssueInstant', str_replace('+00:00', 'Z', gmdate("c", time())));
-        $resp->setAttribute('Destination', $this->destination);
-
-        return $resp;
+        $QW = $this->xml->createElementNS("\165\162\156\x3a\157\x61\x73\151\x73\x3a\x6e\x61\155\145\x73\72\164\143\x3a\x53\x41\x4d\x4c\x3a\62\x2e\60\72\x70\162\157\164\x6f\x63\157\x6c", "\x73\x61\x6d\154\160\x3a\x4c\157\x67\x6f\x75\164\x52\145\161\165\x65\x73\x74");
+        $QW->setAttribute("\111\x44", $this->generateUniqueID(40));
+        $QW->setAttribute("\x56\x65\x72\x73\x69\x6f\156", "\x32\x2e\60");
+        $QW->setAttribute("\111\163\163\x75\145\x49\x6e\163\x74\141\x6e\164", str_replace("\53\60\60\x3a\60\60", "\132", gmdate("\143", time())));
+        $QW->setAttribute("\x44\x65\x73\164\151\156\x61\164\151\157\156", $this->destination);
+        return $QW;
     }
-
-    /**
-     * Creates the Issuer XML element of the LogoutRequest.
-     */
     protected function buildIssuer()
     {
-        return $this->xml->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:Issuer', $this->issuer);
+        return $this->xml->createElementNS("\165\x72\x6e\72\157\x61\x73\151\x73\72\x6e\141\155\145\163\72\164\143\x3a\x53\101\115\x4c\x3a\62\x2e\60\72\x61\163\163\x65\x72\x74\151\157\x6e", "\x73\141\155\154\72\111\x73\x73\165\x65\162", $this->issuer);
     }
-
-    /**
-     * Creates the NameID XML element of the LogoutRequest.
-     */
     protected function buildNameId()
     {
-        return $this->xml->createElementNS('urn:oasis:names:tc:SAML:2.0:assertion', 'saml:NameID', $this->nameId);
+        return $this->xml->createElementNS("\165\162\x6e\72\157\x61\163\151\x73\72\156\141\155\145\x73\72\x74\143\x3a\x53\x41\x4d\114\x3a\62\x2e\60\72\x61\163\163\x65\x72\x74\151\x6f\x6e", "\163\x61\155\154\x3a\x4e\x61\x6d\145\x49\104", $this->nameId);
     }
-
-    /**
-     * Creates the SessionIndex XML element of the LogoutRequest.
-     */
     protected function buildSessionIndex()
     {
-        $sessionIndexes = $this->spUtility->getSessionData('sessionin');
-        $this->spUtility->unsetSessionData('sessionin');
-        return $this->xml->createElement('samlp:SessionIndex', $sessionIndexes);
+        $ja = $this->spUtility->getSessionData("\163\x65\x73\163\x69\157\156\151\x6e");
+        $this->spUtility->unsetSessionData("\x73\x65\163\x73\151\157\x6e\x69\156");
+        return $this->xml->createElement("\x73\141\x6d\154\x70\72\123\145\x73\163\x69\x6f\x6e\111\156\x64\145\170", $ja);
     }
-
-    /**
-     * Convert this logout request message to an XML element.
-     *
-     * @return \DOMElement This logout request.
-     */
     public function toUnsignedXML()
     {
-        $root = toUnsignedXML();
-
-        if ($this->notOnOrAfter !== NULL) {
-            $root->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
+        $OC = toUnsignedXML();
+        if (!($this->notOnOrAfter !== NULL)) {
+            goto m4;
         }
-
+        $OC->setAttribute("\x4e\157\x74\x4f\x6e\117\x72\x41\146\164\145\x72", gmdate("\131\x2d\155\x2d\x64\x5c\124\110\x3a\x69\72\163\134\132", $this->notOnOrAfter));
+        m4:
         if ($this->encryptedNameId === NULL) {
-            SAML2_Utils::addNameId($root, $this->nameId);
-        } else {
-            $eid = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:' . 'EncryptedID');
-            $root->appendChild($eid);
-            $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, TRUE));
+            goto d9;
         }
-
-        foreach ($this->sessionIndexes as $sessionIndex) {
-            SAML2_Utils::addString($root, SAML2_Const::NS_SAMLP, 'SessionIndex', $sessionIndex);
+        $Q5 = $OC->ownerDocument->createElementNS(SAML2_Const::NS_SAML, "\163\141\155\154\x3a" . "\x45\x6e\x63\x72\171\x70\x74\145\144\x49\104");
+        $OC->appendChild($Q5);
+        $Q5->appendChild($OC->ownerDocument->importNode($this->encryptedNameId, TRUE));
+        goto Lt;
+        d9:
+        SAML2_Utils::addNameId($OC, $this->nameId);
+        Lt:
+        foreach ($this->sessionIndexes as $lr) {
+            SAML2_Utils::addString($OC, SAML2_Const::NS_SAMLP, "\x53\x65\x73\163\151\157\156\x49\156\x64\x65\170", $lr);
+            MO:
         }
-
-        return $root;
+        Qv:
+        return $OC;
     }
-
-    /**
-     * |                                          |
-     * | GETTER , SETTERS AND TO STRING FUNCTION  |
-     * |                                          |
-     */
-
     public function __toString()
     {
-        $html = 'LOGOUT REQUEST PARAMS [';
-        $html .= 'TagName = ' . $this->tagName;
-        $html .= ', validators =  ' . implode(",", $this->validators);
-        $html .= ', ID = ' . $this->id;
-        $html .= ', Issuer = ' . $this->issuer;
-        $html .= ', Not On Or After = ' . $this->notOnOrAfter;
-        $html .= ', Destination = ' . $this->destination;
-        $html .= ', Encrypted NameID = ' . $this->encryptedNameId;
-        $html .= ', Issue Instant = ' . $this->issueInstant;
-        $html .= ', Session Indexes = ' . implode(",", $this->sessionIndexes);
-        $html .= ']';
-        return $html;
+        $SZ = "\114\x4f\107\117\125\x54\40\122\105\121\125\x45\123\124\x20\120\101\x52\101\115\123\40\x5b";
+        $SZ .= "\124\141\x67\x4e\141\155\x65\40\x3d\x20" . $this->tagName;
+        $SZ .= "\54\x20\x76\141\154\x69\x64\141\x74\157\x72\163\x20\75\40\x20" . implode("\54", $this->validators);
+        $SZ .= "\54\x20\x49\x44\40\x3d\40" . $this->id;
+        $SZ .= "\x2c\x20\x49\x73\163\165\145\x72\40\x3d\x20" . $this->issuer;
+        $SZ .= "\54\40\116\x6f\164\x20\x4f\156\40\117\x72\x20\x41\146\x74\x65\162\x20\x3d\40" . $this->notOnOrAfter;
+        $SZ .= "\x2c\x20\104\145\163\164\151\x6e\x61\x74\x69\x6f\x6e\40\75\x20" . $this->destination;
+        $SZ .= "\54\40\x45\x6e\x63\162\x79\x70\x74\145\x64\x20\x4e\x61\x6d\x65\111\104\40\75\x20" . $this->encryptedNameId;
+        $SZ .= "\x2c\x20\111\x73\163\x75\145\x20\x49\156\x73\x74\141\156\x74\x20\x3d\x20" . $this->issueInstant;
+        $SZ .= "\54\40\x53\x65\163\x73\151\x6f\156\40\x49\156\144\x65\x78\x65\163\x20\75\x20" . implode("\x2c", $this->sessionIndexes);
+        $SZ .= "\x5d";
+        return $SZ;
     }
-
-    /**
-     * @return mixed
-     */
     public function getXml()
     {
         return $this->xml;
     }
-
-    /**
-     * @param mixed $xml
-     *
-     * @return self
-     */
-    public function setXml($xml)
+    public function setXml($xa)
     {
-        $this->xml = $xml;
-
+        $this->xml = $xa;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getTagName()
     {
         return $this->tagName;
     }
-
-    /**
-     * @param mixed $tagName
-     *
-     * @return self
-     */
-    public function setTagName($tagName)
+    public function setTagName($rJ)
     {
-        $this->tagName = $tagName;
-
+        $this->tagName = $rJ;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
     }
-
-    /**
-     * @param mixed $id
-     *
-     * @return self
-     */
-    public function setId($id)
+    public function setId($Gh)
     {
-        $this->id = $id;
-
+        $this->id = $Gh;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getIssuer()
     {
         return $this->issuer;
     }
-
-    /**
-     * @param mixed $issuer
-     *
-     * @return self
-     */
-    public function setIssuer($issuer)
+    public function setIssuer($wQ)
     {
-        $this->issuer = $issuer;
-
+        $this->issuer = $wQ;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getDestination()
     {
         return $this->destination;
     }
-
-    /**
-     * @param mixed $destination
-     *
-     * @return self
-     */
-    public function setDestination($destination)
+    public function setDestination($Uc)
     {
-        $this->destination = $destination;
-
+        $this->destination = $Uc;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getIssueInstant()
     {
         return $this->issueInstant;
     }
-
-    /**
-     * @param mixed $issueInstant
-     *
-     * @return self
-     */
-    public function setIssueInstant($issueInstant)
+    public function setIssueInstant($Tf)
     {
-        $this->issueInstant = $issueInstant;
-
+        $this->issueInstant = $Tf;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getCertificates()
     {
         return $this->certificates;
     }
-
-    /**
-     * @param mixed $certificates
-     *
-     * @return self
-     */
-    public function setCertificates($certificates)
+    public function setCertificates($T4)
     {
-        $this->certificates = $certificates;
-
+        $this->certificates = $T4;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getValidators()
     {
         return $this->validators;
     }
-
-    /**
-     * @param mixed $validators
-     *
-     * @return self
-     */
-    public function setValidators($validators)
+    public function setValidators($UX)
     {
-        $this->validators = $validators;
-
+        $this->validators = $UX;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getNotOnOrAfter()
     {
         return $this->notOnOrAfter;
     }
-
-    /**
-     * @param mixed $notOnOrAfter
-     *
-     * @return self
-     */
-    public function setNotOnOrAfter($notOnOrAfter)
+    public function setNotOnOrAfter($Pc)
     {
-        $this->notOnOrAfter = $notOnOrAfter;
-
+        $this->notOnOrAfter = $Pc;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getEncryptedNameId()
     {
         return $this->encryptedNameId;
     }
-
-    /**
-     * @param mixed $encryptedNameId
-     *
-     * @return self
-     */
-    public function setEncryptedNameId($encryptedNameId)
+    public function setEncryptedNameId($Ad)
     {
-        $this->encryptedNameId = $encryptedNameId;
-
+        $this->encryptedNameId = $Ad;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getNameId()
     {
         return $this->nameId;
     }
-
-    /**
-     * @param mixed $nameId
-     *
-     * @return self
-     */
-    public function setNameId($nameId)
+    public function setNameId($Au)
     {
-        $this->nameId = $nameId;
-
+        $this->nameId = $Au;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getSessionIndexes()
     {
         return $this->sessionIndexes;
     }
-
-    /**
-     * @param mixed $sessionIndexes
-     *
-     * @return self
-     */
-    public function setSessionIndexes($sessionIndexes)
+    public function setSessionIndexes($ja)
     {
-        $this->sessionIndexes = $sessionIndexes;
-
+        $this->sessionIndexes = $ja;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
     public function getRequestType()
     {
         return $this->requestType;
     }
-
-    /**
-     * @param mixed $requestType
-     *
-     * @return self
-     */
-    public function setRequestType($requestType)
+    public function setRequestType($tp)
     {
-        $this->requestType = $requestType;
-
+        $this->requestType = $tp;
         return $this;
     }
-
-
-    /**
-     * @return mixed
-     */
     public function getBindingType()
     {
         return $this->bindingType;
     }
-
-    /**
-     * @param mixed $bindingType
-     *
-     * @return self
-     */
-    public function setBindingType($bindingType)
+    public function setBindingType($H2)
     {
-        $this->bindingType = $bindingType;
-
+        $this->bindingType = $H2;
         return $this;
     }
 }

@@ -1,56 +1,53 @@
 <?php
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
 
-// initialize all variables
-$spsettings = $this->getExtensionPageUrl('spsettings');
-$idpsettings = $this->getExtensionPageUrl('idpsettings');
-$idps = $this->getExtensionPageUrl('idps');
-$count = $this->spUtility->getcounttable();
-if ($count > 0 && $this->check_license_plan(3)) {
-    $planName = 'Enterprise';
-    $spsettings = $this->getExtensionPageUrl('idps');
+$pC = $this->getExtensionPageUrl("\163\x70\163\x65\164\164\x69\x6e\147\163");
+$P4 = $this->getExtensionPageUrl("\151\144\160\x73\145\x74\164\151\156\x67\x73");
+$JQ = $this->getExtensionPageUrl("\151\144\160\x73");
+$ov = $this->spUtility->getcounttable();
+if (!($ov > 0 && $this->check_license_plan(3))) {
+    goto gZ;
 }
-$planName = $this->check_license_plan(3) ? 'Enterprise' : ($this->check_license_plan(2) ? 'Premium' : ($this->check_license_plan(1) ? 'Standard' : 'SSO'));
-$account = $this->getExtensionPageUrl('account');
-$signinsettings = $this->getExtensionPageUrl('signinsettings');
-$attrsettings = $this->getExtensionPageUrl('attrsettings');
-$rolesettings = $this->getExtensionPageUrl('rolesettings');
-$multisitesettings = $this->getExtensionPageUrl('multisitesettings');
-$support = $this->getExtensionPageUrl('support');
-$pricing = $this->getExtensionPageUrl('upgrade');
-$activeTab = $this->getCurrentActiveTab();
-$is_trial_plan = $this->check_license_plan(4) ? 1 : 0;
-$license = $this->chk_Premium();
-if ($license != NULL) {
-    $days = $this->check_license_expiry_date();
-    if ($days <= 30) {
-        echo '
-           <div class="notice notice-warning">Your miniOrange Magento SAML SSO Plugin license is ';
-        if ($days > 0) {
-            echo 'expiring within ' . $days . ' days</div>';
-        } else {
-            echo 'expired. Please contact <a target="blank" href="https://mail.google.com/mail/u/0/?fs=1&amp;tf=cm&amp;source=mailto&amp;su=Query+to+renew+Magento+SAML+' . $planName . '+Plan+&amp;to=magentosupport@xecurify.com&amp;body=I+want+to+renew+the+Magento+SAML+' . $planName . '+Plan.+">magentosupport@xecurify.com </a> to renew the license</div>';
-        }
-    }
+$N0 = "\105\156\164\145\x72\x70\162\151\163\145";
+$pC = $this->getExtensionPageUrl("\x69\144\x70\x73");
+gZ:
+$N0 = $this->check_license_plan(3) ? "\x45\156\164\x65\162\x70\x72\x69\x73\145" : ($this->check_license_plan(2) ? "\x50\162\x65\x6d\x69\x75\x6d" : ($this->check_license_plan(1) ? "\x53\164\141\x6e\144\x61\162\x64" : "\123\123\x4f"));
+$Qg = $this->getExtensionPageUrl("\x61\143\143\x6f\x75\156\x74");
+$sM = $this->getExtensionPageUrl("\x73\x69\x67\x6e\x69\156\163\145\x74\164\151\156\147\x73");
+$lf = $this->getExtensionPageUrl("\x61\164\x74\x72\163\145\x74\164\x69\x6e\x67\x73");
+$aM = $this->getExtensionPageUrl("\x72\x6f\x6c\145\x73\x65\164\164\x69\156\x67\163");
+$Lb = $this->getExtensionPageUrl("\155\165\x6c\x74\151\x73\x69\164\145\163\145\164\x74\151\x6e\147\x73");
+$a3 = $this->getExtensionPageUrl("\x73\x75\x70\160\x6f\x72\x74");
+$wg = $this->getExtensionPageUrl("\x75\x70\147\162\x61\x64\x65");
+$M9 = $this->getCurrentActiveTab();
+$k6 = $this->check_license_plan(4) ? 1 : 0;
+$Dv = $this->chk_Premium();
+if (!($Dv != NULL)) {
+    goto CS;
 }
-
-if ($this->isTrialExpired()) {
-    ?>
-    <div class="license_note">
-        <span
-            class="license_note_txt">Your Demo account has been expired. Please contact magentosupport@xecurify.com</span>
-    </div>
-    <br>
-<?php }
-
-echo '	<div style=" padding: 0 1%;">
-            <div class="topnav" id="myTopnav">
-                <a class="nav-tab ' . ($activeTab == 'account' ? 'active' : '') . '" href="' . $account . '">Account</a>
-                <a class="nav-tab ' . ($activeTab == 'multisitesettings' ? 'active' : '') . '" href="' . $multisitesettings . '">Multisite Settings</a>
-                <a class="nav-tab ' . ($activeTab == 'idpsettings' ? 'active' : '') . '" href="' . $idpsettings . '">Identity Providers</a>
-                <a class="nav-tab ' . ($activeTab == 'spsettings' || $activeTab == 'idps' ? 'active' : '') . '" href="' . $spsettings . '">Service Providers</a>
-                <a class="nav-tab ' . ($activeTab == 'signinsettings' ? 'active' : '') . '" href="' . $signinsettings . '">Sign In Settings</a>
-                <a class="nav-tab ' . ($activeTab == 'attrsettings' ? 'active' : '') . '" href="' . $attrsettings . '">Attribute Mapping</a>
-                <a class="nav-tab ' . ($activeTab == 'rolesettings' ? 'active' : '') . '" href="' . $rolesettings . '">Role Mapping</a>
-                <a class="nav-tab ' . ($activeTab == 'upgrade' ? 'active' : '') . '" href="' . $pricing . '">Upgrade</a>
-            </div>
-        </div>';
+$cm = $this->check_license_expiry_date();
+if (!($cm <= 30)) {
+    goto Am;
+}
+echo "\xd\12\40\40\40\x20\x20\40\40\40\x20\40\40\x3c\144\151\x76\40\143\154\x61\x73\x73\75\42\156\157\x74\151\x63\x65\40\x6e\157\x74\151\x63\x65\x2d\x77\141\162\x6e\x69\156\147\x22\x3e\131\157\x75\162\x20\155\x69\x6e\151\117\162\x61\156\147\145\40\x4d\141\x67\x65\x6e\164\x6f\x20\123\x41\x4d\x4c\x20\123\123\x4f\40\x50\154\165\x67\151\x6e\x20\154\151\143\x65\x6e\163\x65\x20\x69\163\40";
+if ($cm > 0) {
+    goto Qk;
+}
+echo "\x65\170\x70\x69\162\x65\x64\x2e\40\120\x6c\145\141\163\x65\x20\x63\157\x6e\x74\x61\143\x74\x20\74\x61\x20\164\x61\x72\147\x65\x74\x3d\42\142\154\x61\156\x6b\42\40\x68\x72\145\146\75\x22\150\x74\164\x70\x73\x3a\57\x2f\x6d\x61\x69\x6c\x2e\x67\157\x6f\x67\154\x65\56\x63\x6f\x6d\57\x6d\141\x69\x6c\57\165\57\x30\x2f\x3f\x66\x73\x3d\61\46\141\155\x70\x3b\164\146\75\143\155\46\141\155\160\x3b\163\x6f\x75\x72\143\145\75\155\141\x69\154\x74\157\46\x61\x6d\x70\73\x73\x75\x3d\121\x75\145\x72\x79\x2b\x74\x6f\53\162\x65\x6e\145\x77\x2b\115\x61\147\145\156\x74\157\53\123\x41\115\x4c\53" . $N0 . "\53\x50\154\x61\156\x2b\x26\141\x6d\160\73\164\x6f\75\x6d\x61\x67\x65\156\164\x6f\x73\165\x70\160\x6f\162\x74\100\170\145\143\165\x72\151\146\x79\56\x63\157\x6d\46\x61\155\x70\x3b\142\x6f\x64\x79\75\x49\53\x77\x61\156\x74\53\164\x6f\x2b\x72\x65\156\x65\167\53\164\150\145\53\115\x61\147\x65\156\x74\x6f\x2b\123\101\x4d\x4c\x2b" . $N0 . "\53\x50\x6c\x61\156\56\x2b\x22\76\155\141\147\x65\x6e\164\x6f\163\165\x70\160\157\162\164\x40\x78\145\x63\165\162\151\x66\x79\x2e\x63\x6f\x6d\40\x3c\57\x61\76\40\164\x6f\x20\162\145\x6e\x65\167\x20\x74\150\145\x20\154\151\143\145\x6e\163\145\x3c\x2f\x64\151\x76\x3e";
+goto Bx;
+Qk:
+echo "\x65\x78\160\151\x72\151\156\147\40\167\x69\164\150\151\156\40" . $cm . "\40\144\x61\171\163\74\57\x64\x69\x76\76";
+Bx:
+Am:
+CS:
+if (!$this->isTrialExpired()) {
+    goto MD;
+}
+echo "\40\40\40\40\x3c\x64\x69\x76\x20\x63\154\141\163\163\75\42\154\x69\143\x65\x6e\163\x65\x5f\x6e\157\164\145\x22\76\xd\12\40\40\x20\x20\40\40\40\40\74\x73\160\141\x6e\15\12\x20\x20\40\x20\40\x20\40\40\40\40\40\40\143\x6c\141\x73\163\x3d\42\154\151\x63\145\x6e\163\x65\137\x6e\157\x74\145\x5f\164\x78\164\42\x3e\x59\157\165\x72\x20\104\145\x6d\157\x20\x61\x63\143\x6f\165\156\x74\x20\150\x61\x73\x20\142\x65\x65\x6e\40\x65\170\x70\151\162\145\x64\x2e\40\120\x6c\x65\141\x73\145\x20\143\x6f\156\x74\x61\143\164\40\155\141\147\145\156\x74\x6f\x73\165\160\x70\157\162\164\x40\x78\x65\143\165\x72\151\x66\171\56\x63\157\155\74\x2f\163\x70\141\156\x3e\xd\xa\x20\40\40\x20\x3c\x2f\x64\x69\x76\76\xd\xa\40\x20\x20\x20\x3c\x62\x72\x3e\15\xa";
+MD:
+echo "\x9\74\144\x69\x76\x20\x73\164\171\x6c\145\x3d\x22\40\160\x61\x64\144\151\x6e\147\x3a\40\x30\x20\61\x25\73\42\76\xd\12\40\x20\40\40\x20\x20\x20\40\x20\40\40\x20\74\144\x69\x76\40\x63\154\x61\163\x73\x3d\42\x74\x6f\160\x6e\141\x76\42\40\x69\144\x3d\42\x6d\x79\x54\157\x70\156\x61\166\x22\x3e\15\xa\40\40\x20\40\40\40\x20\x20\40\40\40\x20\40\x20\40\x20\x3c\141\x20\x63\154\141\x73\163\x3d\42\156\141\x76\55\x74\141\142\40" . ($M9 == "\x61\x63\x63\157\165\x6e\x74" ? "\141\143\164\x69\166\x65" : '') . "\x22\x20\x68\162\145\146\x3d\42" . $Qg . "\x22\x3e\101\x63\143\x6f\165\156\x74\74\57\141\76\xd\xa\x20\40\40\40\x20\x20\x20\40\x20\x20\40\40\x20\40\40\x20\74\x61\x20\143\154\x61\163\163\x3d\42\156\x61\166\x2d\x74\141\x62\40" . ($M9 == "\155\x75\154\164\151\x73\151\164\x65\x73\145\x74\164\151\156\147\163" ? "\x61\x63\x74\151\166\x65" : '') . "\42\40\150\x72\x65\x66\x3d\x22" . $Lb . "\x22\x3e\115\x75\x6c\x74\151\x73\x69\164\x65\x20\123\145\x74\164\x69\156\x67\163\x3c\57\141\x3e\15\xa\x20\40\x20\x20\40\x20\x20\x20\40\x20\x20\40\x20\40\40\40\x3c\141\40\x63\154\x61\x73\x73\75\x22\156\141\x76\55\x74\x61\x62\x20" . ($M9 == "\x69\x64\x70\x73\x65\x74\x74\151\156\147\x73" ? "\141\143\x74\151\x76\145" : '') . "\x22\x20\150\162\145\x66\75\x22" . $P4 . "\x22\x3e\111\x64\x65\156\164\x69\164\x79\x20\120\x72\157\x76\151\144\145\162\163\x3c\x2f\x61\76\xd\12\40\40\x20\x20\x20\40\40\x20\40\40\x20\x20\40\40\x20\x20\74\x61\x20\143\x6c\x61\x73\x73\x3d\x22\156\x61\166\x2d\164\141\x62\40" . ($M9 == "\163\160\163\x65\x74\164\x69\x6e\x67\x73" || $M9 == "\151\x64\160\x73" ? "\141\x63\164\151\166\x65" : '') . "\42\x20\x68\x72\x65\146\x3d\42" . $pC . "\x22\76\x53\145\162\x76\151\143\x65\40\x50\x72\x6f\x76\151\x64\x65\x72\163\74\x2f\141\x3e\15\xa\x20\x20\40\40\x20\40\40\x20\x20\40\x20\40\40\40\40\40\x3c\141\40\143\154\x61\x73\163\75\x22\x6e\141\166\x2d\164\141\x62\x20" . ($M9 == "\163\x69\x67\156\151\156\x73\145\164\164\151\156\147\x73" ? "\x61\143\164\x69\x76\x65" : '') . "\42\x20\150\162\145\146\x3d\42" . $sM . "\x22\x3e\123\x69\x67\x6e\40\x49\156\x20\x53\145\x74\164\x69\x6e\x67\x73\74\57\x61\76\15\12\x20\40\x20\40\40\40\x20\x20\40\40\40\x20\x20\40\40\x20\74\x61\x20\143\154\141\163\163\x3d\x22\x6e\141\166\x2d\x74\141\x62\40" . ($M9 == "\x61\164\x74\162\x73\145\164\x74\x69\x6e\147\163" ? "\141\x63\164\151\166\145" : '') . "\x22\40\x68\162\x65\146\75\x22" . $lf . "\42\76\101\x74\x74\x72\151\x62\x75\x74\x65\x20\115\x61\160\x70\151\x6e\147\x3c\57\141\76\xd\xa\40\40\x20\x20\40\x20\40\40\x20\x20\40\x20\40\x20\40\40\74\x61\40\x63\x6c\141\163\x73\75\42\156\x61\x76\x2d\x74\141\142\40" . ($M9 == "\x72\157\x6c\145\x73\145\x74\x74\x69\156\147\163" ? "\x61\143\x74\x69\x76\145" : '') . "\42\40\x68\162\x65\x66\75\x22" . $aM . "\42\x3e\x52\x6f\x6c\x65\40\115\141\x70\x70\151\x6e\147\74\x2f\x61\76\xd\12\x20\x20\40\x20\x20\40\40\x20\40\40\x20\x20\40\x20\40\x20\x3c\141\x20\143\x6c\141\x73\163\75\42\156\x61\x76\x2d\164\x61\x62\40" . ($M9 == "\x75\x70\147\162\x61\144\145" ? "\x61\143\x74\x69\166\x65" : '') . "\x22\40\150\x72\x65\146\75\x22" . $wg . "\x22\x3e\125\x70\147\162\141\x64\145\x3c\57\x61\76\15\xa\x20\40\40\x20\40\x20\x20\x20\40\x20\40\x20\x3c\57\x64\x69\166\x3e\xd\12\40\40\40\x20\40\40\x20\40\x3c\57\x64\151\166\76";

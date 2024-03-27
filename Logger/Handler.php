@@ -1,22 +1,11 @@
 <?php
 
+
 namespace MiniOrange\SP\Logger;
 
 use Monolog\Logger;
-
 class Handler extends \Magento\Framework\Logger\Handler\Base
 {
-    /**
-     * Logging level
-     * @var int
-     */
     protected $loggerType = Logger::DEBUG;
-
-    /**
-     * File name
-     * @var string
-     */
-
-    protected $fileName = '/var/log/mo_saml.log';
-
+    protected $fileName = "\x2f\166\141\162\x2f\x6c\x6f\x67\x2f\155\157\137\163\x61\155\154\56\x6c\157\147";
 }

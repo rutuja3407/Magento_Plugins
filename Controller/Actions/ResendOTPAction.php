@@ -1,94 +1,51 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Actions;
 
 use MiniOrange\SP\Helper\Curl;
 use MiniOrange\SP\Helper\Exception\OTPSendingFailedException;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Handles processing of the Resend OTP to Phone/Email form from the
- * validation page. This action checks the session of what type of
- * validation is the user trying to do and resend the otp to
- * that authentication type.
- */
 class ResendOTPAction extends BaseAdminAction
 {
     private $REQUEST;
-
-    /**
-     * Execute function to execute the classes function.
-     *
-     * @throws \Exception
-     */
     public function execute()
     {
-        // fetch the last place otp was sent to - phone or email
-        $otpType = $this->spUtility->getStoreConfig(SPConstants::OTP_TYPE);
-        $email = $this->spUtility->getStoreConfig(SPConstants::SAMLSP_EMAIL);
-        $phone = $this->spUtility->getStoreConfig(SPConstants::SAMLSP_PHONE);
-        $this->startVerificationProcess($phone, $email, $otpType);
+        $oo = $this->spUtility->getStoreConfig(SPConstants::OTP_TYPE);
+        $EK = $this->spUtility->getStoreConfig(SPConstants::SAMLSP_EMAIL);
+        $zw = $this->spUtility->getStoreConfig(SPConstants::SAMLSP_PHONE);
+        $this->startVerificationProcess($zw, $EK, $oo);
     }
-
-
-    /**
-     * Function calls the Curl function to send the OTP
-     * to the phone number or email address provided by the admin.
-     *
-     * @param $phone
-     * @param $email
-     * @param $otpType
-     */
-    private function startVerificationProcess($phone, $email, $otpType)
+    private function startVerificationProcess($zw, $EK, $oo)
     {
-        $result = Curl::mo_send_otp_token($otpType, $email, $phone);
-        $result = json_decode((string)$result, true);
-        if (strcasecmp($result['status'], 'SUCCESS') == 0)
-            $this->handleOTPSentSuccess($result, $phone, $email, $otpType);
-        else
-            $this->handleOTPSendFailed();
+        $bs = Curl::mo_send_otp_token($oo, $EK, $zw);
+        $bs = json_decode((string) $bs, true);
+        if (strcasecmp($bs["\163\164\x61\x74\165\x73"], "\123\x55\103\103\x45\123\123") == 0) {
+            goto gF;
+        }
+        $this->handleOTPSendFailed();
+        goto Uj;
+        gF:
+        $this->handleOTPSentSuccess($bs, $zw, $EK, $oo);
+        Uj:
     }
-
-
-    /**
-     * This function is called to handle what should happen
-     * after OTP has been sent successfully to the user's
-     * phone or email. Show him the validate OTP screen.
-     * Set the Transaction ID and otpType in session so
-     * that it can fetched later on.
-     *
-     * @param $result
-     * @param $phone
-     * @param $email
-     * @param $otpType
-     */
-    private function handleOTPSentSuccess($result, $phone, $email, $otpType)
+    private function handleOTPSentSuccess($bs, $zw, $EK, $oo)
     {
-        $this->spUtility->setStoreConfig(SPConstants::TXT_ID, $result['txId']);
-        $this->spUtility->setStoreConfig(SPConstants::OTP_TYPE, $otpType);
+        $this->spUtility->setStoreConfig(SPConstants::TXT_ID, $bs["\x74\x78\111\144"]);
+        $this->spUtility->setStoreConfig(SPConstants::OTP_TYPE, $oo);
         $this->spUtility->setStoreConfig(SPConstants::REG_STATUS, SPConstants::STATUS_VERIFY_EMAIL);
-        $message = $otpType == SPConstants::OTP_TYPE_PHONE ? SPMessages::parse('PHONE_OTP_SENT', array('phone' => $phone))
-            : SPMessages::parse('EMAIL_OTP_SENT', array('email' => $email));
-        $this->messageManager->addSuccessMessage($message);
+        $qx = $oo == SPConstants::OTP_TYPE_PHONE ? SPMessages::parse("\x50\110\x4f\116\x45\137\117\124\x50\x5f\x53\x45\x4e\124", array("\160\150\157\156\145" => $zw)) : SPMessages::parse("\105\115\x41\111\114\x5f\117\124\120\x5f\x53\105\116\x54", array("\x65\x6d\x61\151\x6c" => $EK));
+        $this->messageManager->addSuccessMessage($qx);
     }
-
-
-    /**
-     * This function is called to handle what should happen
-     * after sending of OTP fails for a phone number or email.
-     */
     private function handleOTPSendFailed()
     {
         $this->spUtility->setStoreConfig(SPConstants::REG_STATUS, SPConstants::STATUS_VERIFY_EMAIL);
-        throw new OTPSendingFailedException;
+        throw new OTPSendingFailedException();
     }
-
-
-    /** Setter for the request Parameter */
-    public function setRequestParam($request)
+    public function setRequestParam($E1)
     {
-        $this->REQUEST = $request;
+        $this->REQUEST = $E1;
         return $this;
     }
 }

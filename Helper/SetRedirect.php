@@ -1,28 +1,29 @@
 <?php
 
-namespace MiniOrange\SP\Helper;
 
+namespace MiniOrange\SP\Helper;
 
 class SetRedirect
 {
-    public function setRedirect($url, $msg = null, $type = null)
+    public function setRedirect($At, $Fx = null, $qI = null)
     {
-
-        if ($msg !== null) {
-            // Controller may have set this directly
-            $this->message = $msg;
+        if (!($Fx !== null)) {
+            goto wv;
         }
-
-        // Ensure the type is not overwritten by a previous call to setMessage.
-        if (empty($type)) {
-            if (empty($besaml->messageType)) {
-                $this->messageType = 'message';
-            }
-        } // If the type is explicitly set, set it.
-        else {
-            $this->messageType = $type;
+        $this->message = $Fx;
+        wv:
+        if (empty($qI)) {
+            goto WQ;
         }
-        return $besaml;
+        $this->messageType = $qI;
+        goto tr;
+        WQ:
+        if (!empty($GQ->messageType)) {
+            goto Bt;
+        }
+        $this->messageType = "\155\x65\x73\x73\141\x67\145";
+        Bt:
+        tr:
+        return $GQ;
     }
-
 }

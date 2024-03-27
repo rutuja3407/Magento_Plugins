@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Adminhtml\Spsettings;
 
 use Magento\Backend\App\Action\Context;
@@ -22,317 +23,229 @@ use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPMessages;
 use MiniOrange\SP\Helper\SPUtility;
 use Psr\Log\LoggerInterface;
-
-/**
- * This class handles the action for endpoint: mospsaml/spsettings/Index
- * Extends the \Magento\Backend\App\Action for Admin Actions which
- * inturn extends the \Magento\Framework\App\Action\Action class necessary
- * for each Controller class
- */
 class Index extends BaseAdminAction
 {
     protected $sp;
     protected $responseFactory;
-    /**
-     * @var CustomerSetupFactory
-     */
     protected $customerSetupFactory;
-    /**
-     * The first function to be called when a Controller class is invoked.
-     * Usually, has all our controller logic. Returns a view/page/template
-     * to be shown to the users.
-     *
-     * This function gets and prepares all our SP config data from the
-     * database. It's called when you visis the moasaml/spsettings/Index
-     * URL. It prepares all the values required on the SP setting
-     * page in the backend and returns the block to be displayed.
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
-
     private $adminRoleModel;
     private $userGroupModel;
-    /**
-     * @var ModuleDataSetupInterface
-     */
     private $moduleDataSetup;
-    /**
-     * @var AttributeSetFactory
-     */
     private $attributeSetFactory;
-
-    /**
-     * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param CustomerSetupFactory $customerSetupFactory
-     * @param AttributeSetFactory $attributeSetFactory
-     */
-
-    public function __construct(
-        Context                                                    $context,
-        PageFactory                                                $resultPageFactory,
-        SPUtility                                                  $spUtility,
-        ManagerInterface                                           $messageManager,
-        LoggerInterface                                            $logger,
-        \Magento\Authorization\Model\ResourceModel\Role\Collection $adminRoleModel,
-        \Magento\Customer\Model\ResourceModel\Group\Collection     $userGroupModel,
-        Sp                                                         $sp,
-        ModuleDataSetupInterface                                   $moduleDataSetup,
-        CustomerSetupFactory                                       $customerSetupFactory,
-        AttributeSetFactory                                        $attributeSetFactory,
-        ResponseFactory                                            $responseFactory
-    )
+    public function __construct(Context $gt, PageFactory $Jq, SPUtility $fR, ManagerInterface $b_, LoggerInterface $kU, \Magento\Authorization\Model\ResourceModel\Role\Collection $sP, \Magento\Customer\Model\ResourceModel\Group\Collection $i6, Sp $ou, ModuleDataSetupInterface $iD, CustomerSetupFactory $Kn, AttributeSetFactory $Z8, ResponseFactory $Jv)
     {
-        //You can use dependency injection to get any class this observer may need.
-        parent::__construct($context, $resultPageFactory, $spUtility, $messageManager, $logger, $sp);
-        $this->adminRoleModel = $adminRoleModel;
-        $this->sp = $sp;
-        $this->userGroupModel = $userGroupModel;
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->customerSetupFactory = $customerSetupFactory;
-        $this->attributeSetFactory = $attributeSetFactory;
-        $this->responseFactory = $responseFactory;
-
+        parent::__construct($gt, $Jq, $fR, $b_, $kU, $ou);
+        $this->adminRoleModel = $sP;
+        $this->sp = $ou;
+        $this->userGroupModel = $i6;
+        $this->moduleDataSetup = $iD;
+        $this->customerSetupFactory = $Kn;
+        $this->attributeSetFactory = $Z8;
+        $this->responseFactory = $Jv;
     }
-
     public function execute()
     {
-        if ($this->spUtility->check_license_plan(4)) {
-            $send_email = $this->spUtility->getStoreConfig(SPConstants::SEND_EMAIL);
-            if ($send_email == NULL) {
-                $currentAdminUser = $this->spUtility->getCurrentAdminUser()->getData();
-                $magentoVersion = $this->spUtility->getMagnetoVersion();
-                $userEmail = $currentAdminUser['email'];
-                $firstName = $currentAdminUser['firstname'];
-                $lastName = $currentAdminUser['lastname'];
-                $site = $this->spUtility->getBaseUrl();
-                $values = array($firstName, $lastName, $magentoVersion, $site);
-                $this->spUtility->setStoreConfig(SPConstants::SEND_EMAIL, 1);
-                Curl::submit_to_magento_team($userEmail, 'Installed Successfully-Account Tab', $values);
-                $this->spUtility->flushCache();
-            }
+        if (!$this->spUtility->check_license_plan(4)) {
+            goto PG;
         }
-
+        $Az = $this->spUtility->getStoreConfig(SPConstants::SEND_EMAIL);
+        if (!($Az == NULL)) {
+            goto l5;
+        }
+        $fU = $this->spUtility->getCurrentAdminUser()->getData();
+        $RH = $this->spUtility->getMagnetoVersion();
+        $ii = $fU["\145\155\x61\x69\x6c"];
+        $FO = $fU["\146\x69\x72\163\164\156\x61\x6d\x65"];
+        $Fo = $fU["\x6c\141\x73\164\156\x61\155\145"];
+        $kz = $this->spUtility->getBaseUrl();
+        $jT = array($FO, $Fo, $RH, $kz);
+        $this->spUtility->setStoreConfig(SPConstants::SEND_EMAIL, 1);
+        Curl::submit_to_magento_team($ii, "\111\156\163\x74\x61\x6c\154\145\144\x20\123\165\x63\x63\145\163\163\x66\x75\154\x6c\171\x2d\x41\x63\143\x6f\165\156\x74\x20\124\141\x62", $jT);
+        $this->spUtility->flushCache();
+        l5:
+        PG:
         try {
-            $params = $this->getRequest()->getParams(); //get params
-            $this->checkIfValidPlugin(); //check if user has registered himself
-            if (!empty($params['add'])) {
-                $this->spUtility->checkIdpLimit();
+            $Te = $this->getRequest()->getParams();
+            $this->checkIfValidPlugin();
+            if (empty($Te["\x61\x64\x64"])) {
+                goto Fq;
             }
-            if ($this->isFormOptionBeingSaved($params)) // check if form options are being saved
-            {
-                if (!$this->spUtility->check_license_plan(3) && !$this->spUtility->check_license_plan(4)) {
-                    $collection = $this->spUtility->getIDPApps();
-                    foreach ($collection as $item) {
-                        if ($item->getData()["idp_name"] !== $params['saml_identity_name']) {
-                            $idpDetails = $item->getData();
-                            $this->idpDetails = $idpDetails;
-                            $this->spUtility->deleteIDPApps((int)$idpDetails['id']);
-                        }
-                    }
-                }
-                // check if required values have been submitted
-                if ($params['option'] == 'saveIDPSettings') {
-                    if (empty($params['saml_identity_name']))
-                        $params['saml_identity_name'] = $params['selected_provider'];
-
-                    $this->checkIfRequiredFieldsEmpty(array('saml_identity_name' => $params, 'saml_issuer' => $params,
-                        'saml_login_url' => $params, 'saml_x509_certificate' => $params));
-                    $this->processValuesAndSaveData($params);
-
-                    if ($this->spUtility->check_license_plan(3)) {
-                        $idps = $this->spUtility->getAdminUrl('mospsaml/idps/index');
-                        header('Location:' . $idps);
-                        exit;
-                    }
-                    $this->spUtility->flushCache();
-                    $this->messageManager->addSuccessMessage(SPMessages::SETTINGS_SAVED);
-                } else if ($params['option'] == 'upload_metadata_file') {
-                    $folder = 'idpMetadata/';
-                    $metadata_file = 'metadata_file';
-                    $file = $this->getRequest()->getFiles($metadata_file);
-                    $url = $params['upload_url'];
-                    if (!empty($params['saml_identity_name']) || !empty($params['selected_provider']) && (!$this->spUtility->isBlank($file['tmp_name']) || !$this->spUtility->isBlank($url))) {
-                        $matches = array();
-                        $provider = !empty($params['saml_identity_name']) ? $params['saml_identity_name'] : $params['selected_provider'];
-                        $regex = preg_match('/[\'^£$%&*()}{@#~?> <>,|=+¬-]/', $provider);
-                        if (!$regex) {
-                            $this->spUtility->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $provider);
-                            $this->spUtility->handle_upload_metadata($file, $url, $params);
-                            $this->spUtility->reinitConfig();
-                            $this->spUtility->flushCache();
-                            $this->getMessageManager()->addSuccessMessage(SPMessages::SETTINGS_SAVED);
-                        } else {
-                            $this->getMessageManager()->addErrorMessage('Special characters are not allowed in the Identity Provider Name!');
-                        }
-                    } elseif (empty($params['saml_identity_name']) && !empty($params['selected_provider'])) {
-                        $this->spUtility->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $params['selected_provider']);
-                        $this->spUtility->flushCache();
-                    } elseif (empty($params['saml_identity_name']) || ($this->spUtility->isBlank($file['tmp_name']) && $this->spUtility->isBlank($url))) {
-                        $this->getMessageManager()->addErrorMessage('No Metadata IDP Name/File/URL Provided.');
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            $this->logger->debug($e->getMessage());
-        }
-        $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu(SPConstants::MODULE_DIR . SPConstants::MODULE_BASE);
-        $resultPage->addBreadcrumb(__('SP Settings'), __('SP Settings'));
-        $resultPage->getConfig()->getTitle()->prepend(__(SPConstants::MODULE_TITLE));
-        return $resultPage;
-    }
-
-
-    /**
-     * Process Values being submitted and save data in the database.
-     */
-    private function processValuesAndSaveData($params)
-    {
-
-        if (!empty($params['option']) && $params['option'] != 'goBack') {
-
-            $mo_idp_app_name = trim($params['saml_identity_name']);
-            $collection = $this->spUtility->getIDPApps();
-            $idpDetails = null;
-            foreach ($collection as $item) {
-                if ($item->getData()["idp_name"] === $mo_idp_app_name) {
-                    $idpDetails = $item->getData();
-                }
-            }
-        }
-
-        $mo_idp_entity_id = !empty($params['saml_issuer']) ? trim($params['saml_issuer']) : '';
-        $mo_idp_saml_login_url = !empty($params['saml_login_url']) ? trim($params['saml_login_url']) : '';
-        $mo_idp_saml_login_binding = !empty($params['saml_login_binding_type']) ? $params['saml_login_binding_type'] : '';
-        $mo_idp_saml_logout_url = !empty($params['saml_logout_url']) ? trim($params['saml_logout_url']) : '';
-        $mo_idp_saml_logout_binding = !empty($params['saml_logout_binding_type']) ? $params['saml_logout_binding_type'] : '';
-        $mo_idp_x509_certificate = !empty($params['saml_x509_certificate']) ? SAML2Utilities::sanitize_certificate($params['saml_x509_certificate']) : '';
-        $mo_idp_response_signed = !empty($params['saml_response_signed']) && $params['saml_response_signed'] == 'Yes' ? 1 : 0;
-        $mo_idp_assertion_signed = !empty($params['saml_assertion_signed']) && $params['saml_assertion_signed'] == 'Yes' ? 1 : 0;
-
-        if($this->spUtility->check_license_plan(2) || $this->spUtility->check_license_plan(1))
-        {
-            $this->spUtility->setStoreConfig(SPConstants::AUTO_REDIRECT_APP, $mo_idp_app_name);
-        }
-        else
-        {
-            $this->idpDetails = $idpDetails;
-        }
-        $mo_idp_show_admin_link = !empty($this->idpDetails['show_admin_link']) && $this->idpDetails['show_admin_link'] == true ? 1 : 0;
-        $mo_idp_show_customer_link = !empty($this->idpDetails['show_customer_link']) && $this->idpDetails['show_customer_link'] == true ? 1 : 0;
-        $mo_idp_auto_create_admin_users = !empty($this->idpDetails['auto_create_admin_users']) && $this->idpDetails['auto_create_admin_users'] == true ? 1 : 0;
-        $mo_idp_auto_create_customers = !empty($this->idpDetails['auto_create_customers']) && $this->idpDetails['auto_create_customers'] == true ? 1 : 0;
-        $mo_idp_disable_b2c = !empty($this->idpDetails['disable_b2c']) && $this->idpDetails['disable_b2c'] == true ? 1 : 0;
-        $mo_idp_force_authentication_with_idp = !empty($this->idpDetails['force_authentication_with_idp']) && $this->idpDetails['force_authentication_with_idp'] == true ? 1 : 0;
-        $mo_idp_auto_redirect_to_idp = !empty($this->idpDetails['auto_redirect_to_idp']) && $this->idpDetails['auto_redirect_to_idp'] == true ? 1 : 0;
-        $mo_idp_link_to_initiate_sso = !empty($this->idpDetails['link_to_initiate_sso']) && $this->idpDetails['link_to_initiate_sso'] == true ? 1 : 0;
-        $mo_idp_update_attributes_on_login = !empty($this->idpDetails['update_attributes_on_login']) ? $this->idpDetails['update_attributes_on_login'] : 'unchecked';
-        $mo_idp_create_magento_account_by = !empty($this->idpDetails['create_magento_account_by']) ? $this->idpDetails['create_magento_account_by'] : '';
-        $mo_idp_email_attribute = !empty($this->idpDetails['email_attribute']) ? $this->idpDetails['email_attribute'] : '';
-        $mo_idp_username_attribute = !empty($this->idpDetails['username_attribute']) ? $this->idpDetails['username_attribute'] : '';
-        $mo_idp_firstname_attribute = !empty($this->idpDetails['firstname_attribute']) ? $this->idpDetails['firstname_attribute'] : '';
-        $mo_idp_lastname_attribute = !empty($this->idpDetails['lastname_attribute']) ? $this->idpDetails['lastname_attribute'] : '';
-        $mo_idp_group_attribute = !empty($this->idpDetails['group_attribute']) ? $this->idpDetails['group_attribute'] : '';
-        $mo_idp_billing_city_attribute = !empty($this->idpDetails['billing_city_attribute']) ? $this->idpDetails['billing_city_attribute'] : '';
-        $mo_idp_billing_state_attribute = !empty($this->idpDetails['billing_state_attribute']) ? $this->idpDetails['billing_state_attribute'] : '';
-        $mo_idp_billing_country_attribute = !empty($this->idpDetails['billing_country_attribute']) ? $this->idpDetails['billing_country_attribute'] : '';
-        $mo_idp_billing_address_attribute = !empty($this->idpDetails['billing_address_attribute']) ? $this->idpDetails['billing_address_attribute'] : '';
-        $mo_idp_billing_phone_attribute = !empty($this->idpDetails['billing_phone_attribute']) ? $this->idpDetails['billing_phone_attribute'] : '';
-        $mo_idp_billing_zip_attribute = !empty($this->idpDetails['billing_zip_attribute']) ? $this->idpDetails['billing_zip_attribute'] : '';
-        $mo_idp_shipping_city_attribute = !empty($this->idpDetails['shipping_city_attribute']) ? $this->idpDetails['shipping_city_attribute'] : '';
-        $mo_idp_shipping_state_attribute = !empty($this->idpDetails['shipping_state_attribute']) ? $this->idpDetails['shipping_state_attribute'] : '';
-        $mo_idp_shipping_country_attribute = !empty($this->idpDetails['shipping_country_attribute']) ? $this->idpDetails['shipping_country_attribute'] : '';
-        $mo_idp_shipping_address_attribute = !empty($this->idpDetails['shipping_address_attribute']) ? $this->idpDetails['shipping_address_attribute'] : '';
-        $mo_idp_shipping_phone_attribute = !empty($this->idpDetails['shipping_phone_attribute']) ? $this->idpDetails['shipping_phone_attribute'] : '';
-        $mo_idp_shipping_zip_attribute = !empty($this->idpDetails['shipping_zip_attribute']) ? $this->idpDetails['shipping_zip_attribute'] : '';
-        $mo_idp_b2b_attribute = !empty($this->idpDetails['b2b_attribute']) ? $this->idpDetails['b2b_attribute'] : '';
-        $mo_idp_custom_tablename = !empty($this->idpDetails['custom_tablename']) ? $this->idpDetails['custom_tablename'] : '';
-        $mo_idp_custom_attributes = !empty($this->idpDetails['custom_attributes']) ? $this->idpDetails['custom_attributes'] : '';
-        $mo_idp_do_not_autocreate_if_roles_not_mapped = !empty($this->idpDetails['do_not_autocreate_if_roles_not_mapped']) ? $this->idpDetails['do_not_autocreate_if_roles_not_mapped'] : 'unchecked';
-        $mo_idp_update_backend_roles_on_sso = !empty($this->idpDetails['update_backend_roles_on_sso']) ? $this->idpDetails['update_backend_roles_on_sso'] : 'unchecked';
-        $mo_idp_update_frontend_groups_on_sso = !empty($this->idpDetails['update_frontend_groups_on_sso']) ? $this->idpDetails['update_frontend_groups_on_sso'] : 'unchecked';
-        $mo_idp_default_group = !empty($this->idpDetails['default_group']) ? $this->idpDetails['default_group'] : '';
-        $mo_idp_default_role = !empty($this->idpDetails['default_role']) ? $this->idpDetails['default_role'] : '';
-        $mo_idp_groups_mapped = !empty($this->idpDetails['groups_mapped']) ? $this->idpDetails['groups_mapped'] : '';
-        $mo_idp_roles_mapped = !empty($this->idpDetails['roles_mapped']) ? $this->idpDetails['roles_mapped'] : '';
-        $mo_saml_logout_redirect_url = !empty($this->idpDetails['saml_logout_redirect_url']) ? $this->idpDetails['saml_logout_redirect_url'] : '';
-        $billinandshippingchcekbox = !empty($this->idpDetails['saml_enable_billingandshipping']) ? $this->idpDetails['saml_enable_billingandshipping'] : 'none';
-        $sameasbilling = !empty($this->idpDetails['saml_sameasbilling']) ? $this->idpDetails['saml_sameasbilling'] : 'none';
-
-        $mo_saml_headless_sso = !empty($this->idpDetails['mo_saml_headless_sso']) && $this->idpDetails['mo_saml_headless_sso'] == true ? 1 : 0;
-        $mo_saml_frontend_post_url = !empty($this->idpDetails['mo_saml_frontend_post_url']) ? $this->idpDetails['mo_saml_frontend_post_url'] : '';
-
-        if (!is_null($idpDetails)) {
-            $this->spUtility->deleteIDPApps((int)$idpDetails['id']);
-        } else {
             $this->spUtility->checkIdpLimit();
+            Fq:
+            if (!$this->isFormOptionBeingSaved($Te)) {
+                goto XF;
+            }
+            if (!(!$this->spUtility->check_license_plan(3) && !$this->spUtility->check_license_plan(4))) {
+                goto gK;
+            }
+            $yG = $this->spUtility->getIDPApps();
+            foreach ($yG as $ub) {
+                if (!($ub->getData()["\x69\x64\160\137\x6e\141\155\145"] !== $Te["\x73\x61\155\154\x5f\151\x64\x65\156\164\151\x74\x79\x5f\x6e\141\x6d\145"])) {
+                    goto lt;
+                }
+                $hR = $ub->getData();
+                $this->spUtility->deleteIDPApps((int) $hR["\151\x64"]);
+                lt:
+                ic:
+            }
+            WG:
+            gK:
+            if ($Te["\x6f\160\164\151\157\x6e"] == "\163\x61\x76\145\x49\x44\120\x53\x65\164\164\x69\x6e\147\x73") {
+                goto ZG;
+            }
+            if (!($Te["\x6f\160\164\151\x6f\156"] == "\x75\160\x6c\157\141\144\137\155\145\x74\x61\144\x61\x74\x61\x5f\x66\x69\x6c\145")) {
+                goto F_;
+            }
+            $Ds = "\151\x64\160\x4d\145\x74\x61\x64\x61\164\x61\57";
+            $GB = "\x6d\145\164\x61\x64\x61\x74\141\x5f\146\151\x6c\x65";
+            $SI = $this->getRequest()->getFiles($GB);
+            $At = $Te["\165\160\154\157\x61\144\x5f\x75\162\x6c"];
+            if (!empty($Te["\x73\141\155\x6c\137\x69\x64\x65\156\x74\x69\164\x79\137\x6e\x61\x6d\145"]) || !empty($Te["\x73\x65\154\145\143\x74\x65\x64\x5f\x70\162\157\x76\x69\144\x65\x72"]) && (!$this->spUtility->isBlank($SI["\164\155\160\137\156\x61\x6d\x65"]) || !$this->spUtility->isBlank($At))) {
+                goto Ow;
+            }
+            if (empty($Te["\x73\141\155\x6c\137\x69\x64\145\156\164\151\x74\171\x5f\x6e\141\155\145"]) && !empty($Te["\163\x65\154\x65\x63\164\x65\x64\137\x70\162\x6f\x76\x69\x64\x65\162"])) {
+                goto Zp;
+            }
+            if (empty($Te["\x73\141\x6d\154\x5f\x69\144\x65\156\x74\x69\x74\171\x5f\x6e\141\x6d\x65"]) || $this->spUtility->isBlank($SI["\x74\x6d\160\137\156\x61\x6d\x65"]) && $this->spUtility->isBlank($At)) {
+                goto tu;
+            }
+            goto rC;
+            Ow:
+            $ob = array();
+            $dp = !empty($Te["\x73\x61\155\x6c\x5f\151\x64\145\x6e\164\151\x74\171\x5f\156\141\155\145"]) ? $Te["\163\x61\155\x6c\137\x69\x64\145\156\x74\151\164\171\137\156\141\x6d\x65"] : $Te["\163\145\x6c\x65\143\164\x65\144\137\160\x72\x6f\166\x69\x64\145\x72"];
+            $UG = preg_match("\x2f\x5b\x27\136\302\243\44\45\46\52\x28\x29\175\x7b\x40\x23\x7e\77\x3e\x20\x3c\x3e\x2c\x7c\x3d\53\xc2\254\x2d\135\x2f", $dp);
+            if (!$UG) {
+                goto TB;
+            }
+            $this->getMessageManager()->addErrorMessage("\x53\x70\x65\143\151\141\x6c\x20\x63\x68\x61\162\141\x63\164\x65\x72\x73\40\x61\x72\145\x20\x6e\x6f\164\40\141\x6c\x6c\157\x77\x65\144\x20\x69\156\40\x74\x68\x65\x20\111\x64\x65\x6e\164\x69\164\171\x20\x50\162\x6f\166\151\144\x65\162\40\116\141\155\145\x21");
+            goto rA;
+            TB:
+            $this->spUtility->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $dp);
+            $this->spUtility->handle_upload_metadata($SI, $At, $Te);
+            $this->spUtility->reinitConfig();
+            $this->spUtility->flushCache();
+            $this->getMessageManager()->addSuccessMessage(SPMessages::SETTINGS_SAVED);
+            rA:
+            goto rC;
+            Zp:
+            $this->spUtility->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $Te["\x73\145\154\x65\143\x74\145\x64\x5f\160\162\x6f\x76\x69\144\145\x72"]);
+            $this->spUtility->flushCache();
+            goto rC;
+            tu:
+            $this->getMessageManager()->addErrorMessage("\116\157\40\x4d\145\x74\141\x64\141\x74\141\40\x49\104\120\40\x4e\x61\x6d\145\x2f\106\151\154\145\x2f\125\122\x4c\x20\x50\162\x6f\166\151\144\x65\144\56");
+            rC:
+            F_:
+            goto v9;
+            ZG:
+            if (!empty($Te["\163\x61\x6d\x6c\x5f\151\x64\145\x6e\164\x69\164\x79\x5f\x6e\141\155\145"])) {
+                goto z8;
+            }
+            $Te["\x73\141\155\154\137\151\144\x65\156\164\x69\x74\171\137\x6e\x61\x6d\145"] = $Te["\163\145\154\x65\143\x74\145\144\x5f\x70\162\157\166\x69\x64\x65\162"];
+            z8:
+            $this->checkIfRequiredFieldsEmpty(array("\x73\x61\155\x6c\x5f\x69\144\x65\156\x74\x69\x74\x79\137\156\141\x6d\x65" => $Te, "\x73\x61\x6d\x6c\x5f\x69\163\x73\165\x65\x72" => $Te, "\x73\x61\155\154\137\x6c\157\147\x69\156\137\165\162\x6c" => $Te, "\x73\x61\x6d\154\137\x78\x35\x30\x39\x5f\x63\x65\162\164\151\146\151\x63\x61\164\x65" => $Te));
+            $this->processValuesAndSaveData($Te);
+            if (!$this->spUtility->check_license_plan(3)) {
+                goto Oi;
+            }
+            $JQ = $this->spUtility->getAdminUrl("\x6d\157\163\x70\163\141\155\154\57\x69\x64\x70\163\57\x69\156\144\145\170");
+            header("\114\x6f\x63\141\x74\151\157\156\x3a" . $JQ);
+            exit;
+            Oi:
+            $this->spUtility->flushCache();
+            $this->messageManager->addSuccessMessage(SPMessages::SETTINGS_SAVED);
+            v9:
+            XF:
+        } catch (\Exception $IR) {
+            $this->messageManager->addErrorMessage($IR->getMessage());
+            $this->logger->debug($IR->getMessage());
         }
-        $this->spUtility->setIDPApps(
-            $mo_idp_app_name,
-            $mo_idp_entity_id,
-            $mo_idp_saml_login_url,
-            $mo_idp_saml_login_binding,
-            $mo_idp_saml_logout_url,
-            $mo_idp_saml_logout_binding,
-            $mo_idp_x509_certificate,
-            $mo_idp_response_signed,
-            $mo_idp_assertion_signed,
-            $mo_idp_show_admin_link,
-            $mo_idp_show_customer_link,
-            $mo_idp_auto_create_admin_users,
-            $mo_idp_auto_create_customers,
-            $mo_idp_disable_b2c,
-            $mo_idp_force_authentication_with_idp,
-            $mo_idp_auto_redirect_to_idp,
-            $mo_idp_link_to_initiate_sso,
-            $mo_idp_update_attributes_on_login,
-            $mo_idp_create_magento_account_by,
-            $mo_idp_email_attribute,
-            $mo_idp_username_attribute,
-            $mo_idp_firstname_attribute,
-            $mo_idp_lastname_attribute,
-            $mo_idp_group_attribute,
-            $mo_idp_billing_city_attribute,
-            $mo_idp_billing_state_attribute,
-            $mo_idp_billing_country_attribute,
-            $mo_idp_billing_address_attribute,
-            $mo_idp_billing_phone_attribute,
-            $mo_idp_billing_zip_attribute,
-            $mo_idp_shipping_city_attribute,
-            $mo_idp_shipping_state_attribute,
-            $mo_idp_shipping_country_attribute,
-            $mo_idp_shipping_address_attribute,
-            $mo_idp_shipping_phone_attribute,
-            $mo_idp_shipping_zip_attribute,
-            $mo_idp_b2b_attribute,
-            $mo_idp_custom_tablename,
-            $mo_idp_custom_attributes,
-            $mo_idp_do_not_autocreate_if_roles_not_mapped,
-            $mo_idp_update_backend_roles_on_sso,
-            $mo_idp_update_frontend_groups_on_sso,
-            $mo_idp_default_group,
-            $mo_idp_default_role,
-            $mo_idp_groups_mapped,
-            $mo_idp_roles_mapped,
-            $mo_saml_logout_redirect_url,
-            $billinandshippingchcekbox,
-            $sameasbilling,
-            $mo_saml_headless_sso,
-            $mo_saml_frontend_post_url);
-        $this->spUtility->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $mo_idp_app_name);
-        $this->spUtility->setStoreConfig(SPConstants::IDP_NAME, $mo_idp_app_name);
+        $Vy = $this->resultPageFactory->create();
+        $Vy->setActiveMenu(SPConstants::MODULE_DIR . SPConstants::MODULE_BASE);
+        $Vy->addBreadcrumb(__("\x53\120\40\x53\x65\x74\x74\x69\156\x67\163"), __("\x53\120\x20\x53\145\x74\164\x69\x6e\147\163"));
+        $Vy->getConfig()->getTitle()->prepend(__(SPConstants::MODULE_TITLE));
+        return $Vy;
+    }
+    private function processValuesAndSaveData($Te)
+    {
+        if (!(!empty($Te["\157\x70\x74\151\157\156"]) && $Te["\157\160\x74\x69\x6f\x6e"] != "\147\157\x42\141\143\153")) {
+            goto Hk;
+        }
+        $gu = trim($Te["\x73\x61\155\x6c\137\x69\x64\x65\x6e\x74\151\164\171\137\156\x61\155\145"]);
+        $yG = $this->spUtility->getIDPApps();
+        $hR = null;
+        foreach ($yG as $ub) {
+            if (!($ub->getData()["\151\x64\160\x5f\x6e\x61\x6d\145"] === $gu)) {
+                goto K5;
+            }
+            $hR = $ub->getData();
+            K5:
+            BW:
+        }
+        pZ:
+        Hk:
+        $FW = !empty($Te["\x73\x61\x6d\154\137\151\163\x73\165\x65\x72"]) ? trim($Te["\163\x61\x6d\x6c\137\x69\x73\163\165\145\162"]) : '';
+        $I_ = !empty($Te["\163\141\155\x6c\x5f\154\x6f\147\151\x6e\x5f\x75\x72\154"]) ? trim($Te["\163\141\x6d\154\137\x6c\157\x67\151\156\x5f\x75\162\154"]) : '';
+        $CI = !empty($Te["\163\x61\155\x6c\x5f\x6c\x6f\147\x69\x6e\x5f\x62\x69\x6e\144\151\156\147\137\164\x79\x70\x65"]) ? $Te["\x73\141\155\154\137\x6c\157\x67\151\156\137\x62\151\156\x64\151\156\x67\137\x74\171\160\x65"] : '';
+        $tb = !empty($Te["\x73\141\155\154\137\154\157\147\157\x75\164\137\165\x72\154"]) ? trim($Te["\x73\x61\x6d\154\x5f\154\x6f\147\157\165\164\137\x75\162\x6c"]) : '';
+        $fF = !empty($Te["\x73\141\x6d\154\x5f\154\x6f\147\x6f\165\164\137\x62\151\x6e\x64\x69\156\147\x5f\x74\x79\x70\x65"]) ? $Te["\x73\141\155\x6c\137\154\157\147\x6f\x75\164\137\x62\x69\x6e\x64\x69\x6e\147\137\x74\x79\x70\145"] : '';
+        $zS = !empty($Te["\163\x61\155\154\137\170\65\60\x39\137\x63\145\162\x74\151\x66\151\143\x61\164\x65"]) ? SAML2Utilities::sanitize_certificate($Te["\x73\x61\155\154\137\x78\65\60\x39\137\x63\x65\162\x74\151\x66\x69\143\x61\164\145"]) : '';
+        $LT = !empty($Te["\163\141\x6d\x6c\x5f\162\x65\163\x70\157\156\163\x65\x5f\x73\151\147\x6e\145\x64"]) && $Te["\163\x61\155\x6c\137\x72\x65\163\160\157\156\163\x65\137\x73\151\x67\156\145\x64"] == "\131\145\x73" ? 1 : 0;
+        $GK = !empty($Te["\x73\141\x6d\x6c\137\141\x73\x73\145\x72\x74\x69\x6f\x6e\x5f\x73\x69\147\x6e\145\x64"]) && $Te["\163\x61\x6d\x6c\x5f\141\163\x73\x65\162\164\x69\157\156\x5f\163\151\x67\x6e\145\144"] == "\x59\x65\163" ? 1 : 0;
+        $y4 = !empty($hR["\163\150\x6f\167\x5f\141\144\x6d\151\x6e\137\x6c\x69\x6e\x6b"]) && $hR["\163\x68\157\x77\x5f\141\x64\x6d\151\156\x5f\154\x69\x6e\153"] == true ? 1 : 0;
+        $t8 = !empty($hR["\x73\150\x6f\167\137\143\165\163\164\157\155\x65\162\x5f\x6c\x69\x6e\x6b"]) && $hR["\x73\x68\x6f\x77\137\x63\165\x73\x74\x6f\155\145\x72\x5f\154\151\156\153"] == true ? 1 : 0;
+        $Ab = !empty($hR["\x61\x75\x74\x6f\x5f\143\x72\145\141\164\145\x5f\x61\x64\x6d\151\x6e\137\x75\x73\x65\x72\163"]) && $hR["\141\165\164\x6f\x5f\143\162\145\x61\x74\145\137\141\x64\155\x69\x6e\137\165\163\145\x72\163"] == true ? 1 : 0;
+        $Cx = !empty($hR["\x61\x75\164\157\x5f\143\162\x65\141\x74\145\137\x63\165\163\x74\157\x6d\145\x72\x73"]) && $hR["\141\165\x74\x6f\x5f\143\x72\x65\x61\x74\x65\137\x63\165\163\x74\157\x6d\145\162\x73"] == true ? 1 : 0;
+        $kY = !empty($hR["\144\151\x73\141\142\x6c\x65\x5f\142\x32\143"]) && $hR["\x64\151\x73\x61\x62\x6c\145\x5f\x62\62\x63"] == true ? 1 : 0;
+        $ni = !empty($hR["\146\x6f\162\x63\x65\137\141\x75\x74\x68\x65\156\x74\151\x63\x61\164\x69\x6f\x6e\x5f\x77\x69\164\150\x5f\x69\x64\160"]) && $hR["\x66\x6f\162\143\145\x5f\141\x75\x74\150\x65\x6e\164\x69\143\x61\164\x69\157\x6e\x5f\167\x69\164\x68\x5f\x69\x64\160"] == true ? 1 : 0;
+        $j2 = !empty($hR["\141\x75\x74\157\x5f\162\x65\x64\x69\162\145\143\164\x5f\164\157\x5f\151\144\x70"]) && $hR["\141\x75\x74\x6f\x5f\x72\145\x64\151\x72\145\143\x74\137\x74\157\x5f\151\144\160"] == true ? 1 : 0;
+        $zL = !empty($hR["\x6c\x69\156\153\137\x74\x6f\x5f\x69\156\x69\x74\151\x61\164\145\137\x73\x73\157"]) && $hR["\x6c\151\156\153\x5f\164\157\x5f\x69\x6e\x69\164\x69\141\164\x65\137\163\163\157"] == true ? 1 : 0;
+        $Ql = !empty($hR["\x75\160\x64\141\164\x65\x5f\x61\x74\x74\162\151\142\165\164\x65\x73\x5f\x6f\156\137\154\x6f\147\x69\156"]) ? $hR["\165\x70\x64\x61\164\x65\x5f\x61\164\164\x72\x69\x62\x75\164\145\163\137\157\156\137\x6c\x6f\x67\x69\x6e"] : "\165\x6e\143\x68\x65\143\153\145\x64";
+        $Hr = !empty($hR["\x63\x72\x65\x61\164\x65\x5f\x6d\141\x67\145\156\164\157\x5f\141\x63\x63\x6f\165\x6e\164\137\x62\x79"]) ? $hR["\x63\x72\x65\x61\164\145\137\155\141\147\x65\x6e\164\157\137\141\x63\143\x6f\165\156\x74\137\142\x79"] : '';
+        $Qx = !empty($hR["\145\155\141\151\x6c\x5f\141\x74\x74\162\151\x62\165\164\145"]) ? $hR["\x65\155\141\x69\154\x5f\141\164\164\x72\151\x62\165\x74\145"] : '';
+        $pf = !empty($hR["\165\x73\x65\162\x6e\141\155\145\137\141\164\x74\162\151\x62\x75\x74\x65"]) ? $hR["\165\x73\145\162\x6e\141\x6d\145\137\141\164\x74\x72\x69\142\165\164\145"] : '';
+        $Z3 = !empty($hR["\146\151\x72\x73\x74\x6e\x61\155\x65\137\141\164\x74\162\x69\142\x75\164\145"]) ? $hR["\x66\x69\x72\163\164\156\x61\155\145\137\x61\164\x74\x72\151\142\165\164\145"] : '';
+        $ph = !empty($hR["\154\x61\163\x74\x6e\141\x6d\145\x5f\141\164\x74\x72\x69\x62\x75\164\x65"]) ? $hR["\154\x61\163\x74\156\141\x6d\145\137\141\x74\x74\x72\151\x62\165\x74\145"] : '';
+        $qS = !empty($hR["\x67\162\157\x75\160\137\x61\164\x74\162\x69\142\165\164\x65"]) ? $hR["\147\162\157\x75\160\137\x61\164\x74\x72\151\x62\165\164\x65"] : '';
+        $pY = !empty($hR["\x62\151\154\154\151\x6e\x67\137\143\151\x74\x79\137\x61\x74\164\x72\x69\x62\165\164\x65"]) ? $hR["\x62\x69\154\x6c\151\156\x67\137\143\151\164\171\137\141\164\164\x72\151\x62\165\x74\x65"] : '';
+        $mP = !empty($hR["\x62\151\154\x6c\x69\156\x67\x5f\x73\x74\x61\x74\x65\x5f\x61\x74\164\x72\151\x62\x75\x74\145"]) ? $hR["\142\x69\x6c\x6c\x69\x6e\147\137\x73\164\141\x74\145\137\141\x74\164\162\151\x62\165\x74\145"] : '';
+        $gr = !empty($hR["\x62\x69\x6c\x6c\x69\x6e\147\137\x63\x6f\x75\156\x74\162\x79\137\x61\x74\x74\x72\x69\x62\x75\x74\x65"]) ? $hR["\x62\x69\154\x6c\151\156\x67\x5f\143\157\165\156\164\x72\x79\x5f\141\x74\x74\x72\151\142\x75\x74\x65"] : '';
+        $lF = !empty($hR["\142\x69\154\154\151\x6e\x67\137\141\144\x64\162\145\x73\163\x5f\141\164\x74\162\x69\x62\165\164\x65"]) ? $hR["\x62\x69\x6c\154\x69\156\x67\x5f\141\144\x64\162\x65\x73\x73\x5f\x61\x74\x74\x72\151\x62\x75\164\x65"] : '';
+        $M8 = !empty($hR["\142\x69\154\154\151\156\147\x5f\x70\x68\x6f\156\x65\x5f\141\164\164\162\151\142\165\x74\x65"]) ? $hR["\x62\151\154\x6c\x69\156\147\x5f\x70\x68\157\x6e\x65\x5f\x61\164\x74\x72\151\142\x75\x74\x65"] : '';
+        $h5 = !empty($hR["\142\x69\154\x6c\x69\x6e\147\x5f\172\151\x70\x5f\141\164\164\x72\x69\x62\165\164\x65"]) ? $hR["\142\x69\x6c\x6c\x69\156\x67\x5f\x7a\x69\x70\x5f\x61\x74\164\162\151\142\x75\164\x65"] : '';
+        $se = !empty($hR["\x73\150\151\160\x70\151\x6e\147\137\143\151\x74\x79\x5f\141\x74\164\x72\151\142\165\x74\x65"]) ? $hR["\x73\150\151\160\160\151\156\147\137\143\151\x74\x79\137\141\164\x74\162\151\x62\165\164\145"] : '';
+        $zd = !empty($hR["\x73\150\x69\x70\x70\x69\x6e\147\137\163\x74\x61\x74\145\137\x61\164\x74\x72\x69\x62\x75\164\145"]) ? $hR["\163\150\151\160\160\x69\156\147\x5f\163\x74\141\164\x65\x5f\141\164\x74\x72\151\x62\x75\164\x65"] : '';
+        $il = !empty($hR["\x73\150\151\x70\160\x69\156\x67\137\x63\x6f\165\x6e\x74\162\x79\x5f\141\x74\164\x72\x69\142\165\x74\x65"]) ? $hR["\x73\150\x69\x70\160\151\156\147\x5f\x63\157\x75\x6e\x74\x72\x79\x5f\x61\164\164\162\151\142\x75\164\145"] : '';
+        $We = !empty($hR["\x73\x68\x69\160\x70\151\x6e\x67\x5f\141\144\144\162\145\163\163\137\x61\x74\x74\x72\x69\x62\165\164\x65"]) ? $hR["\163\x68\x69\160\x70\151\x6e\147\x5f\141\144\144\x72\145\x73\x73\137\x61\164\164\x72\151\x62\x75\164\145"] : '';
+        $Qn = !empty($hR["\163\x68\151\160\160\x69\x6e\147\137\x70\x68\x6f\x6e\x65\137\x61\x74\164\162\151\x62\x75\x74\145"]) ? $hR["\163\150\151\x70\x70\x69\x6e\x67\137\160\x68\157\156\x65\x5f\x61\x74\x74\x72\151\x62\x75\x74\x65"] : '';
+        $Pt = !empty($hR["\163\150\151\x70\x70\x69\156\147\x5f\x7a\151\x70\x5f\x61\x74\164\x72\x69\142\x75\164\145"]) ? $hR["\x73\x68\151\x70\160\151\x6e\x67\137\x7a\151\160\x5f\141\164\x74\162\x69\x62\x75\164\x65"] : '';
+        $Dx = !empty($hR["\x62\62\142\137\x61\x74\x74\162\151\x62\x75\x74\145"]) ? $hR["\x62\x32\x62\x5f\x61\164\164\x72\x69\142\x75\x74\145"] : '';
+        $C5 = !empty($hR["\143\165\x73\164\x6f\155\137\164\141\x62\x6c\145\156\141\155\x65"]) ? $hR["\143\165\x73\164\x6f\x6d\x5f\x74\141\142\x6c\x65\x6e\x61\155\145"] : '';
+        $V9 = !empty($hR["\x63\x75\x73\164\157\155\x5f\x61\x74\x74\x72\x69\142\165\164\145\163"]) ? $hR["\x63\165\x73\164\x6f\x6d\137\141\x74\x74\162\x69\142\165\164\x65\163"] : '';
+        $WD = !empty($hR["\x64\157\x5f\156\157\164\137\x61\165\x74\x6f\143\162\145\x61\x74\x65\137\151\x66\137\162\x6f\154\145\x73\137\156\x6f\164\137\155\141\160\160\x65\x64"]) ? $hR["\x64\x6f\137\x6e\x6f\x74\137\x61\165\x74\157\x63\x72\x65\141\x74\145\137\x69\146\137\162\157\x6c\145\x73\137\156\157\x74\137\155\141\x70\x70\x65\144"] : "\x75\x6e\x63\x68\x65\143\153\145\144";
+        $VJ = !empty($hR["\165\x70\x64\x61\x74\145\x5f\142\141\x63\x6b\x65\156\144\137\x72\x6f\154\x65\x73\137\157\156\x5f\x73\163\x6f"]) ? $hR["\x75\x70\144\141\x74\x65\137\x62\x61\x63\x6b\145\156\x64\x5f\x72\x6f\x6c\x65\163\x5f\x6f\x6e\137\x73\163\157"] : "\165\x6e\143\150\145\143\x6b\x65\144";
+        $mk = !empty($hR["\x75\x70\144\141\164\x65\137\x66\x72\x6f\156\x74\x65\156\x64\x5f\147\x72\x6f\165\160\x73\137\x6f\x6e\x5f\x73\x73\157"]) ? $hR["\x75\x70\x64\141\164\x65\x5f\x66\x72\x6f\156\x74\x65\156\144\137\147\162\x6f\165\160\x73\x5f\157\156\137\163\163\x6f"] : "\165\x6e\143\x68\x65\143\x6b\145\x64";
+        $YO = !empty($hR["\x64\x65\x66\141\165\154\164\137\x67\162\157\x75\x70"]) ? $hR["\x64\x65\146\141\165\x6c\164\137\x67\162\x6f\165\x70"] : '';
+        $Le = !empty($hR["\x64\145\146\141\x75\x6c\164\137\x72\x6f\x6c\145"]) ? $hR["\144\145\x66\141\165\x6c\164\137\162\157\x6c\145"] : '';
+        $Qu = !empty($hR["\x67\162\157\x75\x70\x73\x5f\155\141\x70\160\x65\x64"]) ? $hR["\x67\x72\x6f\x75\x70\x73\x5f\155\x61\160\160\x65\144"] : '';
+        $by = !empty($hR["\162\x6f\x6c\145\x73\137\x6d\x61\x70\x70\x65\x64"]) ? $hR["\x72\x6f\x6c\145\x73\x5f\x6d\x61\x70\160\145\x64"] : '';
+        $bw = !empty($hR["\163\x61\155\x6c\x5f\x6c\157\x67\x6f\165\x74\x5f\x72\145\x64\151\162\x65\x63\164\x5f\x75\162\x6c"]) ? $hR["\x73\141\x6d\154\x5f\x6c\x6f\x67\157\x75\x74\x5f\x72\x65\x64\x69\x72\145\x63\164\137\165\x72\x6c"] : '';
+        $Yx = !empty($hR["\163\x61\x6d\x6c\x5f\x65\x6e\x61\142\x6c\x65\137\142\151\154\154\x69\156\x67\x61\x6e\144\163\x68\x69\x70\160\151\x6e\x67"]) ? $hR["\163\141\155\x6c\x5f\145\x6e\141\142\154\x65\137\x62\x69\154\154\151\x6e\x67\x61\x6e\144\163\150\151\x70\160\151\x6e\147"] : "\x6e\x6f\x6e\145";
+        $lN = !empty($hR["\x73\x61\x6d\154\x5f\x73\x61\155\x65\x61\x73\142\x69\154\x6c\151\x6e\147"]) ? $hR["\163\141\155\154\137\163\141\155\145\141\x73\x62\x69\154\154\x69\x6e\147"] : "\x6e\157\156\145";
+        $GE = !empty($hR["\155\157\137\x73\x61\155\154\137\150\x65\x61\x64\x6c\x65\x73\163\x5f\x73\163\157"]) && $hR["\x6d\157\137\163\141\x6d\154\137\150\x65\x61\x64\154\145\x73\x73\x5f\x73\163\157"] == true ? 1 : 0;
+        $Q7 = !empty($hR["\155\x6f\x5f\163\141\x6d\154\x5f\x66\162\157\156\x74\145\156\x64\x5f\160\157\x73\x74\137\x75\162\154"]) ? $hR["\155\x6f\x5f\163\141\155\x6c\x5f\x66\x72\157\x6e\164\x65\x6e\x64\x5f\160\157\163\x74\x5f\x75\x72\154"] : '';
+        if (!is_null($hR)) {
+            goto WH;
+        }
+        $this->spUtility->checkIdpLimit();
+        goto Mt;
+        WH:
+        $this->spUtility->deleteIDPApps((int) $hR["\151\x64"]);
+        Mt:
+        $this->spUtility->setIDPApps($gu, $FW, $I_, $CI, $tb, $fF, $zS, $LT, $GK, $y4, $t8, $Ab, $Cx, $kY, $ni, $j2, $zL, $Ql, $Hr, $Qx, $pf, $Z3, $ph, $qS, $pY, $mP, $gr, $lF, $M8, $h5, $se, $zd, $il, $We, $Qn, $Pt, $Dx, $C5, $V9, $WD, $VJ, $mk, $YO, $Le, $Qu, $by, $bw, $Yx, $lN, $GE, $Q7);
+        $this->spUtility->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $gu);
+        $this->spUtility->setStoreConfig(SPConstants::IDP_NAME, $gu);
         $this->spUtility->reinitConfig();
     }
-
-
-    /**
-     * Is the user allowed to view the Service Provider settings.
-     * This is based on the ACL set by the admin in the backend.
-     * Works in conjugation with acl.xml
-     *
-     * @return bool
-     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(SPConstants::MODULE_DIR . SPConstants::MODULE_SPSETTINGS);

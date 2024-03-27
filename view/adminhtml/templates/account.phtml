@@ -1,49 +1,42 @@
-<!--
-    This template file is for the account settings.
-    File acts as a view file for our Account.
--->
-
 <?php
-// initialize all values required on this page
-$status = $this->getRegistrationStatus();
-$userEmail = $this->getCurrentAdminUser()->getEmail();
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
 
-echo '	<div class="row">
-<div class="col-sm-8">
-<div class="page" id="account">
-            <div class="mosp_table_layout">';
-
-if ($status == '') {
-    echo $this->getLayout()
-        ->createBlock("MiniOrange\SP\Block\Sp")
-        ->setTemplate("MiniOrange_SP::verify.phtml")
-        ->toHtml();
-} else if (strcmp($status, 'MO_OTP_EMAIL_VALIDATE') == 0
-    || strcmp($status, 'MO_OTP_PHONE_VALIDATE') == 0
-    || strcmp($status, 'MO_OTP_DELIVERED_FAILURE') == 0) {
-    echo $this->getLayout()
-        ->createBlock("MiniOrange\SP\Block\Sp")
-        ->setTemplate("MiniOrange_SP::validate.phtml")
-        ->toHtml();
-} else if ($status == 'MO_VERIFY_CUSTOMER') {
-    echo $this->getLayout()
-        ->createBlock("MiniOrange\SP\Block\Sp")
-        ->setTemplate("MiniOrange_SP::verify.phtml")
-        ->toHtml();
-} else if (!$this->isVerified()) {
-    /*===========================================================================================
-                        THIS IS PREMIUM PLUGIN SPECIFIC
-    =============================================================================================*/
-    echo $this->getLayout()
-        ->createBlock("MiniOrange\SP\Block\Sp")
-        ->setTemplate("MiniOrange_SP::verifylk.phtml")
-        ->toHtml();
-} else {
-    echo $this->getLayout()
-        ->createBlock("MiniOrange\SP\Block\Sp")
-        ->setTemplate("MiniOrange_SP::profile.phtml")
-        ->toHtml();
+echo "\x3c\x21\55\55\15\12\x20\x20\x20\x20\x54\x68\151\x73\x20\x74\x65\x6d\160\154\141\164\x65\40\146\x69\154\145\40\x69\x73\40\x66\157\x72\40\164\x68\145\40\x61\x63\x63\157\165\156\x74\x20\x73\145\164\x74\x69\x6e\147\163\x2e\15\12\x20\x20\40\40\106\x69\x6c\x65\x20\141\x63\164\x73\40\x61\163\40\x61\40\166\x69\x65\167\40\x66\151\x6c\145\40\x66\x6f\162\x20\x6f\165\x72\40\101\x63\x63\x6f\x75\x6e\x74\x2e\15\12\55\55\x3e\xd\xa\15\xa";
+$kj = $this->getRegistrationStatus();
+$ii = $this->getCurrentAdminUser()->getEmail();
+echo "\11\x3c\144\151\166\40\143\x6c\141\x73\x73\75\42\x72\157\167\x22\76\15\12\x3c\x64\x69\x76\40\x63\154\x61\x73\x73\x3d\42\143\157\x6c\55\163\155\x2d\x38\42\76\xd\xa\x3c\x64\x69\166\40\x63\154\141\163\x73\75\42\160\x61\147\x65\x22\x20\151\144\x3d\42\x61\143\143\x6f\x75\156\x74\42\76\15\12\40\40\40\x20\x20\40\x20\40\x20\40\x20\40\x3c\144\151\166\40\x63\x6c\141\x73\163\75\x22\x6d\x6f\163\x70\x5f\x74\141\x62\x6c\x65\x5f\154\x61\x79\157\x75\x74\42\x3e";
+if ($kj == '') {
+    goto Bs;
 }
-
-echo '       </div>
-        </div>';
+if (strcmp($kj, "\115\117\x5f\117\124\120\x5f\x45\x4d\x41\111\114\x5f\x56\x41\114\111\x44\x41\124\x45") == 0 || strcmp($kj, "\x4d\117\137\117\x54\x50\137\x50\110\x4f\x4e\105\x5f\126\x41\114\x49\104\x41\124\105") == 0 || strcmp($kj, "\115\117\137\117\x54\120\137\x44\x45\x4c\111\126\105\122\105\x44\x5f\x46\101\x49\114\x55\x52\x45") == 0) {
+    goto Mn;
+}
+if ($kj == "\115\117\137\126\x45\x52\x49\106\131\137\x43\x55\x53\x54\117\115\x45\x52") {
+    goto HW;
+}
+if (!$this->isVerified()) {
+    goto md;
+}
+echo $this->getLayout()->createBlock("\115\151\x6e\x69\x4f\162\x61\x6e\147\145\x5c\x53\x50\x5c\x42\154\x6f\x63\153\134\123\160")->setTemplate("\x4d\151\x6e\151\117\x72\141\x6e\x67\x65\x5f\x53\x50\x3a\72\160\162\x6f\x66\x69\154\x65\56\x70\x68\x74\x6d\154")->toHtml();
+goto x5;
+md:
+echo $this->getLayout()->createBlock("\115\151\x6e\151\x4f\162\141\x6e\x67\x65\x5c\123\x50\134\x42\154\157\x63\153\x5c\123\x70")->setTemplate("\115\x69\156\151\x4f\162\141\x6e\147\x65\137\123\120\x3a\72\166\x65\x72\x69\x66\x79\x6c\x6b\x2e\160\x68\x74\155\x6c")->toHtml();
+x5:
+goto W_;
+HW:
+echo $this->getLayout()->createBlock("\115\x69\x6e\x69\117\x72\141\x6e\x67\x65\134\x53\120\134\102\x6c\x6f\x63\x6b\x5c\x53\160")->setTemplate("\x4d\x69\x6e\x69\117\162\x61\x6e\x67\x65\x5f\123\120\x3a\72\166\145\x72\151\x66\x79\56\160\x68\164\155\x6c")->toHtml();
+W_:
+goto IA;
+Mn:
+echo $this->getLayout()->createBlock("\x4d\151\156\151\x4f\x72\x61\156\147\145\134\x53\x50\134\102\x6c\157\143\153\134\123\160")->setTemplate("\115\151\x6e\151\x4f\x72\x61\x6e\x67\145\137\x53\120\x3a\x3a\166\x61\154\x69\x64\141\164\x65\x2e\x70\x68\164\155\154")->toHtml();
+IA:
+goto uo;
+Bs:
+echo $this->getLayout()->createBlock("\x4d\151\x6e\151\117\162\141\x6e\147\145\x5c\x53\120\x5c\x42\154\157\143\153\134\x53\160")->setTemplate("\x4d\151\156\151\x4f\x72\141\x6e\x67\x65\137\123\x50\72\x3a\x76\145\x72\151\x66\171\56\x70\150\x74\155\x6c")->toHtml();
+uo:
+echo "\x20\x20\40\x20\40\40\x20\74\57\x64\x69\166\x3e\15\12\x20\40\x20\x20\40\40\x20\x20\x3c\57\x64\x69\x76\x3e";

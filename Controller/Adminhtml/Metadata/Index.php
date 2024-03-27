@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Adminhtml\Metadata;
 
 use Magento\Backend\App\Action\Context;
@@ -12,68 +13,25 @@ use MiniOrange\SP\Helper\Saml2\MetadataGenerator;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPUtility;
 use Psr\Log\LoggerInterface;
-
-/**
- * This class handles the action for endpoint: mospsaml/metadata/Index
- * Extends the \Magento\Backend\App\Action for Admin Actions which
- * inturn extends the \Magento\Framework\App\Action\Action class necessary
- * for each Controller class
- */
 class Index extends BaseAdminAction
 {
-
     private $fileSystem;
-
-    public function __construct(
-        Context          $context,
-        PageFactory      $resultPageFactory,
-        SPUtility        $spUtility,
-        ManagerInterface $messageManager,
-        LoggerInterface  $logger,
-        File             $fileSystem,
-        Sp               $sp)
+    public function __construct(Context $gt, PageFactory $Jq, SPUtility $fR, ManagerInterface $b_, LoggerInterface $kU, File $B1, Sp $ou)
     {
-        //You can use dependency injection to get any class this observer may need.
-        parent::__construct($context, $resultPageFactory, $spUtility, $messageManager, $logger, $sp);
-        $this->fileSystem = $fileSystem;
-        $this->sp = $sp;
+        parent::__construct($gt, $Jq, $fR, $b_, $kU, $ou);
+        $this->fileSystem = $B1;
+        $this->sp = $ou;
     }
-
-
-    /**
-     * The first function to be called when a Controller class is invoked.
-     * Usually, has all our controller logic. Returns a view/page/template
-     * to be shown to the users.
-     *
-     * This function gets and prepares all our SP config data from the
-     * database. It's called when you visis the moasaml/metadata/Index
-     * URL. It prepares all the values required on the SP setting
-     * page in the backend and returns the block to be displayed.
-     *
-     * @deprecated - don't use this
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
     public function execute()
     {
-        $entity_id = $this->spUtility->getIssuerUrl();
-        $acs_url = $this->spUtility->getAcsUrl();
-        $certificate = $this->spUtility->getFileContents($this->spUtility->getResourcePath('sp-certificate.crt'));
-        $certificate = $this->spUtility->desanitizeCert($certificate);
-
-        $metadata = new MetadataGenerator($entity_id, TRUE, TRUE, $certificate, $acs_url, $acs_url, $acs_url, $acs_url, $acs_url);
-        $metadata = $metadata->generateSPMetadata();
-        $this->fileSystem->filePutContents($this->spUtility->getMetadataFilePath(), $metadata);
+        $o6 = $this->spUtility->getIssuerUrl();
+        $g0 = $this->spUtility->getAcsUrl();
+        $UY = $this->spUtility->getFileContents($this->spUtility->getResourcePath("\163\x70\x2d\x63\145\162\x74\x69\x66\x69\143\141\164\145\56\143\x72\164"));
+        $UY = $this->spUtility->desanitizeCert($UY);
+        $BF = new MetadataGenerator($o6, TRUE, TRUE, $UY, $g0, $g0, $g0, $g0, $g0);
+        $BF = $BF->generateSPMetadata();
+        $this->fileSystem->filePutContents($this->spUtility->getMetadataFilePath(), $BF);
     }
-
-
-    /**
-     * Is the user allowed to view the Metadata File.
-     * This is based on the ACL set by the admin in the backend.
-     * Works in conjugation with acl.xml
-     *
-     * @return bool
-     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(SPConstants::MODULE_DIR . SPConstants::METADATA_DOWNLOAD);

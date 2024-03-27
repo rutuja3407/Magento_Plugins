@@ -1,202 +1,115 @@
 <?php
-//Attribute mapping
-// initialze all values required to be shown on the page
-$roles = $this->getAllRoles();
-$groups = $this->getAllGroups();
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
 
-
-$isEnabled = $this->isEnabled();
-$formKey = $this->getBlockHtml('formkey');
-$premiumlink = $this->getExtensionPageUrl('upgrade');
-$plantype = !$this->check_license_plan(2) ? 'disabled' : '';
-
-$collection = $this->getAllIdpConfiguration();
-$default_provider = $this->getProvider();
-$count = 0;
-$idpDetails = null;
-foreach ($collection as $item) {
-    $count++;
-    if ($item->getData()["idp_name"] === $default_provider) {
-        $idpDetails = $item->getData();
+$CP = $this->getAllRoles();
+$DE = $this->getAllGroups();
+$A5 = $this->isEnabled();
+$ld = $this->getBlockHtml("\x66\157\162\155\153\x65\x79");
+$pz = $this->getExtensionPageUrl("\x75\x70\147\x72\141\x64\x65");
+$Ml = !$this->check_license_plan(2) ? "\x64\x69\163\141\x62\154\x65\144" : '';
+$yG = $this->getAllIdpConfiguration();
+$Yh = $this->getProvider();
+$ov = 0;
+$hR = null;
+foreach ($yG as $ub) {
+    $ov++;
+    if (!($ub->getData()["\x69\x64\x70\137\156\141\155\145"] === $Yh)) {
+        goto Ph;
     }
+    $hR = $ub->getData();
+    Ph:
+    BY:
 }
-if (empty($idpDetails)) {
-    foreach ($collection as $item) {
-        $idpDetails = $item->getData();
-        break;
+x1:
+if (!empty($hR)) {
+    goto kH;
+}
+foreach ($yG as $ub) {
+    $hR = $ub->getData();
+    goto m1;
+    IC:
+}
+m1:
+if (!isset($hR["\x69\x64\160\x5f\x6e\141\155\145"])) {
+    goto zL;
+}
+$Yh = $hR["\151\x64\x70\137\x6e\141\155\x65"];
+zL:
+kH:
+$FL = !$A5 || $ov == 0 ? "\x64\151\x73\x61\142\x6c\145\144" : '';
+if (!$this->isTrialExpired()) {
+    goto Pf;
+}
+$FL = "\x64\151\x73\x61\142\x6c\145\144";
+Pf:
+$Mz = !empty($hR["\x64\x6f\x5f\x6e\x6f\x74\137\141\x75\164\x6f\143\x72\x65\141\164\x65\x5f\x69\x66\137\162\x6f\154\145\x73\x5f\156\157\164\x5f\x6d\141\160\x70\x65\x64"]) ? $hR["\x64\x6f\x5f\156\x6f\164\137\141\165\164\157\143\162\145\141\164\x65\x5f\x69\146\137\x72\x6f\154\x65\163\137\x6e\x6f\x74\x5f\x6d\141\x70\160\x65\144"] : '';
+$bE = !empty($hR["\x75\x70\x64\141\164\145\x5f\142\x61\x63\x6b\145\156\x64\137\162\157\154\x65\x73\x5f\x6f\156\x5f\163\163\x6f"]) ? $hR["\165\160\144\141\x74\x65\137\x62\x61\143\x6b\x65\x6e\144\137\x72\157\154\x65\x73\x5f\x6f\156\x5f\163\163\x6f"] : '';
+$Gw = !empty($hR["\165\160\x64\x61\x74\x65\137\x66\x72\157\x6e\164\x65\x6e\x64\137\x67\x72\x6f\165\x70\x73\x5f\157\156\137\163\163\157"]) ? $hR["\165\x70\x64\141\x74\145\x5f\146\162\x6f\x6e\x74\145\x6e\x64\137\x67\162\157\x75\160\x73\137\x6f\156\137\163\x73\x6f"] : '';
+$iS = !empty($hR["\162\157\154\145\x73\x5f\155\x61\x70\160\x65\144"]) ? json_decode($hR["\162\157\154\x65\x73\137\155\x61\160\160\145\x64"]) : '';
+$iS = json_decode(json_encode($iS), true);
+$yw = !empty($hR["\x67\x72\157\x75\160\x73\137\155\x61\x70\x70\x65\x64"]) ? json_decode($hR["\147\162\x6f\x75\x70\x73\137\155\x61\x70\x70\x65\144"]) : '';
+$yw = json_decode(json_encode($yw), true);
+$Vb = !empty($hR["\144\x65\146\x61\165\154\x74\137\162\157\x6c\x65"]) ? $hR["\x64\145\146\x61\x75\x6c\x74\x5f\162\x6f\154\x65"] : '';
+$BK = !empty($hR["\144\x65\146\x61\165\x6c\x74\x5f\147\162\x6f\x75\160"]) ? $hR["\x64\145\146\x61\x75\154\x74\x5f\x67\162\157\165\x70"] : '';
+echo "\15\12\xd\xa\74\x64\151\x76\x20\x63\154\x61\163\x73\75\x22\x72\157\x77\42\76\xd\12\74\144\x69\166\40\143\154\141\163\163\75\42\x63\x6f\154\x2d\x73\155\55\70\x22\76\15\xa\x20\x20\40\40\74\144\151\x76\x20\x63\x6c\x61\163\163\x3d\42\160\x61\x67\145\42\x20\x69\144\x3d\x22\x61\164\164\162\155\x61\x70\160\151\x6e\147\x22\x3e\15\12\40\40\40\40\40\x20\x20\x20\74\144\x69\x76\40\x63\154\141\x73\x73\x3d\x22\x6d\x6f\x73\x61\x6d\154\137\164\141\x62\154\x65\x5f\154\x61\x79\157\x75\164\42\x3e\xd\xa\x20\x20\40\x20\40\x20\40\x20";
+if (!$this->check_license_plan(3)) {
+    goto EJ;
+}
+echo "\xd\12\x20\x20\x20\x20\x20\x20\40\40\x3c\146\x6f\162\155\40\x6e\141\155\145\x3d\x22\x73\145\154\145\x63\x74\137\x70\x72\157\x76\151\x64\145\162\x22\x20\x6d\145\164\x68\157\x64\x3d\x22\x70\157\x73\164\x22\x20\x61\x63\164\x69\x6f\x6e\75\42\42\76\xd\12\40\40\40\x20\40\40\40\40" . $ld . "\xd\12\40\40\x20\40\x20\40\x20\40\74\x69\x6e\x70\x75\x74\x20\x74\x79\160\x65\x3d\42\150\151\x64\x64\x65\156\42\40\x6e\x61\x6d\145\75\42\157\160\164\151\x6f\x6e\42\x20\x76\x61\154\165\x65\x3d\x22\x73\x61\166\x65\x50\162\157\x76\151\x64\145\x72\42\x3e\xd\12\40\x20\40\x20\x20\40\40\x20\x20\40\x20\x20\74\164\162\76\xd\xa\40\x20\40\x20\40\40\40\x20\40\x20\x20\x20\40\40\40\40\x3c\164\x64\76\x3c\x73\164\162\x6f\156\147\76\111\x64\145\x6e\164\151\164\171\40\120\162\x6f\166\x69\x64\x65\x72\72\x3c\x2f\163\164\x72\x6f\156\147\76\x3c\57\164\144\76\xd\xa\x20\40\x20\40\x20\x20\x20\x20\40\x20\40\x20\x20\x20\x20\40\x3c\164\x64\76\15\xa\40\40\x20\x20\40\40\40\40\x20\x20\40\40\40\40\x20\40\40\74\x73\x65\154\x65\143\x74\x20\x6f\x6e\x63\x68\141\x6e\147\x65\x3d\42\x74\x68\x69\x73\56\146\x6f\162\x6d\56\x73\x75\142\x6d\x69\164\50\x29\x22\x20\151\x64\75\x22\x6d\x6f\x5f\151\x64\145\x6e\164\x69\164\171\x5f\160\162\x6f\166\151\x64\x65\x72\42\x20" . $FL . "\x20\x20\x6e\141\x6d\x65\x3d\42\x6d\x6f\137\151\144\145\156\164\151\164\x79\x5f\x70\162\157\x76\x69\x64\x65\162\x22\xd\xa\40\40\40\40\40\x20\40\40\x20\x20\x20\x20\x20\x20\40\x20\x20\x73\x74\171\154\145\x3d\x22\167\x69\144\x74\150\72\x61\x75\x74\x6f\x3b\42\40\x3e";
+foreach ($yG as $ub) {
+    $rV = $Yh == $ub->getData()["\x69\144\160\137\x6e\x61\155\x65"] ? "\163\x65\154\x65\x63\x74\145\x64" : '';
+    print_r("\74\x6f\160\x74\151\x6f\156\x20\151\x64\x3d\x22\x6d\157\x32\x66\x5f\162\x6f\x6c\145\x73\x22\40" . $rV . "\xd\12\40\x20\x20\40\x20\x20\40\40\40\x20\x20\x20\x20\40\40\40\x20\x20\40\40\40\x20\40\40\x20\x20\x20\40\156\x61\155\x65\x3d\x22" . $ub->getData()["\151\x64\160\x5f\x6e\141\x6d\145"] . "\x22\x20\x76\x61\x6c\165\x65\x3d\x22" . $ub->getData()["\151\144\160\x5f\156\141\x6d\x65"] . "\x22\x3e" . $ub->getData()["\151\144\160\137\x6e\141\x6d\x65"] . "\x3c\x2f\157\160\164\x69\157\x6e\x3e");
+    Ye:
+}
+lI:
+echo "\xd\12\x20\40\40\40\40\x20\40\x20\x20\40\40\40\x20\40\x20\40\x20\x20\x20\40\x20\40\40\x20\x20\x20\40\x20\74\x2f\x73\x65\x6c\145\x63\164\76\15\xa\40\x20\x20\40\x20\x20\x20\40\40\40\x20\40\x20\x20\x20\40\x20\x20\x20\40\40\40\40\x20\40\40\40\40\74\151\76\x53\x65\154\145\x63\x74\x20\x49\x64\145\x6e\x74\x69\164\x79\40\120\162\x6f\166\151\x64\x65\162\40\x74\157\x20\x63\x6f\x6e\x66\x69\147\165\x72\x65\40\107\162\x6f\x75\160\x2f\122\x6f\x6c\x65\40\115\x61\160\x70\151\x6e\147\x2e\74\x2f\x69\x3e\xd\12\x20\40\x20\x20\40\x20\40\40\x20\x20\40\x20\40\x20\40\40\x20\x20\x20\40\x3c\57\x74\x64\x3e\xd\xa\40\x20\x20\x20\x20\x20\40\40\x20\x20\40\x20\74\x2f\164\x72\x3e\xd\xa\x20\40\x20\x20\x20\x20\x20\40\x20\40\40\40\74\x2f\x66\157\162\155\76\15\12\40\40\x20\x20\40\x20\40\40\x20\x20\40\x20";
+EJ:
+echo "\15\12\40\40\40\x20\40\x20\x20\x20\x20\40\x20\40\74\142\x72\x3e\15\xa\x20\x20\x20\40\40\40\x20\x20\40\40\40\40\x3c\x66\157\x72\x6d\40\156\141\x6d\145\75\42\x66\x22\40\x6d\x65\x74\150\157\144\x3d\42\x70\157\163\164\42\x20\141\143\164\151\x6f\156\75\42\42\x3e\15\xa\40\40\40\40\40\40\x20\40\x20\x20\x20\x20\x20\x20\40\40" . $ld . "\xd\12\x20\40\40\40\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x3c\151\156\160\x75\x74\40\164\x79\x70\145\x3d\x22\150\151\x64\144\x65\156\x22\x20\x6e\x61\155\145\75\42\x6f\160\164\151\157\156\x22\40\x76\x61\154\165\145\75\42\163\x61\166\145\x41\164\x74\162\x53\145\x74\x74\x69\156\x67\x73\x22\40\57\76\xd\12\x20\x20\x20\40\x20\x20\40\40\x20\x20\x20\x20\x20\40\x20\x20\74\x69\x6e\x70\165\164\x20\164\171\160\x65\75\x22\x68\151\144\144\x65\156\x22\x20\156\141\155\x65\x3d\x22\155\157\137\x69\144\145\x6e\x74\x69\x74\171\x5f\160\x72\x6f\166\151\144\145\x72\42\40\166\141\x6c\165\x65\x3d\42" . $Yh . "\x22\x3e\xd\xa\40\40\40\40\x20\x20\40\40\x20\40\x20\x20\x20\x20\x20\40\x3c\150\63\76\x52\x6f\x6c\x65\x20\115\x61\160\x70\151\x6e\147\x20\50\117\x70\x74\x69\157\x6e\x61\154\51";
+echo !$this->check_license_plan(2) ? "\x3c\163\x6d\x61\x6c\x6c\x20\x73\x74\171\154\x65\x3d\42\x66\157\156\164\55\167\145\151\x67\150\x74\72\40\142\157\154\x64\x3b\x20\146\x6f\x6e\164\x2d\163\x69\x7a\x65\72\40\x31\x2e\64\x72\145\x6d\x3b\x22\76\74\141\x20\163\164\171\154\145\75\x22\143\157\154\157\x72\72\162\x65\144\x3b\x20\42\x20\x68\162\x65\146\75\x22" . $pz . "\42\xd\xa\x20\x20\x20\x20\x20\x20\40\40\40\x20\40\x20\x20\40\40\x20\143\x6c\x61\x73\x73\75\x22\x70\162\145\x6d\x69\165\x6d\40\160\162\x65\155\x69\x75\x6d\x2d\x62\164\x6e\55\x6c\151\156\x6b\42\76\x5b\120\x52\105\115\111\x55\x4d\135\74\x2f\x61\76\74\x2f\163\x6d\141\154\x6c\76" : '';
+echo "\x3c\x2f\x68\63\76\74\150\162\57\76\15\12\x20\x20\40\40\40\40\40\40\40\40\x20\40\x20\40\40\40\x3c\x74\x61\x62\154\145\x3e\15\12\40\x20\x20\40\x20\x20\x20\40\40\x20\40\x20\x20\40\x20\40\40\40\40\40\x20\x20\40\40\74\x74\162\76\xd\xa\x20\x20\x20\x20\40\40\x20\40\40\40\x20\40\40\40\40\x20\40\40\40\x20\40\40\x20\40\x3c\164\144\x20\143\x6f\x6c\163\160\x61\x6e\75\x22\x32\42\x3e\xd\12\x20\x20\40\x20\40\x20\40\x20\40\x20\x20\40\x20\40\x20\x20\40\40\x20\40\40\40\x20\40\x20\40\x20\x20\x3c\144\151\166\x20\x63\x6c\x61\163\x73\75\42\155\157\137\156\x6f\164\145\42\x3e\15\12\40\x20\40\40\x20\x20\x20\x20\x20\x20\x20\x20\40\40\x20\40\40\x20\x20\x20\x20\40\40\40\x20\40\40\40\x20\40\40\40\74\x73\160\141\x6e\40\x63\154\x61\163\x73\x3d\x22\142\x74\x6e\x2d\x6c\151\156\153\x22\40\x68\162\145\146\75\42\42\76\x57\x68\x61\x74\40\x69\x73\40\122\x6f\154\145\x20\x4d\x61\x70\x70\x69\x6e\147\x3f\x3c\57\x73\x70\141\156\76\15\12\40\40\x20\40\40\x20\40\x20\x20\40\x20\x20\40\40\x20\40\40\x20\40\40\40\x20\40\x20\x20\x20\40\40\x20\40\x20\x20\74\144\151\166\x20\150\x69\144\x64\145\156\x20\143\x6c\141\x73\x73\75\x22\x63\157\x6c\x6c\141\160\163\x65\x22\76\xd\xa\40\x20\x20\x20\40\40\40\x20\x20\x20\x20\x20\40\x20\x20\x20\40\40\x20\40\40\x20\40\40\x20\x20\x20\40\x20\x20\x20\40\x20\x20\x20\x20\74\x6f\x6c\76\15\xa\x20\40\40\x20\40\40\40\40\40\40\40\40\x20\x20\40\x20\x20\x20\x20\40\40\x20\x20\x20\x20\40\40\x20\x20\40\40\x20\40\x20\x20\40\40\x20\x20\x20\x3c\154\x69\76\x4d\x61\x67\x65\156\164\157\40\165\x73\x65\163\x20\141\40\143\157\x6e\x63\x65\160\164\x20\x6f\x66\40\x52\x6f\x6c\145\x73\x2c\x20\x64\145\163\x69\147\x6e\145\144\x20\x74\x6f\x20\147\151\x76\x65\x20\164\x68\x65\x20\163\151\164\145\40\x6f\167\156\x65\162\x20\x74\x68\145\x20\x61\142\151\x6c\151\164\171\x20\x74\157\40\143\157\156\x74\x72\157\154\15\12\40\40\40\x20\x20\x20\x20\40\40\40\40\x20\x20\40\40\40\x20\40\40\40\x20\x20\x20\40\x20\x20\40\40\40\x20\40\40\x20\40\x20\40\40\x20\40\40\40\x20\40\x20\x20\40\x20\40\x77\x68\x61\164\40\x75\x73\145\162\163\x20\x63\x61\x6e\x20\x61\x6e\x64\40\143\141\156\x6e\157\164\40\x64\157\40\167\151\x74\x68\x69\156\x20\164\x68\145\x20\x73\x69\164\x65\x2e\74\x2f\x6c\151\x3e\xd\xa\x20\40\x20\x20\40\40\40\x20\x20\40\40\x20\40\40\40\40\x20\x20\x20\x20\40\x20\40\40\x20\x20\x20\40\40\x20\x20\40\x20\40\x20\40\x20\40\x20\x20\x3c\154\151\x3e\x52\x6f\154\x65\40\x6d\x61\160\160\x69\156\147\x20\150\145\x6c\160\163\x20\171\x6f\x75\x20\x74\x6f\x20\x61\x73\x73\151\x67\156\x20\163\x70\145\x63\151\146\x69\x63\40\162\157\x6c\145\163\40\x74\x6f\40\165\x73\145\162\163\40\x6f\146\40\x61\x20\x63\145\162\164\x61\x69\x6e\40\147\x72\x6f\165\160\40\151\x6e\40\171\x6f\x75\162\40\x49\144\120\56\x3c\57\x6c\151\x3e\15\12\x20\40\40\40\x20\40\40\40\40\x20\x20\40\40\40\x20\40\40\x20\40\x20\x20\x20\40\40\40\40\40\x20\40\40\x20\x20\x20\x20\x20\40\40\x20\40\x20\x3c\x6c\x69\x3e\127\x68\151\154\145\x20\141\165\164\x6f\x20\x72\145\x67\151\x73\x74\x65\x72\x69\x6e\x67\x2c\x20\x74\150\x65\40\165\163\145\162\x73\40\x61\x72\x65\x20\141\x73\x73\151\x67\156\145\144\x20\162\x6f\x6c\145\163\40\x62\x61\x73\x65\x64\x20\157\156\40\x74\x68\x65\x20\147\x72\157\x75\x70\40\x74\150\x65\x79\40\141\x72\145\40\155\x61\x70\x70\x65\144\40\164\157\x2e\74\x2f\x6c\151\76\15\xa\40\x20\40\x20\x20\x20\x20\40\40\x20\40\40\40\x20\x20\x20\x20\x20\40\x20\40\x20\x20\40\40\40\x20\40\40\40\x20\x20\40\x20\40\x20\x3c\57\x6f\154\76\15\xa\x20\x20\40\x20\x20\40\x20\x20\40\x20\x20\40\x20\40\x20\40\40\40\x20\40\x20\x20\40\40\x20\40\40\x20\40\40\x20\x20\x3c\57\x64\151\x76\76\15\12\x20\x20\40\40\40\x20\40\40\40\40\40\40\x20\x20\x20\x20\x20\x20\x20\x20\x20\40\x20\40\x20\x20\40\x20\74\57\144\x69\x76\x3e\xd\xa\x20\x20\x20\40\x20\x20\40\x20\40\x20\40\x20\x20\x20\40\x20\x20\40\40\40\x20\x20\40\x20\74\57\x74\144\x3e\xd\xa\x20\40\x20\40\40\x20\x20\x20\x20\40\x20\x20\x20\x20\40\x20\40\x20\40\x20\x20\40\x20\40\x3c\x2f\164\x72\76\xd\12\x20\x20\x20\x20\40\x20\40\40\40\40\40\x20\x20\40\x20\x20\40\x20\x20\x20\x3c\164\x72\x3e\74\x74\144\x20\143\x6f\154\x73\x70\x61\x6e\x3d\42\x32\x22\x3e\x3c\142\x3e\116\x4f\124\x45\72\x20\x3c\x2f\142\76\x52\x6f\x6c\x65\x20\x77\151\154\154\40\142\145\40\141\x73\163\x69\147\156\x65\x64\x20\x6f\156\154\x79\40\x74\157\40\156\157\156\x2d\x61\x64\155\x69\156\40\165\163\x65\162\163\40\50\x75\163\145\x72\40\164\x68\x61\x74\x20\144\x6f\40\116\117\124\x20\x68\141\x76\x65\40\x41\144\155\x69\x6e\151\x73\x74\x72\x61\x74\x6f\x72\15\12\40\x20\x20\x20\x20\40\40\40\x20\x20\40\x20\x20\40\40\x20\40\x20\40\40\x20\40\40\40\160\162\151\x76\x69\x6c\x65\147\x65\163\x29\x2e\x20\x59\157\165\x20\167\x69\x6c\154\40\x68\x61\166\x65\40\x74\157\x20\155\x61\x6e\x75\x61\154\x6c\x79\40\x63\x68\x61\x6e\147\145\x20\x74\150\x65\x20\x72\157\154\145\x20\x6f\146\40\x41\144\x6d\151\156\x69\163\x74\162\x61\164\x6f\162\40\x75\x73\x65\x72\163\x2e\x3c\57\x74\x64\x3e\x3c\57\164\x72\76\15\12\40\x20\40\40\x20\40\40\x20\40\40\x20\x20\x20\40\40\x20\x20\40\x20\x20\74\164\162\x3e\74\x74\144\x20\x63\157\x6c\x73\x70\141\x6e\x3d\x22\62\42\x3e\74\x69\x6e\x70\165\164\x20\164\171\x70\145\x3d\x22\x63\x68\x65\x63\153\142\x6f\x78\42\x20\151\144\75\42\x64\x6f\x6e\164\137\143\162\x65\141\x74\145\137\x75\163\145\x72\x5f\x69\x66\x5f\x72\x6f\x6c\145\137\x6e\157\164\137\x6d\141\160\x70\145\x64\42\xd\xa\x20\x20\x20\x20\x20\40\x20\40\x20\x20\x20\x20\x20\x20\x20\40\40\x20\40\40\40\x20\x20\x20\x6e\141\x6d\145\75\x22\x6d\x6f\137\163\x61\155\x6c\x5f\x64\x6f\156\164\137\143\x72\145\141\164\x65\x5f\165\x73\x65\162\137\x69\x66\x5f\162\157\x6c\145\x5f\x6e\157\x74\x5f\x6d\x61\x70\160\x65\144\42\40\166\x61\154\x75\x65\x3d\x22\x63\x68\x65\x63\153\x65\144\42\15\12\x20\x20\x20\x20\x20\40\x20\40\x20\x20\x20\40\40\40\x20\40\40\40\x20\x20\x20\x20\40\40" . $Mz . "\xd\12\x20\x20\x20\40\40\40\x20\40\40\x20\40\x20\x20\40\40\x20\x20\x20\x20\x20\40\40\40\40" . $FL . "\40" . $Ml . "\x20\x2f\x3e\46\156\142\163\160\73\x26\x6e\x62\x73\x70\73\104\157\x20\x6e\157\x74\x20\x61\x75\164\157\x20\x63\x72\145\141\164\145\40\x75\x73\x65\x72\x73\40\151\x66\40\162\157\x6c\x65\x73\40\141\x72\x65\40\156\x6f\164\15\xa\40\x20\x20\40\40\40\40\x20\x20\x20\40\40\x20\x20\40\40\x20\40\40\40\40\x20\40\x20\155\141\x70\160\x65\x64\40\x68\x65\162\x65\56\x3c\x2f\164\144\x3e\74\x2f\164\x72\x3e\15\xa\40\x20\40\x20\x20\40\40\x20\40\40\x20\x20\40\x20\x20\40\40\x20\40\40\x3c\164\x72\76\74\x74\144\40\143\x6f\x6c\x73\x70\x61\x6e\x3d\x22\x32\42\x3e\x3c\151\x6e\160\165\164\x20\x74\171\160\145\x3d\x22\143\x68\x65\143\153\x62\157\x78\42\x20\151\144\75\42\165\x70\x64\141\164\145\137\162\x6f\x6c\x65\163\42\15\xa\40\40\40\x20\40\x20\x20\x20\x20\40\40\x20\40\40\x20\40\40\x20\40\40\40\40\40\40\156\141\155\145\75\42\163\x61\155\154\x5f\x61\x6d\x5f\x75\x70\x64\141\x74\145\137\162\x6f\x6c\x65\163\42\40\x76\x61\x6c\165\145\x3d\42\x63\150\145\143\x6b\145\x64\x22\15\12\40\40\x20\x20\40\40\x20\x20\x20\40\40\x20\x20\40\40\x20\40\x20\40\40\40\40\40\40" . $bE . "\40" . $FL . "\40\40" . $Ml . "\x3e\xd\12\40\x20\x20\x20\40\x20\x20\40\x20\40\40\40\x20\x20\x20\x20\x20\x20\x20\40\40\x20\x20\x20\x26\x6e\142\163\160\73\46\156\142\163\160\73\125\160\x64\x61\164\145\40\102\x61\x63\153\145\x6e\144\40\x52\157\154\x65\x73\40\157\x6e\x20\x53\123\x4f\x2e\74\57\164\144\x3e\x3c\57\164\x72\x3e\15\12\40\x20\x20\40\x20\40\40\x20\x20\x20\x20\40\x20\40\x20\40\40\x20\40\x20\x3c\164\162\x3e\74\x74\144\40\143\157\154\163\x70\x61\x6e\x3d\42\x32\42\76\74\151\x6e\x70\165\x74\40\164\171\x70\145\75\42\x63\150\145\143\153\142\157\170\42\40\151\144\x3d\x22\x75\x70\x64\141\164\145\x5f\x66\x72\x6f\156\x74\x65\156\144\x5f\x72\x6f\x6c\145\x73\x22\xd\12\x20\40\40\x20\x20\x20\40\40\40\40\40\x20\x20\x20\40\40\40\40\40\x20\x20\x20\40\40\156\141\x6d\x65\x3d\42\163\x61\155\x6c\137\x61\x6d\137\x75\160\x64\141\x74\145\137\146\162\157\x6e\164\x65\x6e\x64\x5f\x72\157\154\145\163\42\x20\x76\x61\154\165\x65\x3d\42\x63\150\x65\143\x6b\145\x64\42\xd\xa\x20\x20\40\40\x20\x20\x20\40\40\40\x20\40\40\x20\40\40\40\40\x20\x20\x20\40\40\40" . $Gw . "\40" . $FL . "\40" . $Ml . "\x20\x3e\15\12\40\40\40\x20\x20\40\x20\x20\40\40\x20\40\40\x20\x20\40\40\x20\40\40\x20\x20\x20\x20\x26\156\x62\163\160\73\46\156\x62\x73\x70\x3b\x55\x70\x64\141\164\x65\40\x46\x72\157\x6e\164\x65\156\144\x20\122\x6f\154\145\163\40\x6f\x6e\40\123\x53\117\56\74\x2f\164\x64\76\74\x2f\x74\162\x3e\15\xa\x20\40\40\x20\40\40\x20\x20\x20\40\x20\x20\40\x20\x20\40\40\40\x20\x20\x3c\164\162\x3e\15\12\15\12\x20\x20\x20\40\40\x20\x20\40\x20\x20\40\40\x20\40\40\40\40\x20\x20\40\74\164\x72\76\xd\xa\x20\x20\x20\x20\40\40\40\40\40\x20\40\40\40\x20\x20\40\x20\x20\x20\40\x20\x20\x20\40\74\x74\x64\76\x3c\163\164\162\157\156\x67\76\x44\145\146\x61\x75\x6c\x74\40\x52\x6f\x6c\145\x20\x28\x46\157\162\x20\x42\141\x63\x6b\145\x6e\144\40\125\x73\145\162\163\x29\72\x3c\x2f\x73\164\x72\157\x6e\147\x3e\74\57\x74\x64\76\15\xa\40\40\40\40\x20\x20\40\x20\40\40\40\x20\40\x20\40\x20\40\x20\40\x20\x20\x20\40\x20\x3c\164\144\76\xd\xa\x20\x20\x20\x20\40\x20\40\40\x20\40\x20\x20\x20\40\40\x20\40\x20\x20\40\x20\x20\x20\x20\40\40\40\x20\40\40\x20\x20\x3c\x73\145\154\145\143\x74\40\151\x64\x3d\42\x73\x61\155\x6c\137\x61\x6d\137\144\145\x66\141\165\154\x74\x5f\x72\157\154\x65\42\x20\x6e\141\155\145\75\x22\x73\141\x6d\x6c\137\141\x6d\x5f\x64\x65\146\x61\x75\x6c\x74\x5f\x72\157\x6c\x65\42\xd\12\40\40\40\40\x20\40\40\x20\x20\40\x20\40\x20\x20\x20\40\x20\40\40\40\x20\40\x20\x20\x20\40\40\x20\40\x20\x20\x20\40\x20\40\x20\x20" . $FL . "\40" . $Ml . "\40\x73\x74\171\x6c\x65\75\x22\167\151\x64\164\x68\x3a\x31\65\x30\x70\170\73\x22\40\76";
+foreach ($CP as $An) {
+    $rV = $Vb == $An["\154\141\142\x65\x6c"] ? "\163\145\154\x65\143\x74\x65\144" : '';
+    echo "\x3c\157\160\164\x69\x6f\156\40\x69\x64\x3d\42\155\157\x32\x66\x5f\162\157\154\145\163\x22\40" . $rV . "\xd\12\40\x20\x20\40\40\x20\40\x20\40\40\x20\40\x20\x20\x20\40\x20\40\40\x20\x20\x20\40\40\40\40\x20\40\x20\x20\x20\x20\40\x20\40\x20\40\40\x20\40\156\x61\155\145\x3d\x22" . $An["\154\141\x62\x65\x6c"] . "\42\x20\x76\x61\154\165\x65\x3d\42" . $An["\154\141\142\x65\154"] . "\42\57\76" . $An["\154\x61\x62\145\x6c"] . "\x3c\57\157\x70\164\151\x6f\x6e\76";
+    Tz:
+}
+Gs:
+echo "\x20\40\x20\x20\40\x20\x20\40\x20\40\40\x20\x20\40\x20\x20\x20\40\40\40\x20\x20\x20\x20\x20\x20\40\74\x2f\163\145\x6c\145\143\x74\x3e\40\x20\40\74\151\76\123\x65\x6c\x65\x63\x74\40\164\x68\145\40\x64\x65\146\x61\x75\154\164\40\x72\157\x6c\145\40\x74\157\x20\x61\163\163\151\147\x6e\40\164\x6f\40\x6e\x65\167\40\x55\163\145\x72\163\56\74\57\x69\76\15\xa\40\x20\40\x20\40\40\x20\40\x20\40\x20\40\x20\x20\x20\x20\40\40\40\40\x20\x20\x20\40\x3c\x2f\164\x64\x3e\xd\12\40\40\x20\x20\x20\x20\x20\x20\40\x20\40\x20\40\x20\x20\40\40\40\x20\x20\74\57\x74\162\76";
+foreach ($CP as $An) {
+    $SP = $An["\166\141\154\165\145"];
+    $A0 = $An["\x6c\x61\x62\145\154"];
+    if (empty($iS)) {
+        goto UQ;
     }
-    if (isset($idpDetails['idp_name'])) {
-        $default_provider = $idpDetails['idp_name'];
-    }
+    $NC = (array) $iS;
+    $VP = !empty($NC[$SP]) ? $NC[$SP] : '';
+    goto Ks;
+    UQ:
+    $NC = [];
+    $VP = !empty($NC[$SP]) ? $NC[$SP] : '';
+    Ks:
+    echo "\74\x74\162\x3e\x3c\164\x64\x3e\74\142\x3e" . $A0 . "\74\x2f\142\x3e\74\57\164\144\76\x3c\x74\x64\x3e\x3c\x69\156\x70\165\x74\40\x74\171\160\145\x3d\42\164\x65\170\164\x22\x20\x6e\141\x6d\145\x3d\x22\163\141\x6d\154\x5f\141\x6d\x5f\x61\x64\x6d\x69\156\137\141\x74\164\162\x5f\166\141\154\165\x65\163\x5f" . $SP . "\x22\40\166\x61\x6c\x75\145\75\x22" . $VP . "\42\x20\160\154\x61\x63\145\150\157\154\x64\x65\162\75\42\x53\x65\155\151\x2d\143\157\x6c\x6f\156\x28\73\51\40\163\145\160\x61\x72\x61\164\x65\x64\40\122\157\x6c\x65\x73\40\146\157\162\x20" . $A0 . "\x22\x20\163\x74\x79\154\145\x3d\42\167\151\144\164\x68\72\x20\64\x30\60\x70\170\x3b\42" . $FL . "\x20" . $Ml . "\40\x2f\x3e\74\57\x74\144\x3e\74\57\x74\162\76";
+    tI:
 }
-$disabled = !$isEnabled || $count == 0 ? "disabled" : "";
-if ($this->isTrialExpired()) {
-    $disabled = "disabled";
+D_:
+echo "\15\xa\40\40\40\x20\40\40\x20\x20\x20\40\x20\40\x20\x20\40\x20\x20\40\40\40\74\164\144\76\74\164\162\76\x3c\57\164\x72\x3e\xd\12\40\40\x20\x20\40\40\x20\40\40\40\x20\40\40\x20\x20\40\40\x20\x20\x20\x3c\x74\162\40\x20\x73\164\x79\154\x65\75\42\142\x6f\162\144\x65\162\x2d\142\x6f\x74\164\157\x6d\72\x20\x31\x70\x78\x20\x73\x6f\154\151\144\x20\x23\x63\x31\142\x64\x62\144\73\x22\76\15\xa\40\40\40\x20\x20\40\40\x20\40\x20\x20\x20\x20\40\40\x20\x20\40\x20\x20\x3c\x74\x72\x3e\15\xa\x20\40\x20\x20\40\x20\x20\40\x20\x20\x20\x20\40\x20\40\40\40\40\x20\40\x3c\x74\x64\x3e\74\164\x72\76\74\57\164\x72\x3e\xd\12\x20\x20\40\x20\40\x20\40\40\x20\40\40\40\x20\x20\40\40\40\40\x20\40\x20\40\x20\x20\74\164\144\x3e\x3c\163\164\x72\157\156\x67\x3e\x44\x65\146\x61\165\x6c\164\40\x47\162\x6f\x75\160\x20\50\106\x6f\x72\40\106\x72\157\x6e\164\145\x6e\x64\40\x55\163\145\x72\x73\51\x3a\x3c\x2f\163\x74\x72\x6f\156\x67\76\x3c\x2f\164\144\x3e\xd\xa\x20\x20\40\x20\40\40\40\x20\40\40\x20\40\x20\x20\40\40\40\40\x20\x20\x20\40\x20\x20\x3c\x74\144\x3e\15\12\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\40\40\40\40\x20\x20\40\x20\40\40\x20\40\40\40\40\x20\40\40\x20\x20\40\x20\x3c\163\145\154\145\x63\164\x20\151\x64\x3d\42\163\141\155\154\137\x61\x6d\137\144\x65\x66\x61\165\154\164\x5f\x67\x72\157\165\x70\x22\x20\x6e\x61\x6d\145\75\42\x73\x61\155\x6c\x5f\141\x6d\x5f\144\x65\146\141\x75\154\x74\x5f\147\x72\157\x75\x70\x22\xd\xa\40\x20\40\x20\x20\40\40\x20\x20\40\40\40\40\40\40\x20\40\40\40\x20\40\x20\40\x20\x20\x20\40\40\40\40\40\40\x20\x20\40\x20\x20" . $FL . "\x20" . $Ml . "\40\x73\x74\x79\154\145\x3d\x22\167\151\144\164\x68\72\x31\65\60\x70\170\x3b\x22\40\76";
+foreach ($DE as $tk) {
+    $rV = $BK == $tk["\x6c\x61\142\x65\154"] ? "\x73\x65\154\145\x63\x74\x65\x64" : '';
+    echo "\x3c\157\x70\164\x69\x6f\156\40\x69\144\x3d\42\x6d\x6f\62\146\137\x67\x72\157\165\x70\x73\42\x20" . $rV . "\40\x6e\141\x6d\x65\x3d\x22" . $tk["\x6c\x61\142\145\x6c"] . "\x22\40\x76\x61\154\165\x65\x3d\x22" . $tk["\154\141\142\145\154"] . "\42\57\76" . $tk["\x6c\141\142\x65\154"] . "\74\57\157\160\164\x69\157\x6e\76";
+    G5:
 }
-$mo_saml_dont_create_user_if_role_not_mapped = !empty($idpDetails['do_not_autocreate_if_roles_not_mapped']) ? $idpDetails['do_not_autocreate_if_roles_not_mapped'] : "";
-
-$saml_am_update_roles = !empty($idpDetails['update_backend_roles_on_sso']) ? $idpDetails['update_backend_roles_on_sso'] : "";
-$saml_am_update_frontend_roles = !empty($idpDetails['update_frontend_groups_on_sso']) ? $idpDetails['update_frontend_groups_on_sso'] : "";
-
-$admin_roles_configured = !empty($idpDetails['roles_mapped']) ? json_decode($idpDetails['roles_mapped']) : "";
-$admin_roles_configured = json_decode(json_encode($admin_roles_configured), true);
-$customer_roles_configured = !empty($idpDetails['groups_mapped']) ? json_decode($idpDetails['groups_mapped']) : "";
-$customer_roles_configured = json_decode(json_encode($customer_roles_configured), true);
-$default_role = !empty($idpDetails['default_role']) ? $idpDetails['default_role'] : "";
-$default_group = !empty($idpDetails['default_group']) ? $idpDetails['default_group'] : "";
-
-echo '
-
-<div class="row">
-<div class="col-sm-8">
-    <div class="page" id="attrmapping">
-        <div class="mosaml_table_layout">
-        ';
-if ($this->check_license_plan(3)) {
-    echo '
-        <form name="select_provider" method="post" action="">
-        ' . $formKey . '
-        <input type="hidden" name="option" value="saveProvider">
-            <tr>
-                <td><strong>Identity Provider:</strong></td>
-                <td>
-                 <select onchange="this.form.submit()" id="mo_identity_provider" ' . $disabled . '  name="mo_identity_provider"
-                 style="width:auto;" >';
-
-    foreach ($collection as $item) {
-        $selected = $default_provider == $item->getData()["idp_name"] ? 'selected' : '';
-
-        print_r('<option id="mo2f_roles" ' . $selected . '
-                            name="' . $item->getData()["idp_name"] . '" value="' . $item->getData()["idp_name"] . '">' .
-            $item->getData()["idp_name"] . '</option>');
-    }
-
-    echo '
-                            </select>
-                            <i>Select Identity Provider to configure Group/Role Mapping.</i>
-                    </td>
-            </tr>
-            </form>
-            ';
+wo:
+echo "\40\40\40\x20\x20\40\40\40\x20\40\x20\40\40\x20\40\x20\x20\x20\40\x20\40\40\x20\x20\x20\x20\x20\x3c\x2f\x73\x65\154\145\x63\164\76\40\74\151\76\x53\145\x6c\145\x63\x74\x20\164\150\145\x20\x64\x65\x66\x61\x75\x6c\164\40\x72\x6f\154\x65\40\x74\157\40\141\163\163\151\x67\x6e\x20\164\157\40\x6e\x65\x77\x20\125\x73\x65\162\163\56\x3c\57\151\76\15\xa\x20\40\x20\x20\40\40\x20\x20\40\40\40\40\x20\x20\40\x20\x20\x20\40\40\40\40\x20\40\74\57\x74\x64\x3e\15\12\x20\40\40\40\40\40\x20\x20\40\40\x20\40\40\40\x20\40\x20\40\x20\x20\x3c\57\164\162\76";
+foreach ($DE as $tk) {
+    $SP = $tk["\x76\x61\154\165\x65"];
+    $A0 = $tk["\154\141\142\145\x6c"];
+    $VP = !empty($yw[$SP]) ? $yw[$SP] : '';
+    echo "\x3c\164\x72\76\x20\x3c\x74\x64\76\74\142\x3e" . $A0 . "\x3c\57\142\76\x3c\x2f\x74\144\76\xd\xa\x20\40\40\40\x20\40\40\40\40\x20\x20\40\40\x20\40\40\40\40\40\x20\40\40\40\x20\x20\x20\40\x20\40\40\40\x20\40\x20\40\x20\74\x74\144\76\74\x69\156\160\x75\x74\x20\x74\x79\x70\145\x3d\42\164\x65\x78\164\x22\40\x6e\x61\x6d\145\75\42\163\141\155\154\137\141\x6d\137\147\x72\157\x75\x70\137\x61\x74\x74\162\x5f\x76\141\x6c\165\x65\x73\137" . $SP . "\x22\40\x76\x61\x6c\x75\145\x3d\x22" . $VP . "\42\40\x70\154\x61\143\145\x68\157\x6c\144\145\x72\x3d\x22\123\145\x6d\x69\x2d\x63\x6f\154\x6f\156\x28\73\51\x20\x73\145\160\141\x72\x61\164\x65\x64\x20\107\x72\157\x75\x70\x20\x76\141\154\x75\x65\x20\146\157\162\x20" . $A0 . "\x22\x20\x73\x74\x79\154\145\x3d\x22\167\151\144\164\x68\72\x20\64\x30\60\160\x78\73\42" . $FL . "\x20" . $Ml . "\40\x2f\76\15\12\40\40\40\x20\40\x20\x20\x20\x20\40\x20\40\x20\x20\x20\x20\x20\40\40\40\x20\40\x20\40\x20\40\x20\x20\x20\40\x20\40\x20\40\x20\40\74\57\x74\144\76\15\xa\40\40\40\x20\40\x20\40\40\40\x20\x20\x20\x20\40\40\x20\x20\x20\40\40\x20\40\40\40\x20\40\40\x20\x3c\57\x74\x72\76";
+    Nm:
 }
-echo '
-            <br>
-            <form name="f" method="post" action="">
-                ' . $formKey . '
-                <input type="hidden" name="option" value="saveAttrSettings" />
-                <input type="hidden" name="mo_identity_provider" value="' . $default_provider . '">
-                <h3>Role Mapping (Optional)';
-echo (!$this->check_license_plan(2)) ? '<small style="font-weight: bold; font-size: 1.4rem;"><a style="color:red; " href="' . $premiumlink . '"
-                class="premium premium-btn-link">[PREMIUM]</a></small>' : '';
-echo '</h3><hr/>
-                <table>
-                        <tr>
-                        <td colspan="2">
-                            <div class="mo_note">
-                                <span class="btn-link" href="">What is Role Mapping?</span>
-                                <div hidden class="collapse">
-                                    <ol>
-                                        <li>Magento uses a concept of Roles, designed to give the site owner the ability to control
-                                                what users can and cannot do within the site.</li>
-                                        <li>Role mapping helps you to assign specific roles to users of a certain group in your IdP.</li>
-                                        <li>While auto registering, the users are assigned roles based on the group they are mapped to.</li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </td>
-                        </tr>
-                    <tr><td colspan="2"><b>NOTE: </b>Role will be assigned only to non-admin users (user that do NOT have Administrator
-                        privileges). You will have to manually change the role of Administrator users.</td></tr>
-                    <tr><td colspan="2"><input type="checkbox" id="dont_create_user_if_role_not_mapped"
-                        name="mo_saml_dont_create_user_if_role_not_mapped" value="checked"
-                        ' . $mo_saml_dont_create_user_if_role_not_mapped . '
-                        ' . $disabled . ' ' . $plantype . ' />&nbsp;&nbsp;Do not auto create users if roles are not
-                        mapped here.</td></tr>
-                    <tr><td colspan="2"><input type="checkbox" id="update_roles"
-                        name="saml_am_update_roles" value="checked"
-                        ' . $saml_am_update_roles . ' ' . $disabled . '  ' . $plantype . '>
-                        &nbsp;&nbsp;Update Backend Roles on SSO.</td></tr>
-                    <tr><td colspan="2"><input type="checkbox" id="update_frontend_roles"
-                        name="saml_am_update_frontend_roles" value="checked"
-                        ' . $saml_am_update_frontend_roles . ' ' . $disabled . ' ' . $plantype . ' >
-                        &nbsp;&nbsp;Update Frontend Roles on SSO.</td></tr>
-                    <tr>
-
-                    <tr>
-                        <td><strong>Default Role (For Backend Users):</strong></td>
-                        <td>
-                                <select id="saml_am_default_role" name="saml_am_default_role"
-                                     ' . $disabled . ' ' . $plantype . ' style="width:150px;" >';
-
-foreach ($roles as $role) {
-    $selected = $default_role == $role['label'] ? 'selected' : '';
-    echo '<option id="mo2f_roles" ' . $selected . '
-                                        name="' . $role['label'] . '" value="' . $role['label'] . '"/>' .
-        $role['label'] . '</option>';
-}
-echo '                           </select>   <i>Select the default role to assign to new Users.</i>
-                        </td>
-                    </tr>';
-
-
-foreach ($roles as $role) {
-    $role_value = $role['value'];
-    $role_name = $role['label'];
-    if (empty($admin_roles_configured)) {
-        $admin_roles = [];
-        $value = !empty($admin_roles[$role_value]) ? $admin_roles[$role_value] : "";
-    } else {
-        $admin_roles = (array)$admin_roles_configured;
-        $value = !empty($admin_roles[$role_value]) ? $admin_roles[$role_value] : "";
-    }
-    echo '<tr><td><b>' . $role_name . '</b></td><td><input type="text" name="saml_am_admin_attr_values_' .
-        $role_value . '" value="' . $value . '" placeholder="Semi-colon(;) separated Roles for ' .
-        $role_name . '" style="width: 400px;"' . $disabled . ' ' . $plantype . ' /></td></tr>';
-}
-
-echo '
-                    <td><tr></tr>
-                    <tr  style="border-bottom: 1px solid #c1bdbd;">
-                    <tr>
-                    <td><tr></tr>
-                        <td><strong>Default Group (For Frontend Users):</strong></td>
-                        <td>
-                                <select id="saml_am_default_group" name="saml_am_default_group"
-                                     ' . $disabled . ' ' . $plantype . ' style="width:150px;" >';
-
-foreach ($groups as $group) {
-    $selected = $default_group == $group['label'] ? 'selected' : '';
-    echo '<option id="mo2f_groups" ' . $selected . ' name="' .
-        $group['label'] . '" value="' . $group['label'] . '"/>' .
-        $group['label'] . '</option>';
-}
-
-echo '                           </select> <i>Select the default role to assign to new Users.</i>
-                        </td>
-                    </tr>';
-
-foreach ($groups as $group) {
-    $role_value = $group['value'];
-    $role_name = $group['label'];
-    $value = !empty($customer_roles_configured[$role_value]) ? $customer_roles_configured[$role_value] : "";
-
-    echo '<tr> <td><b>' . $role_name . '</b></td>
-                                    <td><input type="text" name="saml_am_group_attr_values_' .
-        $role_value . '" value="' . $value . '" placeholder="Semi-colon(;) separated Group value for ' .
-        $role_name . '" style="width: 400px;"' . $disabled . ' ' . $plantype . ' />
-                                    </td>
-                            </tr>';
-}
-
-echo '               <tr>
-                        <td>&nbsp;</td>
-                        <td><br /><input type="submit" style="width:100px;" name="submit" value="Save"
-                        class="btn-round" ' . $disabled . ' ' . $plantype . ' /> &nbsp;
-                        <br /><br />
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div>
-';
+FI:
+echo "\x20\x20\40\40\40\40\x20\x20\x20\40\40\x20\40\x20\40\74\x74\x72\x3e\xd\12\40\x20\x20\x20\40\x20\x20\x20\x20\x20\x20\x20\40\40\40\x20\x20\40\40\40\x20\x20\40\x20\x3c\164\x64\x3e\46\156\142\163\x70\73\74\57\164\x64\76\15\12\x20\40\x20\x20\40\x20\x20\40\40\40\x20\40\40\x20\40\40\x20\x20\40\40\40\40\40\x20\x3c\164\144\76\x3c\142\162\40\57\76\74\151\x6e\x70\165\x74\x20\164\171\x70\145\x3d\42\163\x75\x62\x6d\151\x74\42\x20\x73\164\171\x6c\x65\x3d\x22\x77\x69\144\x74\x68\x3a\x31\60\60\160\170\x3b\x22\x20\156\141\x6d\x65\x3d\42\163\165\x62\x6d\x69\x74\42\x20\166\141\x6c\x75\x65\75\x22\123\x61\166\x65\42\15\12\40\40\40\x20\x20\x20\x20\x20\x20\x20\40\40\40\40\40\40\40\x20\x20\x20\40\x20\x20\40\143\154\x61\x73\x73\75\42\x62\x74\x6e\x2d\162\x6f\x75\x6e\x64\x22\x20" . $FL . "\x20" . $Ml . "\40\57\x3e\x20\46\156\142\x73\160\73\xd\12\x20\40\x20\40\x20\40\x20\x20\x20\40\40\x20\x20\x20\x20\x20\40\40\x20\x20\x20\x20\x20\x20\74\142\162\x20\57\76\x3c\x62\x72\x20\57\76\15\xa\40\x20\x20\40\40\x20\x20\x20\x20\x20\x20\x20\40\x20\40\x20\x20\x20\x20\x20\x20\x20\40\x20\74\x2f\164\144\76\15\12\40\40\40\40\x20\40\40\40\40\40\x20\40\x20\40\x20\40\40\40\x20\40\74\57\164\162\x3e\xd\xa\x20\x20\x20\40\40\40\40\x20\x20\x20\40\40\x20\40\40\x20\x3c\x2f\x74\x61\142\x6c\x65\76\xd\12\40\x20\x20\40\x20\x20\x20\x20\40\40\x20\x20\x3c\x2f\146\157\x72\155\76\15\xa\40\40\x20\x20\40\40\x20\40\74\57\144\151\x76\76\xd\xa\40\x20\x20\40\x3c\x2f\144\151\x76\76\xd\12";

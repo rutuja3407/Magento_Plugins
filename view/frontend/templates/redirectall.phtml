@@ -1,22 +1,27 @@
 <?php
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
 
-$logger = $objectManager->get("Psr\Log\LoggerInterface");
-
-if (!$customerSession->isLoggedIn()) {
-    $params = $this->getRequest()->getParams(); //get params
-    $checkbackdoorurl = !empty($params['saml_sso']) ? $params['saml_sso'] : 1;
-    if ($this->isAllPageAutoRedirectEnabled_action() && $this->isSiteEnable()) {
-        $logger->debug("Customer not logged in: Redirecting To IDP");
-        $currentUrl = $this->getCurrentUrl();
-        $logger->debug("CurrentURL: " . $currentUrl);
-        $redirect = $objectManager->get('\Magento\Framework\App\Response\Http');
-        $autoredirect_appName = $this->getAutoRedirect_AppName();
-
-        $redirect->setRedirect($this->getSPInitiatedUrl($currentUrl) . $autoredirect_appName);
-    }
-
+$F_ = \Magento\Framework\App\ObjectManager::getInstance();
+$fD = $F_->create("\115\x61\x67\x65\156\164\x6f\x5c\x43\x75\163\164\157\x6d\x65\162\x5c\x4d\157\144\x65\x6c\134\123\x65\x73\x73\151\157\x6e");
+$kU = $F_->get("\120\163\x72\x5c\x4c\157\147\134\114\x6f\x67\147\x65\162\x49\x6e\x74\145\162\146\141\x63\x65");
+if ($fD->isLoggedIn()) {
+    goto mB;
 }
-
-?>
+$Te = $this->getRequest()->getParams();
+$cy = !empty($Te["\163\x61\155\x6c\137\163\x73\157"]) ? $Te["\x73\x61\155\154\x5f\x73\x73\157"] : 1;
+if (!($this->isAllPageAutoRedirectEnabled_action() && $this->isSiteEnable())) {
+    goto rK;
+}
+$kU->debug("\103\x75\x73\164\157\x6d\145\x72\x20\x6e\x6f\x74\40\x6c\x6f\x67\x67\145\144\40\151\156\x3a\40\122\x65\144\151\162\x65\143\164\x69\x6e\147\40\124\157\x20\111\104\120");
+$RZ = $this->getCurrentUrl();
+$kU->debug("\x43\x75\x72\x72\x65\x6e\x74\125\x52\x4c\x3a\x20" . $RZ);
+$pW = $F_->get("\x5c\x4d\x61\147\x65\156\x74\x6f\134\106\x72\141\155\x65\x77\x6f\x72\x6b\134\x41\160\160\134\x52\145\163\160\157\156\163\x65\134\x48\164\x74\160");
+$TS = $this->getAutoRedirect_AppName();
+$pW->setRedirect($this->getSPInitiatedUrl($RZ) . $TS);
+rK:
+mB:

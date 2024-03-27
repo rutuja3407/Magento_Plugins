@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Observer;
 
 use Magento\Framework\Event\Observer;
@@ -8,67 +9,48 @@ use Magento\Framework\Message\ManagerInterface;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPUtility;
 use Psr\Log\LoggerInterface;
-
-
-/**
- * This is our main logout Observer class. Observer class are used as a callback
- * function for all of our events and hooks. This particular observer
- * class is being used to check if the customer has initiated the logout process.
- * If so then send a logout request to the IDP.
- */
 class PostLogout implements ObserverInterface
 {
     private $messageManager;
     private $logger;
     private $spUtility;
-
-
-    public function __construct(
-        ManagerInterface $messageManager,
-        LoggerInterface  $logger,
-        SPUtility        $spUtility)
+    public function __construct(ManagerInterface $b_, LoggerInterface $kU, SPUtility $fR)
     {
-        //You can use dependency injection to get any class this observer may need.
-        $this->messageManager = $messageManager;
-        $this->logger = $logger;
-        $this->spUtility = $spUtility;
-
+        $this->messageManager = $b_;
+        $this->logger = $kU;
+        $this->spUtility = $fR;
     }
-
-    /**
-     * This function is called as soon as the observer class is initialized.
-     * Checks if the request parameter has any of the configured request
-     * parameters and handles any exception that the system might throw.
-     *
-     * @param $observer
-     */
-    public function execute(Observer $observer)
+    public function execute(Observer $UJ)
     {
-        $idp_name = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
-        $this->spUtility->log_debug("post logoutrequest: $idp_name");
-        if ($idp_name) {
-            $this->spUtility->log_debug("post logoutrequest:idp name found : $idp_name");
-
-            $idp_name = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
-            $collection = $this->spUtility->getIDPApps();
-            $idpDetails = null;
-            foreach ($collection as $item) {
-                if ($item->getData()["idp_name"] === $idp_name) {
-                    $idpDetails = $item->getData();
-                }
-            }
-
-            $redirect = $idpDetails['saml_logout_redirect_url'];
-            if ($redirect) {
-                $this->spUtility->result($redirect);
-            } else {
-                $this->spUtility->result($this->spUtility->getBaseUrl());
-            }
+        $rq = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $this->spUtility->log_debug("\160\157\x73\x74\x20\154\157\147\157\165\x74\x72\145\x71\165\x65\x73\164\x3a\40{$rq}");
+        if (!$rq) {
+            goto ad;
         }
-
-        $this->spUtility->log_debug("post logoutrequest:idp name not found");
-
+        $this->spUtility->log_debug("\160\157\163\x74\40\154\x6f\x67\x6f\x75\164\x72\145\x71\x75\x65\163\x74\72\x69\x64\x70\40\156\x61\155\x65\40\x66\157\x75\156\x64\40\72\40{$rq}");
+        $rq = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $yG = $this->spUtility->getIDPApps();
+        $hR = null;
+        foreach ($yG as $ub) {
+            if (!($ub->getData()["\151\x64\x70\x5f\156\x61\x6d\145"] === $rq)) {
+                goto dp;
+            }
+            $hR = $ub->getData();
+            dp:
+            q7:
+        }
+        Jb:
+        $pW = $hR["\163\x61\x6d\154\x5f\x6c\157\147\157\x75\x74\137\162\145\144\151\162\145\143\164\x5f\165\162\x6c"];
+        if ($pW) {
+            goto kt;
+        }
         $this->spUtility->result($this->spUtility->getBaseUrl());
-
+        goto pS;
+        kt:
+        $this->spUtility->result($pW);
+        pS:
+        ad:
+        $this->spUtility->log_debug("\160\157\163\164\x20\154\x6f\147\157\x75\164\162\145\x71\x75\145\163\x74\x3a\x69\144\160\x20\156\x61\155\x65\40\156\157\x74\40\x66\x6f\x75\156\144");
+        $this->spUtility->result($this->spUtility->getBaseUrl());
     }
 }

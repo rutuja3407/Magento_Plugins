@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Adminhtml\Support;
 
 use Magento\Backend\App\Action\Context;
@@ -8,60 +9,31 @@ use MiniOrange\SP\Controller\Actions\BaseAdminAction;
 use MiniOrange\SP\Helper\Curl;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * This class handles the action for endpoint: mospsaml/support/Index
- * Extends the \Magento\Backend\App\Action for Admin Actions which
- * inturn extends the \Magento\Framework\App\Action\Action class necessary
- * for each Controller class
- *
- * This class handles processing and sending or support request
- */
 class Index extends BaseAdminAction
 {
-    /**
-     * The first function to be called when a Controller class is invoked.
-     * Usually, has all our controller logic. Returns a view/page/template
-     * to be shown to the users.
-     *
-     * This function gets and prepares all our SP config data from the
-     * database. It's called when you visis the moasaml/metadata/Index
-     * URL. It prepares all the values required on the SP setting
-     * page in the backend and returns the block to be displayed.
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
     public function execute()
     {
-
         try {
-            $params = $this->getRequest()->getParams(); //get params
-            if ($this->isFormOptionBeingSaved($params)) {
-                $this->checkIfSupportQueryFieldsEmpty(array('email' => $params, 'query' => $params));
-                $email = $params['email'];
-                $phone = $params['phone'];
-                $query = $params['query'];
-                $companyName = $this->spUtility->getBaseUrl();
-                Curl::submit_contact_us($email, $phone, $query, $companyName);
-                $this->messageManager->addSuccessMessage(SPMessages::QUERY_SENT);
+            $Te = $this->getRequest()->getParams();
+            if (!$this->isFormOptionBeingSaved($Te)) {
+                goto Gj;
             }
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            $this->logger->debug($e->getMessage());
+            $this->checkIfSupportQueryFieldsEmpty(array("\x65\x6d\141\151\154" => $Te, "\x71\165\x65\x72\x79" => $Te));
+            $EK = $Te["\x65\155\x61\x69\x6c"];
+            $zw = $Te["\160\150\x6f\x6e\x65"];
+            $NB = $Te["\161\x75\x65\162\x79"];
+            $a9 = $this->spUtility->getBaseUrl();
+            Curl::submit_contact_us($EK, $zw, $NB, $a9);
+            $this->messageManager->addSuccessMessage(SPMessages::QUERY_SENT);
+            Gj:
+        } catch (\Exception $IR) {
+            $this->messageManager->addErrorMessage($IR->getMessage());
+            $this->logger->debug($IR->getMessage());
         }
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setUrl($this->_redirect->getRefererUrl());
-        return $resultRedirect;
+        $PJ = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $PJ->setUrl($this->_redirect->getRefererUrl());
+        return $PJ;
     }
-
-
-    /**
-     * Is the user allowed to view the Support settings.
-     * This is based on the ACL set by the admin in the backend.
-     * Works in conjugation with acl.xml
-     *
-     * @return bool
-     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(SPConstants::MODULE_DIR . SPConstants::MODULE_SUPPORT);

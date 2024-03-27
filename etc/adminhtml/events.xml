@@ -13,8 +13,8 @@
         <observer name="saml_sp_logout_after_observer" instance="MiniOrange\SP\Observer\AdminPostLogoutObserver"/>
     </event>
 
-    <event name="controller_action_predispatch">
+    <!-- <event name="controller_action_predispatch">
         <observer name="saml_sp_observer" instance="MiniOrange\SP\Observer\RedirectToIDPObserver" />
-    </event>
+    </event> -->
 
 </config>

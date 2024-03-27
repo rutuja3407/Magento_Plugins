@@ -1,25 +1,19 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Exception denotes that the SAML IDP sent a
- * Responder or Requester SAML response instead
- * of Success in the
- */
 class InvalidSamlStatusCodeException extends SAMLResponseException
 {
-    public function __construct($statusCode, $xml)
+    public function __construct($pj, $xa)
     {
-        $message = SPMessages::parse('INVALID_INSTANT', array('statuscode' => $statusCode));
-        $code = 117;
-        parent::__construct($message, $code, $xml, FALSE);
+        $qx = SPMessages::parse("\111\116\x56\x41\114\111\x44\137\111\116\123\x54\x41\x4e\124", array("\163\164\141\x74\165\x73\143\157\144\x65" => $pj));
+        $wI = 117;
+        parent::__construct($qx, $wI, $xa, FALSE);
     }
-
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . "\72\x20\133{$this->code}\135\x3a\x20{$this->message}\xa";
     }
 }

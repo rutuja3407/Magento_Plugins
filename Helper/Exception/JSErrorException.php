@@ -1,21 +1,18 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
-/**
- * Exception denotes that there was ErrorMessage set during JS validation.
- */
 class JSErrorException extends \Exception
 {
-    public function __construct($message)
+    public function __construct($qx)
     {
-        $message = $message;
-        $code = 103;
-        parent::__construct($message, $code, NULL);
+        $qx = $qx;
+        $wI = 103;
+        parent::__construct($qx, $wI, NULL);
     }
-
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . "\72\x20\x5b{$this->code}\135\72\40{$this->message}\xa";
     }
 }

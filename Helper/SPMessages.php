@@ -1,124 +1,78 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper;
 
-/**
- * This class lists down all of our messages to be shown to the admin or
- * in the frontend. This is a constant file listing down all of our
- * constants. Has a parse function to parse and replace any dynamic
- * values needed to be inputed in the string. Key is usually of the form
- * {{key}}
- */
 class SPMessages
 {
-    //Registration Flow Messages
-    const REQUIRED_REGISTRATION_FIELDS = 'Email, CompanyName, Password and Confirm Password are required fields. Please enter valid entries.';
-    const INVALID_PASS_STRENGTH = 'Choose a password with minimum length 6.';
-    const PASS_MISMATCH = 'Passwords do not match.';
-    const INVALID_EMAIL = 'Please match the format of Email. No special characters are allowed.';
-    const ERROR_EMAIL_OTP = 'There was an error in sending email. Please click on Resend OTP to try again.';
-    const ERROR_PHONE_OTP = 'There was an error in sending sms. Please click on Resend OTP link next to phone number textbox.';
-    const ACCOUNT_EXISTS = 'You already have an account with miniOrange. Please enter a valid password.';
-    const ERROR_PHONE_FORMAT = '{{phone}} is not a valid phone number. Please enter a valid Phone Number. E.g:+1XXXXXXXXXX';
-
-    const RESEND_EMAIL_OTP = 'Another One Time Passcode has been sent for verification to {{email}}';
-    const EMAIL_OTP_SENT = 'A passcode is sent to {{email}}. Please enter the otp here to verify your email.';
-    const RESEND_PHONE_OTP = 'Another One Time Passcode has been sent for verification to {{phone}}';
-    const PHONE_OTP_SENT = 'One Time Passcode has been sent for verification to {{phone}}';
-    const REG_SUCCESS = 'Your account has been retrieved successfully.';
-    const NEW_REG_SUCCES = 'Registration complete!';
-
-    //Validation Flow Messages
-    const REQUIRED_OTP = 'Please enter a value in OTP field.';
-    const INVALID_OTP_FORMAT = 'Please enter a valid value in OTP field.';
-    const INVALID_OTP = 'Invalid one time passcode. Please enter a valid passcode.';
-    const INVALID_CRED = 'Invalid username or password. Please try again.';
-
-    //website error
-    const WEBSITE_ERROR = 'You have selected the websites above the license limit.';
-    const WEBSITE_ERROR_ENTERPRISE = 'If You want more than 1 site then upgrade Enterprise plan';
-    const WEBSITES_SAVED = 'Websites saved successfully';
-
-    //General Flow Messages
-    const REQUIRED_FIELDS = 'Please fill in the required fields.';
-    const ERROR_OCCURRED = 'An error occured while processing your request. Please try again.';
-    const NOT_REG_ERROR = 'Please register and verify your account before trying to configure your settings. Go the Account
-                                            Section to complete your registration registered.';
-    const INVALID_OP = 'Invalid Operation. Please Try Again.';
-
-    //Licensing Messages
-    const INVALID_LICENSE = 'License key for this instance is incorrect. Make sure you have not tampered with it at all.
-                                            Please enter a valid license key.';
-    const LICENSE_KEY_IN_USE = 'License key you have entered has already been used. Please enter a key which has not been used
-                                            before on any other instance or if you have exausted all your keys then contact us at
-                                            magentosupport@xecurify.com to buy more keys.';
-    const ENTERED_INVALID_KEY = 'You have entered an invalid license key. Please enter a valid license key.';
-    const LICENSE_VERIFIED = 'Your license is verified. You can now setup the plugin.';
-    const NOT_UPGRADED_YET = 'You have not upgraded yet.';
-
-    //Forgot Password Messages
-    const PASS_RESET = 'You password has been reset successfully. Please enter the new password sent to your registered mail here.';
-    const PASS_RESET_ERROR = 'Sorry we encountered an error while reseting your password.';
-
-    //cURL Error
-    const CURL_ERROR = 'ERROR: <a href="http://php.net/manual/en/curl.installation.php" target="_blank">PHP cURL extension</a>
-                                            is not installed or disabled. Query submit failed.';
-
-    //Query Form Error
-    const REQUIRED_QUERY_FIELDS = 'Please fill up Email and Query fields to submit your query.';
-    const ERROR_QUERY = 'Your query could not be submitted. Please try again.';
-    const QUERY_SENT = 'Thanks for getting in touch! We shall get back to you shortly.';
-
-    //Save Settings Error
-    const ISSUER_EXISTS = 'You seem to already have an Identity Provider for that issuer configured under : <i>{{name}}</i>';
-    const NO_IDP_CONFIG = 'Please Configure an Identity Provider.';
-
-    const SETTINGS_SAVED = 'Settings saved successfully.';
-    const IDP_DELETED = 'Identity Provider settings deleted successfully.';
-    const SP_ENTITY_ID_CHANGED = 'SP Entity ID changed successfully.';
-    const SP_ENTITY_ID_NULL = 'SP EntityID/Issuer cannot be NULL.';
-
-    //SAML SSO Error Messages
-    const INVALID_INSTANT = '<strong>INVALID_REQUEST: </strong>Request time is greater than the current time.<br/>';
-    const INVALID_SAML_VERSION = 'We only support SAML 2.0! Please send a SAML 2.0 request.<br/>';
-    const INVALID_IDP = '<strong>INVALID_IDP: </strong>No Identity Provider configuration found. Please configure your
-                                            Identity Provider.<br/>';
-    const INVALID_RESPONSE_SIGNATURE = '<strong>INVALID_SIGNATURE: </strong>Invalid Signature. Please check your certificates.';
-    const SAML_INVALID_OPERATION = '<strong>INVALID_OPERATION: </strong>Invalid Operation! Please contact your site administrator.<br/>';
-    const MISSING_NAMEID = 'Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.';
-    const INVALID_NO_OF_NAMEIDS = 'More than one <saml:NameID> or <saml:EncryptedD> in <saml:Subject>.';
-    const MISSING_ID_FROM_RESPONSE = 'Missing ID attribute on SAML assertion.';
-    const MISSING_ISSUER_VALUE = 'Missing <saml:Issuer> in assertion.';
-    const INVALID_ISSUER = 'Issuer cannot be verified. Expected {{expect}}, found {{found}}';
-    const INVALID_AUDIENCE = 'Invalid audience URI. Expected {{expect}}, found {{found}}';
-    const INVALID_DESTINATION = 'Destination in response doesn\'t match the current URL. Destination is {{destination}},
-                                            current URL is {{currenturl}}.';
-    const MISSING_ATTRIBUTES_EXCEPTION = 'SAML Response doesn\'t have the necessary attributes to log the user in';
-    const INVALID_STATUS_CODE = '<strong>INVALID_STATUS_CODE: </strong> The Identity Provider returned an Invalid response.
-                                            Identity Provider has sent {{statuscode}} status code in SAML Response.
-                                            Please check with your Identity Provider for more information.';
-
-    const SAML_RESPONSE = "<pre>{{xml}}</pre>";
-    const FORMATTED_CERT = "<pre>{{cert}}</pre>";
-
-    //Trial installation and expiration Messages
-    const TRIAL_EXTENDED = "Your Trial is Successfully Extended for 7 More Days. (Please note: The trial can only be extended once.)";
-    const EXTEND_TRIAL_LIMIT_REACHED = "Your Extend Trial Limit is Reached. Unable to Extend the trial.";
-
-    /**
-     * Parse the message and replace the dynamic values with the
-     * necessary values. The dynamic values needs to be passed in
-     * the key value pair. Key is usually of the form {{key}}.
-     *
-     * @param $message
-     * @param $data
-     */
-    public static function parse($message, $data = array())
+    const REQUIRED_REGISTRATION_FIELDS = "\x45\x6d\x61\x69\154\x2c\x20\103\157\x6d\160\x61\156\171\116\141\155\145\x2c\x20\x50\141\x73\x73\167\157\162\144\40\x61\x6e\x64\x20\103\x6f\x6e\x66\151\162\x6d\40\x50\141\163\163\x77\x6f\x72\144\x20\141\162\145\40\162\145\161\165\151\x72\x65\144\x20\x66\x69\145\154\144\163\56\40\120\x6c\x65\141\x73\145\40\145\x6e\x74\x65\x72\40\166\x61\x6c\x69\144\x20\x65\x6e\x74\x72\151\145\x73\x2e";
+    const INVALID_PASS_STRENGTH = "\103\x68\x6f\x6f\x73\145\x20\141\40\160\x61\x73\163\167\x6f\x72\x64\x20\167\151\x74\150\x20\x6d\151\156\151\x6d\x75\x6d\x20\x6c\x65\x6e\x67\164\x68\x20\x36\x2e";
+    const PASS_MISMATCH = "\120\x61\163\163\167\157\162\144\163\x20\144\x6f\40\x6e\x6f\164\x20\x6d\x61\164\143\150\x2e";
+    const INVALID_EMAIL = "\x50\154\x65\x61\163\145\x20\x6d\x61\x74\x63\x68\x20\164\x68\x65\40\146\157\x72\x6d\x61\164\40\157\146\x20\105\155\141\151\154\x2e\x20\116\157\40\163\160\x65\x63\x69\141\x6c\x20\143\150\141\162\141\x63\164\x65\162\x73\x20\141\x72\145\40\141\154\x6c\x6f\167\x65\144\56";
+    const ERROR_EMAIL_OTP = "\124\150\145\x72\x65\x20\167\141\x73\40\x61\156\x20\145\x72\162\x6f\162\40\x69\x6e\40\163\145\x6e\x64\x69\156\x67\x20\x65\155\141\151\154\56\x20\x50\x6c\x65\x61\163\x65\40\x63\154\151\143\153\40\x6f\x6e\x20\122\x65\x73\x65\156\x64\x20\x4f\124\x50\40\x74\x6f\x20\164\162\x79\40\x61\147\x61\151\156\56";
+    const ERROR_PHONE_OTP = "\x54\150\x65\x72\x65\40\167\x61\x73\x20\x61\156\x20\x65\162\162\157\x72\40\151\x6e\x20\163\145\156\x64\151\x6e\147\40\163\155\163\x2e\40\x50\154\145\141\x73\145\40\x63\x6c\151\143\x6b\40\x6f\156\40\x52\145\x73\145\x6e\x64\40\x4f\x54\x50\40\x6c\151\156\x6b\x20\156\145\x78\164\x20\164\157\40\x70\x68\157\x6e\145\40\156\165\155\142\145\162\x20\164\x65\x78\164\x62\157\170\x2e";
+    const ACCOUNT_EXISTS = "\x59\157\165\x20\x61\154\x72\x65\141\x64\171\40\150\141\166\145\x20\141\x6e\40\x61\143\x63\x6f\165\156\x74\x20\167\151\x74\150\x20\155\x69\x6e\151\117\162\x61\x6e\147\x65\x2e\x20\120\154\145\141\x73\x65\40\x65\156\164\145\x72\x20\141\40\166\x61\x6c\151\144\x20\160\x61\x73\163\167\x6f\162\x64\x2e";
+    const ERROR_PHONE_FORMAT = "\173\173\x70\150\157\x6e\145\175\x7d\x20\x69\x73\40\156\x6f\164\x20\x61\40\x76\x61\x6c\x69\x64\x20\x70\150\x6f\x6e\145\x20\156\165\155\x62\x65\162\56\x20\x50\154\x65\x61\163\x65\x20\145\156\164\145\162\40\141\40\166\141\154\x69\x64\40\120\x68\157\x6e\x65\x20\x4e\x75\x6d\x62\x65\162\x2e\x20\105\x2e\147\x3a\x2b\61\x58\130\x58\130\130\x58\130\x58\130\130";
+    const RESEND_EMAIL_OTP = "\101\156\157\164\150\145\162\x20\117\x6e\145\40\124\x69\155\x65\40\120\x61\163\163\143\157\x64\x65\x20\150\x61\163\40\x62\x65\x65\x6e\x20\x73\x65\156\164\40\146\x6f\x72\x20\166\x65\162\151\146\151\x63\x61\x74\151\157\156\40\164\157\40\173\173\145\x6d\x61\151\154\x7d\175";
+    const EMAIL_OTP_SENT = "\101\40\x70\x61\163\163\x63\x6f\144\x65\x20\x69\163\40\163\145\x6e\164\40\164\x6f\x20\173\x7b\145\155\x61\151\x6c\x7d\175\56\40\120\154\x65\x61\x73\145\x20\x65\156\164\x65\x72\x20\164\150\145\40\157\x74\x70\x20\150\x65\x72\x65\40\164\157\40\x76\x65\162\x69\x66\171\40\x79\157\x75\162\x20\145\155\x61\151\x6c\x2e";
+    const RESEND_PHONE_OTP = "\x41\x6e\157\x74\150\145\x72\40\x4f\x6e\x65\40\124\x69\x6d\x65\40\120\141\x73\x73\143\157\144\x65\40\150\141\163\x20\142\x65\145\156\40\163\x65\x6e\x74\40\146\157\162\40\166\145\x72\x69\x66\151\143\141\x74\x69\x6f\156\x20\164\x6f\40\x7b\173\x70\x68\157\x6e\145\x7d\x7d";
+    const PHONE_OTP_SENT = "\x4f\x6e\145\x20\124\151\x6d\x65\x20\120\x61\163\163\143\157\144\145\x20\150\141\x73\40\x62\x65\145\156\x20\x73\x65\x6e\164\x20\x66\157\162\40\x76\x65\162\151\146\x69\x63\141\164\151\x6f\156\40\164\x6f\x20\173\173\x70\x68\x6f\156\x65\x7d\175";
+    const REG_SUCCESS = "\131\x6f\165\x72\x20\141\x63\143\157\x75\x6e\x74\40\150\x61\163\x20\142\x65\x65\x6e\x20\x72\x65\x74\162\x69\x65\166\x65\144\40\x73\165\143\143\145\x73\163\x66\x75\x6c\x6c\171\56";
+    const NEW_REG_SUCCES = "\x52\145\147\x69\x73\x74\x72\141\164\151\157\156\40\x63\157\155\160\154\x65\164\x65\x21";
+    const REQUIRED_OTP = "\120\x6c\145\x61\163\145\x20\x65\156\x74\145\x72\x20\x61\x20\x76\x61\154\165\145\40\x69\x6e\x20\x4f\x54\120\40\x66\151\x65\x6c\144\x2e";
+    const INVALID_OTP_FORMAT = "\x50\x6c\x65\x61\163\x65\x20\x65\156\x74\145\162\40\x61\40\x76\x61\154\151\x64\x20\x76\141\x6c\165\145\x20\x69\x6e\x20\x4f\x54\x50\x20\146\x69\x65\154\144\56";
+    const INVALID_OTP = "\111\x6e\x76\141\154\x69\x64\40\x6f\x6e\x65\40\x74\151\x6d\x65\x20\x70\x61\x73\163\143\x6f\x64\145\x2e\40\120\154\145\x61\163\145\40\145\x6e\164\x65\162\x20\141\40\166\141\x6c\x69\144\40\160\141\163\x73\143\x6f\144\145\56";
+    const INVALID_CRED = "\111\156\x76\141\x6c\x69\144\40\x75\163\x65\x72\x6e\x61\155\x65\x20\x6f\x72\40\x70\x61\163\x73\167\157\x72\144\x2e\40\x50\x6c\x65\141\x73\x65\x20\x74\162\x79\x20\141\x67\x61\151\156\56";
+    const WEBSITE_ERROR = "\x59\x6f\165\x20\150\141\166\145\x20\163\x65\154\x65\143\164\145\x64\40\164\x68\x65\40\167\x65\142\x73\x69\164\x65\163\x20\x61\142\x6f\166\145\x20\164\150\145\x20\154\x69\143\145\x6e\163\x65\x20\154\x69\155\x69\164\x2e";
+    const WEBSITE_ERROR_ENTERPRISE = "\111\146\40\131\157\165\40\x77\141\156\x74\40\155\157\162\145\x20\164\x68\x61\156\x20\61\40\x73\151\x74\145\40\164\x68\145\156\x20\x75\x70\x67\x72\x61\144\145\x20\x45\x6e\x74\x65\162\x70\x72\x69\x73\x65\x20\x70\x6c\141\156";
+    const WEBSITES_SAVED = "\x57\145\142\163\x69\x74\x65\163\x20\163\141\166\145\x64\x20\163\x75\x63\143\145\163\x73\146\165\154\x6c\171";
+    const REQUIRED_FIELDS = "\120\154\145\x61\163\145\40\x66\151\x6c\154\x20\151\156\x20\x74\x68\145\40\162\x65\161\165\x69\162\x65\x64\x20\146\151\x65\x6c\144\x73\56";
+    const ERROR_OCCURRED = "\x41\156\x20\x65\162\162\157\162\x20\x6f\143\x63\165\162\145\x64\x20\x77\150\151\x6c\x65\40\160\x72\x6f\x63\x65\x73\163\x69\156\x67\x20\171\x6f\x75\x72\40\x72\x65\161\x75\145\x73\x74\56\40\120\x6c\x65\x61\163\145\40\164\162\x79\40\141\147\x61\151\x6e\x2e";
+    const NOT_REG_ERROR = "\x50\x6c\145\141\x73\x65\x20\162\x65\x67\x69\x73\x74\145\162\x20\x61\156\144\40\x76\x65\162\x69\146\x79\40\171\157\165\x72\40\x61\x63\143\x6f\165\156\164\x20\x62\145\146\x6f\x72\145\40\164\162\171\x69\156\x67\x20\164\x6f\x20\x63\157\156\146\x69\147\165\x72\x65\40\171\x6f\165\x72\x20\163\145\164\x74\151\x6e\x67\163\56\40\107\x6f\40\164\x68\145\40\x41\x63\143\x6f\x75\156\164\xd\xa\40\x20\x20\40\x20\40\40\40\40\40\40\x20\x20\40\40\x20\40\40\x20\40\x20\x20\40\40\x20\40\x20\40\40\40\x20\40\x20\40\40\40\40\40\x20\x20\40\40\x20\40\123\145\x63\x74\x69\157\x6e\40\x74\x6f\40\143\157\155\x70\154\145\164\x65\40\x79\157\x75\x72\x20\162\x65\x67\x69\x73\164\162\x61\164\151\157\x6e\x20\x72\x65\x67\x69\x73\x74\145\x72\x65\x64\56";
+    const INVALID_OP = "\x49\156\166\141\x6c\151\x64\40\x4f\x70\145\162\x61\x74\x69\157\x6e\x2e\40\x50\x6c\145\x61\163\145\40\x54\162\x79\40\x41\147\141\x69\156\x2e";
+    const INVALID_LICENSE = "\x4c\151\x63\145\x6e\163\x65\x20\x6b\x65\171\40\x66\157\162\40\x74\150\x69\163\x20\x69\x6e\x73\164\141\x6e\x63\x65\40\151\163\40\x69\x6e\143\x6f\x72\x72\145\143\164\56\x20\x4d\x61\x6b\145\x20\x73\x75\x72\x65\x20\x79\157\x75\x20\x68\x61\x76\x65\x20\x6e\157\x74\x20\164\141\155\160\145\x72\145\x64\x20\x77\x69\x74\150\x20\151\x74\x20\x61\x74\40\141\154\x6c\56\xd\xa\40\x20\40\x20\x20\x20\x20\40\x20\40\40\x20\x20\40\40\40\x20\40\x20\40\40\40\x20\x20\40\40\40\40\x20\x20\x20\x20\x20\40\40\40\40\40\x20\40\x20\40\40\x20\120\154\145\x61\163\145\x20\145\156\x74\145\162\40\x61\x20\166\141\x6c\x69\x64\x20\154\x69\x63\x65\156\x73\145\x20\x6b\x65\x79\x2e";
+    const LICENSE_KEY_IN_USE = "\114\151\143\x65\x6e\x73\x65\40\153\x65\x79\40\171\x6f\x75\x20\x68\141\166\x65\40\x65\x6e\164\x65\x72\145\144\x20\x68\141\x73\x20\x61\x6c\x72\x65\141\144\x79\40\x62\145\145\156\x20\x75\163\x65\x64\x2e\x20\120\x6c\145\141\163\145\x20\145\x6e\x74\x65\162\40\x61\40\x6b\145\x79\x20\167\x68\151\143\x68\40\x68\x61\x73\x20\x6e\x6f\x74\x20\x62\x65\x65\x6e\x20\x75\x73\145\144\xd\12\x20\40\40\40\40\40\40\40\x20\x20\40\40\40\x20\x20\x20\40\40\x20\40\40\x20\40\40\x20\x20\x20\x20\40\40\x20\x20\x20\40\x20\40\40\x20\x20\40\40\40\x20\40\142\145\x66\157\162\145\40\x6f\x6e\40\141\x6e\171\x20\x6f\x74\x68\x65\162\x20\151\156\163\x74\141\x6e\x63\145\x20\x6f\x72\x20\151\x66\x20\171\157\165\40\x68\141\166\145\40\x65\170\x61\165\163\x74\145\144\x20\x61\x6c\154\40\171\x6f\x75\162\x20\x6b\x65\171\163\40\x74\x68\x65\156\x20\x63\157\156\164\141\143\164\x20\x75\163\x20\141\164\xd\xa\40\x20\x20\x20\x20\x20\40\x20\x20\x20\40\x20\x20\x20\40\x20\x20\40\40\x20\40\x20\40\40\40\x20\x20\40\x20\40\40\40\40\40\40\x20\40\x20\40\x20\40\x20\x20\x20\155\141\147\x65\156\x74\x6f\x73\x75\x70\160\157\162\164\x40\170\145\x63\x75\x72\151\146\x79\56\x63\157\155\x20\164\157\40\x62\x75\171\x20\155\x6f\x72\145\x20\153\x65\171\x73\56";
+    const ENTERED_INVALID_KEY = "\x59\157\x75\x20\x68\141\166\x65\40\x65\x6e\164\x65\162\x65\x64\x20\x61\156\40\151\x6e\166\141\154\151\x64\40\x6c\x69\143\x65\x6e\163\145\x20\153\x65\171\56\x20\120\154\145\141\x73\x65\x20\x65\x6e\x74\145\162\x20\x61\x20\x76\141\154\x69\144\40\154\151\143\x65\156\163\x65\40\153\145\171\x2e";
+    const LICENSE_VERIFIED = "\131\157\165\x72\x20\154\151\x63\x65\x6e\163\145\40\x69\x73\40\166\x65\162\151\x66\151\145\144\x2e\40\131\x6f\165\40\x63\x61\156\x20\x6e\x6f\x77\x20\163\145\x74\165\x70\x20\164\150\x65\40\x70\x6c\165\147\x69\156\56";
+    const NOT_UPGRADED_YET = "\x59\x6f\165\40\x68\141\166\145\x20\x6e\x6f\x74\40\x75\160\x67\x72\141\x64\x65\x64\40\x79\145\164\56";
+    const PASS_RESET = "\131\157\165\40\x70\141\163\x73\167\x6f\x72\144\40\x68\141\x73\x20\142\145\145\x6e\40\162\x65\x73\145\x74\40\163\165\143\143\x65\163\x73\146\x75\154\154\x79\56\x20\x50\x6c\145\x61\163\x65\x20\x65\x6e\164\x65\162\40\x74\x68\145\x20\x6e\x65\167\40\x70\x61\x73\163\x77\x6f\x72\144\40\163\x65\156\x74\40\164\157\x20\171\157\165\x72\40\x72\x65\x67\x69\x73\x74\x65\162\145\x64\x20\x6d\x61\x69\154\x20\x68\x65\x72\x65\56";
+    const PASS_RESET_ERROR = "\123\157\x72\162\171\x20\x77\x65\40\x65\x6e\143\157\165\156\x74\145\x72\145\144\x20\x61\156\40\145\162\x72\157\162\x20\167\150\151\154\145\x20\x72\145\x73\145\164\x69\156\147\40\171\x6f\x75\x72\40\160\x61\x73\163\x77\x6f\162\144\x2e";
+    const CURL_ERROR = "\x45\x52\x52\117\x52\x3a\x20\74\141\40\150\162\x65\146\75\42\x68\164\164\160\72\x2f\57\x70\150\160\x2e\x6e\145\164\57\x6d\x61\x6e\165\x61\x6c\57\145\x6e\x2f\x63\165\162\154\x2e\151\x6e\163\x74\141\154\x6c\141\x74\151\157\156\56\160\x68\160\x22\40\164\x61\x72\147\145\164\x3d\42\x5f\142\x6c\141\156\153\x22\x3e\x50\x48\x50\40\x63\125\x52\114\40\x65\170\164\145\x6e\163\x69\157\x6e\x3c\x2f\x61\x3e\15\xa\40\40\40\x20\x20\x20\40\x20\40\x20\40\40\x20\x20\x20\x20\x20\40\x20\40\40\40\40\40\x20\x20\x20\40\40\40\40\x20\x20\x20\40\x20\40\40\40\x20\x20\40\x20\40\x69\163\x20\156\157\164\40\151\156\163\x74\141\154\x6c\x65\144\x20\157\162\40\144\x69\163\141\x62\x6c\145\x64\56\40\121\165\145\x72\171\x20\163\165\x62\x6d\151\x74\40\146\x61\151\x6c\145\144\x2e";
+    const REQUIRED_QUERY_FIELDS = "\x50\154\145\141\163\x65\x20\x66\151\154\154\x20\165\160\x20\105\x6d\x61\x69\154\x20\141\x6e\144\40\x51\x75\x65\162\171\x20\146\151\x65\154\x64\x73\40\164\x6f\x20\163\165\142\155\151\x74\x20\171\157\x75\162\x20\161\x75\145\162\x79\x2e";
+    const ERROR_QUERY = "\x59\157\165\162\40\x71\x75\145\162\x79\40\x63\x6f\165\154\x64\40\x6e\157\x74\40\x62\145\40\x73\165\142\155\x69\164\x74\145\x64\x2e\40\120\x6c\145\141\x73\145\x20\164\x72\x79\x20\141\147\141\151\156\56";
+    const QUERY_SENT = "\x54\x68\141\x6e\x6b\x73\40\x66\x6f\x72\x20\147\145\x74\x74\151\x6e\x67\40\151\156\40\x74\157\x75\143\150\x21\x20\127\145\x20\163\x68\141\x6c\x6c\x20\147\x65\164\x20\142\x61\x63\x6b\40\x74\157\x20\x79\x6f\x75\x20\163\150\x6f\162\x74\x6c\171\56";
+    const ISSUER_EXISTS = "\131\157\165\x20\163\145\145\155\40\164\157\x20\141\x6c\x72\145\141\144\171\x20\150\x61\166\145\40\x61\x6e\40\x49\144\145\x6e\x74\151\164\x79\40\x50\x72\x6f\166\151\144\x65\x72\40\x66\x6f\x72\x20\164\x68\141\x74\x20\151\x73\163\165\145\x72\x20\x63\157\x6e\x66\x69\147\165\162\x65\144\40\165\x6e\x64\145\x72\x20\x3a\x20\x3c\x69\76\173\173\156\x61\x6d\145\175\175\74\57\x69\x3e";
+    const NO_IDP_CONFIG = "\120\154\145\141\x73\x65\40\x43\x6f\156\146\151\147\x75\162\x65\40\x61\x6e\x20\111\144\x65\x6e\x74\151\164\x79\40\120\162\x6f\x76\151\144\x65\x72\x2e";
+    const SETTINGS_SAVED = "\123\145\x74\164\151\156\147\x73\x20\x73\x61\166\x65\144\x20\163\x75\x63\x63\145\163\163\146\x75\x6c\154\171\x2e";
+    const IDP_DELETED = "\x49\x64\145\x6e\x74\x69\x74\x79\40\120\162\x6f\166\151\144\x65\x72\40\x73\145\x74\x74\x69\x6e\x67\163\x20\144\145\154\145\164\x65\144\40\x73\x75\143\143\145\x73\x73\146\x75\x6c\x6c\171\x2e";
+    const SP_ENTITY_ID_CHANGED = "\123\120\40\x45\x6e\164\151\164\x79\40\x49\x44\x20\x63\150\141\156\147\145\144\40\x73\x75\x63\143\145\x73\163\146\x75\154\x6c\x79\x2e";
+    const SP_ENTITY_ID_NULL = "\123\120\40\105\x6e\x74\151\164\171\x49\x44\x2f\x49\x73\163\165\145\162\x20\143\141\x6e\156\x6f\164\40\x62\x65\x20\x4e\125\x4c\114\x2e";
+    const INVALID_INSTANT = "\74\x73\164\162\157\x6e\147\76\x49\116\126\101\114\111\x44\137\122\105\x51\x55\x45\x53\124\72\40\x3c\x2f\163\164\162\157\x6e\x67\76\122\145\161\x75\145\x73\164\x20\164\x69\155\x65\40\151\163\40\147\x72\x65\x61\x74\145\162\40\x74\150\141\156\40\164\150\x65\40\143\165\162\162\x65\x6e\x74\x20\x74\x69\155\x65\56\x3c\142\162\x2f\76";
+    const INVALID_SAML_VERSION = "\127\x65\40\157\156\154\171\x20\x73\x75\160\x70\x6f\162\164\40\x53\101\115\114\40\62\x2e\x30\41\40\x50\x6c\x65\x61\x73\x65\x20\x73\145\156\x64\x20\141\x20\123\101\x4d\x4c\x20\62\56\60\x20\162\x65\161\x75\145\163\x74\56\x3c\142\x72\57\x3e";
+    const INVALID_IDP = "\x3c\x73\164\162\x6f\x6e\x67\x3e\x49\x4e\x56\101\114\111\104\137\x49\x44\120\x3a\40\x3c\57\163\x74\x72\x6f\x6e\147\x3e\x4e\x6f\x20\x49\x64\145\x6e\x74\151\x74\171\40\120\162\157\x76\151\144\x65\x72\40\143\157\156\146\151\147\x75\162\141\164\x69\x6f\156\40\146\x6f\165\x6e\x64\56\40\120\x6c\145\141\163\145\x20\x63\157\156\146\x69\147\165\162\x65\x20\171\157\x75\162\xd\xa\40\40\x20\40\x20\x20\x20\x20\x20\40\x20\40\x20\x20\x20\40\40\x20\40\40\x20\40\x20\x20\x20\x20\x20\x20\40\x20\40\40\40\40\x20\x20\40\x20\x20\40\40\x20\40\x20\111\144\145\x6e\x74\x69\164\x79\x20\120\x72\x6f\166\x69\x64\145\162\56\74\142\162\x2f\x3e";
+    const INVALID_RESPONSE_SIGNATURE = "\x3c\x73\x74\x72\x6f\156\x67\76\111\x4e\126\x41\114\111\104\x5f\123\111\x47\116\x41\x54\125\x52\105\x3a\40\x3c\57\x73\164\162\157\156\147\x3e\111\x6e\x76\x61\x6c\151\x64\40\x53\x69\x67\x6e\x61\164\x75\x72\145\56\x20\x50\154\145\141\163\145\x20\143\150\x65\x63\153\40\x79\157\x75\x72\x20\143\145\x72\164\x69\146\x69\x63\x61\164\x65\x73\x2e";
+    const SAML_INVALID_OPERATION = "\74\x73\164\162\157\156\x67\x3e\111\x4e\x56\101\114\x49\104\x5f\117\120\105\122\101\x54\111\x4f\116\72\40\x3c\x2f\163\x74\162\157\x6e\x67\x3e\111\x6e\166\x61\154\151\x64\40\x4f\x70\x65\x72\141\x74\x69\157\156\x21\40\x50\154\145\x61\163\145\40\143\157\x6e\x74\141\143\164\x20\x79\x6f\x75\x72\x20\x73\151\x74\145\40\x61\144\155\151\156\151\x73\164\x72\141\x74\157\x72\56\74\142\x72\57\x3e";
+    const MISSING_NAMEID = "\x4d\x69\x73\163\151\156\x67\x20\x3c\163\x61\155\154\x3a\116\x61\x6d\x65\x49\104\x3e\40\x6f\162\40\x3c\x73\141\155\x6c\72\x45\156\x63\x72\x79\x70\x74\x65\144\111\x44\76\x20\x69\x6e\x20\74\x73\x61\x6d\154\x3a\x53\x75\x62\x6a\x65\143\164\76\x2e";
+    const INVALID_NO_OF_NAMEIDS = "\x4d\x6f\x72\145\x20\164\x68\141\156\40\157\156\145\40\x3c\x73\141\x6d\154\x3a\116\141\155\145\111\104\76\40\x6f\x72\x20\x3c\163\141\x6d\154\72\x45\x6e\143\162\x79\x70\164\145\x64\x44\76\40\151\x6e\x20\74\x73\x61\155\x6c\x3a\x53\165\x62\x6a\x65\x63\164\x3e\56";
+    const MISSING_ID_FROM_RESPONSE = "\115\151\x73\163\151\156\147\40\111\x44\x20\141\x74\164\162\151\142\x75\164\x65\40\x6f\x6e\40\x53\x41\115\x4c\40\141\163\x73\145\162\x74\151\x6f\156\56";
+    const MISSING_ISSUER_VALUE = "\x4d\x69\x73\163\151\156\147\x20\x3c\163\141\x6d\154\x3a\x49\163\163\x75\145\x72\x3e\x20\151\156\x20\x61\163\163\145\162\x74\x69\x6f\156\x2e";
+    const INVALID_ISSUER = "\111\x73\x73\165\x65\162\x20\143\141\x6e\x6e\157\164\40\142\x65\40\166\x65\162\x69\146\151\145\144\x2e\x20\x45\x78\160\145\x63\x74\x65\x64\x20\x7b\173\145\170\160\145\x63\164\175\175\x2c\40\x66\157\x75\156\x64\x20\173\x7b\x66\157\165\156\x64\x7d\x7d";
+    const INVALID_AUDIENCE = "\111\156\x76\x61\154\x69\x64\x20\x61\165\144\x69\145\156\143\145\40\125\x52\111\x2e\40\x45\x78\x70\145\143\x74\145\x64\x20\173\173\x65\x78\160\145\143\x74\x7d\175\54\40\146\157\165\x6e\144\40\x7b\173\146\157\x75\156\144\x7d\x7d";
+    const INVALID_DESTINATION = "\104\x65\163\164\151\x6e\x61\x74\151\x6f\x6e\40\151\156\40\162\145\x73\160\x6f\x6e\163\145\40\144\157\145\x73\156\x27\x74\x20\155\x61\164\x63\x68\x20\164\150\145\x20\x63\165\x72\162\145\156\164\40\125\x52\114\x2e\x20\x44\x65\x73\164\151\156\141\x74\151\x6f\x6e\40\x69\163\40\x7b\x7b\x64\x65\163\164\x69\156\141\164\x69\157\x6e\175\175\x2c\xd\xa\40\40\x20\40\40\40\x20\x20\40\40\x20\x20\x20\x20\x20\x20\40\40\x20\40\40\x20\x20\40\x20\x20\x20\40\40\x20\40\x20\x20\x20\40\x20\x20\40\40\x20\40\x20\x20\40\143\165\162\x72\x65\x6e\164\40\x55\122\114\x20\x69\x73\x20\173\173\143\165\162\162\145\156\164\x75\x72\x6c\175\175\56";
+    const MISSING_ATTRIBUTES_EXCEPTION = "\x53\101\115\x4c\40\122\x65\x73\x70\157\x6e\163\x65\40\x64\157\145\x73\x6e\47\164\x20\x68\x61\x76\145\x20\x74\x68\x65\x20\x6e\x65\x63\145\163\163\141\162\x79\40\141\164\x74\x72\x69\142\165\x74\145\163\40\x74\157\40\x6c\x6f\x67\40\164\x68\145\40\165\163\x65\x72\40\151\156";
+    const INVALID_STATUS_CODE = "\74\163\164\x72\x6f\x6e\x67\76\x49\x4e\x56\101\x4c\x49\x44\x5f\123\124\x41\x54\125\x53\137\103\x4f\104\105\72\40\x3c\57\163\164\x72\x6f\156\147\76\40\124\x68\x65\x20\111\144\145\156\x74\151\164\x79\x20\x50\x72\157\166\x69\144\x65\162\x20\162\145\x74\x75\x72\156\145\x64\x20\141\156\40\111\156\x76\x61\x6c\x69\x64\x20\162\145\x73\160\x6f\x6e\163\x65\56\15\12\40\40\x20\x20\x20\40\x20\40\40\40\x20\x20\x20\40\40\40\40\x20\40\40\x20\40\x20\40\x20\40\40\x20\x20\x20\40\40\x20\40\x20\40\x20\x20\x20\x20\x20\x20\40\40\111\144\x65\156\x74\x69\x74\x79\x20\120\x72\x6f\166\151\144\145\x72\x20\150\x61\163\x20\163\145\x6e\164\x20\x7b\x7b\x73\x74\x61\164\165\163\x63\157\144\145\x7d\x7d\x20\163\164\141\164\x75\163\x20\143\x6f\x64\x65\x20\x69\156\40\x53\101\x4d\114\x20\x52\145\163\160\157\156\x73\145\56\xd\12\x20\x20\40\40\40\x20\40\40\x20\x20\40\40\x20\x20\x20\x20\40\x20\x20\x20\40\x20\x20\40\40\40\x20\x20\40\x20\40\40\40\x20\x20\x20\x20\40\x20\40\40\x20\x20\40\120\x6c\x65\x61\163\x65\40\x63\150\x65\143\x6b\x20\167\x69\164\x68\x20\171\x6f\165\x72\x20\111\x64\x65\x6e\164\151\x74\x79\x20\120\162\157\x76\151\x64\x65\162\x20\x66\x6f\162\x20\x6d\157\162\x65\x20\x69\x6e\146\157\162\x6d\141\164\x69\157\156\56";
+    const SAML_RESPONSE = "\74\x70\x72\145\76\173\x7b\170\155\x6c\x7d\175\x3c\57\160\x72\145\x3e";
+    const FORMATTED_CERT = "\x3c\160\x72\145\76\173\x7b\x63\145\x72\x74\x7d\x7d\74\x2f\160\162\x65\x3e";
+    const TRIAL_EXTENDED = "\x59\157\x75\162\40\124\x72\x69\141\154\x20\151\x73\40\123\165\x63\143\145\x73\x73\146\165\x6c\x6c\x79\40\105\x78\164\145\156\144\145\x64\40\146\157\162\40\x37\x20\x4d\157\162\145\40\104\141\171\163\x2e\x20\x28\120\154\x65\x61\163\145\x20\156\x6f\x74\145\x3a\x20\x54\150\x65\x20\x74\x72\x69\141\154\x20\x63\141\156\40\x6f\156\154\x79\40\x62\x65\x20\x65\170\164\145\x6e\144\x65\x64\40\157\156\143\145\56\51";
+    const EXTEND_TRIAL_LIMIT_REACHED = "\131\157\165\x72\40\x45\170\x74\145\x6e\x64\40\124\x72\151\x61\x6c\x20\114\x69\155\x69\164\x20\x69\163\x20\122\145\x61\143\150\145\x64\x2e\x20\x55\156\141\x62\154\x65\x20\164\157\x20\105\170\x74\145\x6e\x64\x20\164\150\x65\x20\164\x72\x69\x61\154\x2e";
+    public static function parse($qx, $or = array())
     {
-        $message = constant("self::" . $message);
-        foreach ($data as $key => $value) {
-            $message = str_replace("{{" . $key . "}}", $value, $message);
+        $qx = constant("\x73\145\154\x66\x3a\x3a" . $qx);
+        foreach ($or as $On => $VP) {
+            $qx = str_replace("\173\x7b" . $On . "\x7d\x7d", $VP, $qx);
+            Av:
         }
-        return $message;
+        q0:
+        return $qx;
     }
 }

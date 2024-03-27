@@ -1,23 +1,19 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Exception denotes that there was an Invalid Operation
- */
 class PasswordResetFailedException extends \Exception
 {
     public function __construct()
     {
-        $message = SPMessages::parse('ERROR_OCCURRED');
-        $code = 116;
-        parent::__construct($message, $code, NULL);
+        $qx = SPMessages::parse("\x45\x52\x52\x4f\122\x5f\117\x43\x43\125\x52\122\x45\104");
+        $wI = 116;
+        parent::__construct($qx, $wI, NULL);
     }
-
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . "\x3a\40\x5b{$this->code}\x5d\x3a\x20{$this->message}\12";
     }
 }

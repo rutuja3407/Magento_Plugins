@@ -1,46 +1,31 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Exception denotes a SAMLResponseException.
- * This exception is not thrown but is
- * extended by other exception classes.
- */
 class SAMLResponseException extends \Exception
 {
     private $samlResponse;
     private $isCertError;
-
-    public function __construct($message, $code, $xml, $isCertError)
+    public function __construct($qx, $wI, $xa, $Ic)
     {
-        $this->xml = $xml;
-        $this->isCertError = $isCertError;
-        parent::__construct($message, $code, NULL);
+        $this->xml = $xa;
+        $this->isCertError = $Ic;
+        parent::__construct($qx, $wI, NULL);
     }
-
     public function getSamlResponse()
     {
-        return SPMessages::parse('SAML_RESPONSE',
-            array('xml' => $this->parseXML($this->xml)));
+        return SPMessages::parse("\123\101\x4d\114\x5f\122\x45\123\120\x4f\116\123\x45", array("\x78\x6d\154" => $this->parseXML($this->xml)));
     }
-
-    /**
-     * This function is used to show an XML in
-     * the plain text format for debugging
-     * purposes.
-     */
-    public static function parseXML($xml)
+    public static function parseXML($xa)
     {
-        $dom = new \DOMDocument;
-        $dom->preserveWhiteSpace = TRUE;
-        $dom->formatOutput = TRUE;
-        $dom->loadXML($xml->ownerDocument->saveXML($xml));
-        return htmlentities($dom->saveXml());
+        $uE = new \DOMDocument();
+        $uE->preserveWhiteSpace = TRUE;
+        $uE->formatOutput = TRUE;
+        $uE->loadXML($xa->ownerDocument->saveXML($xa));
+        return htmlentities($uE->saveXml());
     }
-
     public function isCertError()
     {
         return $this->isCertError;

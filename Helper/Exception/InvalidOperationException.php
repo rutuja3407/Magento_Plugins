@@ -1,23 +1,19 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Exception denotes that there was an Invalid Operation
- */
 class InvalidOperationException extends \Exception
 {
     public function __construct()
     {
-        $message = SPMessages::parse('INVALID_OP');
-        $code = 105;
-        parent::__construct($message, $code, NULL);
+        $qx = SPMessages::parse("\x49\x4e\x56\x41\x4c\111\x44\x5f\x4f\x50");
+        $wI = 105;
+        parent::__construct($qx, $wI, NULL);
     }
-
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . "\x3a\x20\x5b{$this->code}\x5d\x3a\x20{$this->message}\12";
     }
 }

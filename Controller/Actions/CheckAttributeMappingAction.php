@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Actions;
 
 use Magento\Backend\App\Action\Context;
@@ -9,12 +10,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use MiniOrange\SP\Helper\Exception\MissingAttributesException;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPUtility;
-
-/**
- * This class handles checking of the SAML attributes and NameID
- * coming in the response and mapping it to the attribute mapping
- * done in the plugin settings by the admin to update the user.
- */
 class CheckAttributeMappingAction extends BaseAction
 {
     const TEST_VALIDATE_RELAYSTATE = SPConstants::TEST_RELAYSTATE;
@@ -29,218 +24,157 @@ class CheckAttributeMappingAction extends BaseAction
     private $groupName;
     private $testAction;
     private $processUserAction;
-
-    public function __construct(
-        Context               $context,
-        SPUtility             $spUtility,
-        ShowTestResultsAction $testAction,
-        ProcessUserAction     $processUserAction,
-        StoreManagerInterface $storeManager,
-        ResultFactory         $resultFactory,
-        ResponseFactory       $responseFactory)
+    public function __construct(Context $gt, SPUtility $fR, ShowTestResultsAction $Ip, ProcessUserAction $JJ, StoreManagerInterface $VO, ResultFactory $ps, ResponseFactory $Jv)
     {
-        $this->testAction = $testAction;
-        $this->processUserAction = $processUserAction;
-        $this->storeManager = $storeManager;
-        parent::__construct($context, $spUtility, $storeManager, $resultFactory, $responseFactory);
+        $this->testAction = $Ip;
+        $this->processUserAction = $JJ;
+        $this->storeManager = $VO;
+        parent::__construct($gt, $fR, $VO, $ps, $Jv);
     }
-
-    /**
-     * Execute function to execute the classes function.
-     */
     public function execute()
     {
-        $idp_name = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
-        $this->spUtility->log_debug("checkAttributeMappingAction: ", $idp_name);
-        $collection = $this->spUtility->getIDPApps();
-        $idpDetails = null;
-        foreach ($collection as $item) {
-            if ($item->getData()["idp_name"] === $idp_name) {
-                $idpDetails = $item->getData();
+        $rq = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $this->spUtility->log_debug("\143\150\x65\x63\153\101\164\x74\x72\x69\x62\165\164\145\115\141\160\160\151\156\x67\101\x63\164\x69\157\156\x3a\x20", $rq);
+        $yG = $this->spUtility->getIDPApps();
+        $hR = null;
+        foreach ($yG as $ub) {
+            if (!($ub->getData()["\x69\x64\x70\137\x6e\141\x6d\145"] === $rq)) {
+                goto RG;
             }
+            $hR = $ub->getData();
+            RG:
+            eb:
         }
-        $this->emailAttribute = $idpDetails['email_attribute'];
-        $this->usernameAttribute = $idpDetails['username_attribute'];
-        $this->firstName = $idpDetails['firstname_attribute'];
-        $this->lastName = $idpDetails['lastname_attribute'];
-        $this->checkIfMatchBy = $idpDetails['create_magento_account_by'];
-        $this->groupName = $idpDetails['group_attribute'];
-
-        $idp_name = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
-        $this->spUtility->log_debug("checkattributemappingAction", $idp_name);
-        $ssoemail = current(current($this->samlResponse->getAssertions())->getNameId());
-        $attrs = current($this->samlResponse->getAssertions())->getAttributes();
-
-        if (!filter_var($ssoemail, FILTER_VALIDATE_EMAIL)) {
-            $ssoemail = $this->findUserEmail($attrs);
+        KI:
+        $this->emailAttribute = $hR["\x65\155\x61\x69\154\137\x61\x74\164\162\x69\142\x75\164\x65"];
+        $this->usernameAttribute = $hR["\165\163\x65\162\x6e\x61\155\x65\x5f\x61\x74\x74\x72\x69\x62\165\x74\x65"];
+        $this->firstName = $hR["\146\151\162\x73\x74\156\141\x6d\145\x5f\141\x74\164\162\151\142\165\x74\x65"];
+        $this->lastName = $hR["\x6c\x61\163\x74\156\x61\155\145\137\141\x74\x74\x72\x69\x62\x75\x74\x65"];
+        $this->checkIfMatchBy = $hR["\x63\162\x65\x61\164\145\137\155\x61\x67\x65\156\164\x6f\x5f\x61\143\x63\x6f\165\156\x74\137\x62\x79"];
+        $this->groupName = $hR["\147\x72\x6f\165\160\137\141\164\164\x72\151\x62\x75\164\x65"];
+        $rq = $this->spUtility->getSessionData(SPConstants::IDP_NAME);
+        $this->spUtility->log_debug("\143\x68\x65\143\153\x61\x74\164\x72\x69\x62\165\x74\x65\x6d\141\160\160\151\x6e\x67\x41\143\164\151\x6f\x6e", $rq);
+        $bC = current(current($this->samlResponse->getAssertions())->getNameId());
+        $q_ = current($this->samlResponse->getAssertions())->getAttributes();
+        if (filter_var($bC, FILTER_VALIDATE_EMAIL)) {
+            goto hW;
         }
-        if (!$ssoemail && !($this->relayState == self::TEST_VALIDATE_RELAYSTATE)) {
-            // $this->spUtility->log_debug("This Customer email not found.");
-
-            //     $this->messageManager->addErrorMessage(__("Email not found.Please contact your Administrator."));
-            //     return $this->responseFactory->create()->setRedirect($this->storeManager->getStore()->getBaseUrl().'/customer/account')->sendResponse();
+        $bC = $this->findUserEmail($q_);
+        hW:
+        if (!(!$bC && !($this->relayState == self::TEST_VALIDATE_RELAYSTATE))) {
+            goto DH;
         }
-        $sitecode = $this->storeManager->getWebsite()->getCode();
-        $attrs['NameID'] = array($ssoemail);
-        $sessionIndex = current($this->samlResponse->getAssertions())->getSessionIndex();
-        $this->spUtility->setSessionData('sessionin', $sessionIndex);
-        //$_COOKIE['sessionin'] = $sessionIndex;
-
-        // setcookie("sessionin", $sessionIndex, time() + (86400 * 30), "/");
-        $this->moSAMLcheckMapping($attrs, $sessionIndex);
+        DH:
+        $Ay = $this->storeManager->getWebsite()->getCode();
+        $q_["\x4e\141\155\145\111\104"] = array($bC);
+        $lr = current($this->samlResponse->getAssertions())->getSessionIndex();
+        $this->spUtility->setSessionData("\163\145\163\x73\x69\157\x6e\151\156", $lr);
+        $this->moSAMLcheckMapping($q_, $lr);
     }
-
-    private function findUserEmail($attrs)
+    private function findUserEmail($q_)
     {
-
-        if ($attrs) {
-            foreach ($attrs as $value) {
-                if (is_array($value)) {
-                    $value = $this->findUserEmail($value);
-                }
-                if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    return $value;
-                }
+        if (!$q_) {
+            goto yK;
+        }
+        foreach ($q_ as $VP) {
+            if (!is_array($VP)) {
+                goto NE;
             }
-            return "";
+            $VP = $this->findUserEmail($VP);
+            NE:
+            if (!filter_var($VP, FILTER_VALIDATE_EMAIL)) {
+                goto BG;
+            }
+            return $VP;
+            BG:
+            zy:
         }
+        xM:
+        return '';
+        yK:
     }
-
-
-    /**
-     * This function checks the SAML Attribute Mapping done
-     * in the plugin and matches it to update the user's
-     * attributes.
-     *
-     * @param $attrs
-     * @param $sessionIndex
-     * @throws MissingAttributesException;
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function moSAMLcheckMapping($attrs, $sessionIndex)
+    private function moSAMLcheckMapping($q_, $lr)
     {
-        if (empty($attrs)) throw new MissingAttributesException;
-        if ($this->spUtility->isBlank($this->checkIfMatchBy)) $this->checkIfMatchBy = SPConstants::DEFAULT_MAP_BY;
-        $this->processUserName($attrs);
-        $this->processEmail($attrs);
-        $this->processGroupName($attrs);
-        $this->processResult($attrs, $sessionIndex, $attrs['NameID']);
+        if (!empty($q_)) {
+            goto rO;
+        }
+        throw new MissingAttributesException();
+        rO:
+        if (!$this->spUtility->isBlank($this->checkIfMatchBy)) {
+            goto bF;
+        }
+        $this->checkIfMatchBy = SPConstants::DEFAULT_MAP_BY;
+        bF:
+        $this->processUserName($q_);
+        $this->processEmail($q_);
+        $this->processGroupName($q_);
+        $this->processResult($q_, $lr, $q_["\x4e\141\x6d\145\111\104"]);
     }
-
-    /**
-     * Check if the attribute list has a UserName. If
-     * no UserName is found then NameID is considered as
-     * the UserName. This is done because Magento needs
-     * a UserName for creating a new user.
-     *
-     * @param $attrs
-     */
-    private function processUserName(&$attrs)
+    private function processUserName(&$q_)
     {
-        if (empty($attrs[$this->usernameAttribute]))
-            $attrs[$this->usernameAttribute][0]
-                = $this->checkIfMatchBy == SPConstants::DEFAULT_MAP_USERN ? $attrs['NameID'][0] : null;
+        if (!empty($q_[$this->usernameAttribute])) {
+            goto Oc;
+        }
+        $q_[$this->usernameAttribute][0] = $this->checkIfMatchBy == SPConstants::DEFAULT_MAP_USERN ? $q_["\116\141\155\x65\x49\104"][0] : null;
+        Oc:
     }
-
-    /**
-     * Check if the attribute list has a Email. If
-     * no Email is found then NameID is considered as
-     * the Email. This is done because Magento needs
-     * a Email for creating a new user.
-     *
-     * @param $attrs
-     */
-    private function processEmail(&$attrs)
+    private function processEmail(&$q_)
     {
-        if (empty($attrs[$this->emailAttribute]))
-            $attrs[$this->emailAttribute][0]
-                = $this->checkIfMatchBy == SPConstants::DEFAULT_MAP_EMAIL ? $attrs['NameID'][0] : null;
+        if (!empty($q_[$this->emailAttribute])) {
+            goto JG;
+        }
+        $q_[$this->emailAttribute][0] = $this->checkIfMatchBy == SPConstants::DEFAULT_MAP_EMAIL ? $q_["\116\141\x6d\145\111\104"][0] : null;
+        JG:
     }
-
-    /**
-     * Check if the attribute list has a Group/Role. If
-     * no Group/Role is found then NameID is considered as
-     * the Group/Role. This is done because Magento needs
-     * a Group/Role for creating a new user.
-     *
-     * @param $attrs
-     */
-    private function processGroupName(&$attrs)
+    private function processGroupName(&$q_)
     {
-        if (empty($attrs[$this->groupName]))
-            $this->groupName = array();
+        if (!empty($q_[$this->groupName])) {
+            goto kn;
+        }
+        $this->groupName = array();
+        kn:
     }
-
-    /**
-     * Process the result to either show a Test result
-     * screen or log/create user in Magento.
-     *
-     * @param $attrs
-     * @param $sessionIndex
-     * @param $nameId
-     * @throws MissingAttributesException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function processResult($attrs, $sessionIndex, $nameId)
+    private function processResult($q_, $lr, $Au)
     {
         switch ($this->relayState) {
-            case self::TEST_VALIDATE_RELAYSTATE :
-                $this->testAction->setAttrs($attrs)->setNameId($nameId[0])->execute();
-                break;
+            case self::TEST_VALIDATE_RELAYSTATE:
+                $this->testAction->setAttrs($q_)->setNameId($Au[0])->execute();
+                goto Vg;
             default:
-                $this->processUserAction->setAttrs($attrs)->setRelayState($this->relayState)
-                    ->setSessionIndex($sessionIndex)->execute();
-                break;
+                $this->processUserAction->setAttrs($q_)->setRelayState($this->relayState)->setSessionIndex($lr)->execute();
+                goto Vg;
         }
+        jB:
+        Vg:
     }
-
-    /** Setter for the RelayState Parameter */
-    public function setRelayState($relayState)
+    public function setRelayState($Nf)
     {
-        $this->relayState = $relayState;
+        $this->relayState = $Nf;
         return $this;
     }
-
-    /** Setter for the SAML Response Parameter */
-    public function setSamlResponse($samlResponse)
+    public function setSamlResponse($yO)
     {
-        $this->samlResponse = $samlResponse;
+        $this->samlResponse = $yO;
         return $this;
     }
-
-    /**
-     * Check if the attribute list has a FirstName. If
-     * no firstName is found then NameID is considered as
-     * the firstName. This is done because Magento needs
-     * a firstName for creating a new user.
-     *
-     * @param $attrs
-     */
-    private function processFirstName(&$attrs)
+    private function processFirstName(&$q_)
     {
-        if (empty($attrs[$this->firstName])) {
-            $temp = explode('@', $attrs['NameID'][0]);
-            $attrs[$this->firstName][0] = $temp[0];
-            $this->spUtility->log_debug(" inside CheckAttributeMappingAction : processFirstName: Changed firstName: " . $attrs[$this->firstName][0]);
+        if (!empty($q_[$this->firstName])) {
+            goto Ay;
         }
-
+        $Dq = explode("\100", $q_["\116\141\x6d\145\x49\x44"][0]);
+        $q_[$this->firstName][0] = $Dq[0];
+        $this->spUtility->log_debug("\x20\151\x6e\163\x69\144\145\40\103\x68\145\x63\x6b\101\164\164\x72\x69\142\x75\x74\145\x4d\x61\x70\x70\x69\x6e\147\x41\143\x74\151\x6f\x6e\x20\72\x20\160\x72\157\x63\145\x73\x73\106\x69\x72\163\164\116\x61\155\145\x3a\x20\x43\150\x61\x6e\147\x65\144\x20\x66\151\162\163\164\116\141\155\x65\72\x20" . $q_[$this->firstName][0]);
+        Ay:
     }
-
-    /**
-     * Check if the attribute list has a FirstName. If
-     * no firstName is found then NameID is considered as
-     * the firstName. This is done because Magento needs
-     * a firstName for creating a new user.
-     *
-     * @param $attrs
-     */
-    private function processLastName(&$attrs)
+    private function processLastName(&$q_)
     {
-        if (empty($attrs[$this->lastName])) {
-            $temp = explode('@', $attrs['NameID'][0]);
-            $attrs[$this->lastName][0] = $temp[1];
-            $this->spUtility->log_debug(" inside CheckAttributeMappingAction : processLastName: Changed LastName: " . $attrs[$this->lastName][0]);
+        if (!empty($q_[$this->lastName])) {
+            goto Wt;
         }
-
+        $Dq = explode("\x40", $q_["\116\x61\x6d\x65\111\104"][0]);
+        $q_[$this->lastName][0] = $Dq[1];
+        $this->spUtility->log_debug("\40\151\156\x73\151\x64\x65\x20\103\150\x65\143\153\101\x74\x74\162\151\x62\x75\x74\x65\115\x61\160\x70\x69\156\x67\x41\x63\164\151\x6f\156\x20\72\40\x70\162\157\x63\x65\163\x73\114\141\x73\164\116\x61\155\145\72\40\103\150\x61\x6e\147\x65\144\40\x4c\141\163\164\116\x61\x6d\x65\72\x20" . $q_[$this->lastName][0]);
+        Wt:
     }
 }

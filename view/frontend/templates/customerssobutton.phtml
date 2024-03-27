@@ -1,36 +1,34 @@
-<!--
-        This template shows a SSO box on the customer frontend pages
-        Use this if you want to show a sso button on your frontend pages
-    -->
 <?php
-$currentWebsiteId = $this->getCurrentWebsite();
-$allIdpConfig = $this->getAllIdpConfiguration();
-$websiteIds = $this->getWebsiteIds();
-$selectedWebsites = $this->spUtility->isBlank($websiteIds) ? array() : json_decode($websiteIds);
-if (!$this->spUtility->isBlank($selectedWebsites))
-    foreach ($selectedWebsites as $key => $website) {
-        if ($currentWebsiteId == $key) {
-            foreach ($allIdpConfig as $item) {
-                if ($item->getData()["show_customer_link"] == 1) {
-                    print_r('
-            <div style="text-align:left;width:100%;">
-                <svg height="5" width="215">
-                    <line x1="0" y1="0" x2="210" y2="0" style="stroke:#969393;stroke-width:3">
-                </svg>OR
-                <svg height="5" width="210">
-                    <line x1="0" y1="0" x2="210" y2="0" style="stroke:#969393;stroke-width:3">
-                </svg>
-                <div class="card" style="margin-top:1%;">
-                    <div class="primary">
-                        <a href="' . $this->getSPInitiatedUrl(null, $item->getData()['idp_name']) . '" class="action login primary" style="padding: 1% 14%;">
-                            <span>Login with ' . $item->getData()['idp_name'] . '</span>
-                        </a>
-                    </div>
-                </div>
-            </div>');
-                }
-            }
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
 
-        }
-
+echo "\x3c\41\x2d\55\15\xa\x20\x20\x20\40\40\x20\x20\40\x54\150\151\x73\40\164\145\x6d\160\x6c\141\164\x65\x20\163\x68\x6f\167\x73\x20\x61\x20\x53\123\117\40\x62\x6f\170\40\x6f\156\40\164\150\x65\x20\143\x75\x73\164\157\155\x65\x72\40\146\162\x6f\x6e\x74\x65\x6e\144\40\160\141\147\145\x73\15\12\x20\x20\x20\40\40\x20\x20\x20\125\163\x65\x20\164\150\x69\163\40\x69\x66\x20\x79\x6f\165\40\167\x61\x6e\x74\x20\x74\157\40\163\150\157\167\40\x61\40\163\x73\157\x20\x62\165\x74\x74\x6f\156\x20\157\x6e\x20\171\157\165\162\40\x66\x72\x6f\156\164\145\x6e\144\40\160\141\147\x65\x73\xd\12\x20\40\x20\x20\55\55\x3e\xd\12";
+$u9 = $this->getCurrentWebsite();
+$IZ = $this->getAllIdpConfiguration();
+$hq = $this->getWebsiteIds();
+$L_ = $this->spUtility->isBlank($hq) ? array() : json_decode($hq);
+if ($this->spUtility->isBlank($L_)) {
+    goto AM;
+}
+foreach ($L_ as $On => $Kt) {
+    if (!($u9 == $On)) {
+        goto ZT;
     }
+    foreach ($IZ as $ub) {
+        if (!($ub->getData()["\x73\150\x6f\x77\137\143\165\x73\164\x6f\155\145\162\137\154\x69\156\x6b"] == 1)) {
+            goto zn;
+        }
+        print_r("\15\xa\x20\x20\40\x20\x20\x20\40\x20\x20\x20\40\40\x3c\144\x69\x76\x20\x73\164\171\154\145\75\x22\164\x65\x78\x74\55\141\x6c\x69\147\156\72\154\145\146\164\x3b\167\151\x64\164\x68\72\x31\60\60\x25\73\42\76\15\12\40\x20\x20\40\x20\40\40\40\x20\40\x20\x20\x20\x20\x20\40\74\x73\166\147\x20\x68\x65\151\147\x68\164\75\x22\x35\42\x20\x77\151\x64\164\x68\x3d\42\62\x31\65\42\76\xd\12\x20\x20\40\40\x20\40\40\40\x20\x20\x20\40\x20\x20\40\x20\40\x20\x20\40\x3c\x6c\x69\x6e\x65\40\170\x31\75\x22\x30\x22\40\171\61\x3d\x22\60\x22\x20\170\x32\x3d\42\x32\61\60\42\x20\171\62\75\x22\60\42\40\163\x74\171\154\x65\x3d\42\x73\x74\162\x6f\x6b\145\72\43\x39\66\71\63\x39\x33\73\x73\164\x72\x6f\x6b\x65\x2d\167\x69\144\164\x68\72\x33\x22\76\xd\xa\x20\x20\40\40\x20\40\x20\40\x20\x20\40\40\40\40\40\x20\74\x2f\163\166\x67\76\117\x52\xd\xa\x20\x20\40\40\x20\x20\x20\40\40\x20\40\x20\x20\x20\40\40\x3c\163\166\x67\x20\150\x65\151\x67\x68\x74\x3d\42\65\42\x20\167\x69\144\x74\150\x3d\42\62\61\60\x22\x3e\15\12\x20\x20\x20\x20\x20\x20\x20\x20\x20\40\40\x20\x20\x20\40\x20\x20\x20\x20\x20\x3c\x6c\151\x6e\145\40\170\61\x3d\x22\60\x22\x20\x79\61\x3d\x22\60\42\40\170\62\x3d\42\x32\61\60\42\40\x79\x32\x3d\42\x30\42\x20\x73\164\x79\x6c\145\x3d\42\x73\x74\162\x6f\x6b\x65\x3a\43\71\x36\x39\x33\71\x33\x3b\x73\x74\x72\157\x6b\x65\x2d\x77\151\x64\x74\x68\x3a\x33\42\x3e\xd\12\40\x20\x20\40\40\40\x20\40\x20\x20\x20\x20\40\40\40\x20\x3c\57\163\166\147\76\xd\12\40\40\40\40\x20\x20\x20\x20\40\40\40\40\x20\40\40\40\x3c\x64\x69\166\40\143\154\x61\x73\163\x3d\x22\x63\141\x72\x64\42\x20\x73\164\171\x6c\145\x3d\42\155\141\x72\x67\x69\156\55\164\157\x70\x3a\61\45\73\x22\x3e\xd\12\x20\40\x20\40\x20\40\x20\40\40\x20\40\x20\x20\40\x20\x20\x20\40\x20\40\74\x64\151\166\x20\143\x6c\141\163\x73\x3d\x22\x70\x72\x69\155\x61\162\x79\42\76\xd\xa\x20\40\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\40\x20\x20\x20\x20\x20\x20\x20\40\x20\x3c\x61\40\150\x72\x65\146\x3d\x22" . $this->getSPInitiatedUrl(null, $ub->getData()["\151\144\160\137\156\141\x6d\x65"]) . "\x22\x20\x63\154\x61\163\163\x3d\x22\x61\x63\164\x69\157\156\40\x6c\x6f\147\151\x6e\40\x70\x72\151\x6d\141\162\x79\x22\40\x73\x74\x79\x6c\x65\x3d\42\x70\x61\x64\144\x69\x6e\x67\x3a\40\61\45\x20\x31\64\x25\x3b\x22\x3e\15\xa\x20\x20\x20\40\40\x20\40\x20\x20\40\40\x20\40\x20\x20\x20\40\40\40\x20\40\x20\40\x20\x20\x20\x20\40\x3c\163\x70\x61\156\x3e\114\x6f\x67\x69\156\x20\167\x69\164\150\x20" . $ub->getData()["\x69\144\x70\x5f\x6e\x61\x6d\x65"] . "\x3c\57\x73\x70\141\156\x3e\15\xa\x20\x20\x20\40\40\40\x20\40\40\40\x20\x20\x20\x20\x20\x20\40\40\40\x20\40\x20\x20\x20\x3c\x2f\x61\x3e\15\12\x20\x20\40\x20\40\40\x20\x20\40\x20\40\40\x20\x20\40\x20\40\40\x20\40\x3c\57\144\x69\x76\76\xd\12\x20\x20\x20\40\40\40\40\x20\x20\x20\x20\40\x20\40\40\x20\74\57\x64\x69\x76\x3e\15\xa\x20\40\x20\40\40\x20\40\40\x20\x20\x20\40\74\x2f\144\151\166\76");
+        zn:
+        hB:
+    }
+    n3:
+    ZT:
+    ux:
+}
+N1:
+AM:

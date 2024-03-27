@@ -1,24 +1,19 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Exception denotes that Issuer in the SAML response
- * doesn't match the one set by the plugin
- */
 class InvalidIssuerException extends SAMLResponseException
 {
-    public function __construct($expect, $found, $xml)
+    public function __construct($vS, $iX, $xa)
     {
-        $message = SPMessages::parse('INVALID_ISSUER', array('expect' => $expect, 'found' => $found));
-        $code = 101;
-        parent::__construct($message, $code, $xml, FALSE);
+        $qx = SPMessages::parse("\x49\x4e\126\101\x4c\x49\104\137\111\x53\123\125\105\x52", array("\145\170\x70\145\143\164" => $vS, "\146\157\165\156\144" => $iX));
+        $wI = 101;
+        parent::__construct($qx, $wI, $xa, FALSE);
     }
-
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . "\72\x20\133{$this->code}\x5d\72\40{$this->message}\xa";
     }
 }

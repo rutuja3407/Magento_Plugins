@@ -1,639 +1,559 @@
 <?php
-/**
- * This file is part of miniOrange plugin.
- *
- * miniOrange plugin is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * miniOrange plugin is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with miniOrange plugin.  If not, see <http://www.gnu.org/licenses/>.
- */
 
-
-/**
- * @todo - This class needs to be modified and optimized.
- */
 
 namespace MiniOrange\SP\Helper\Saml2;
 
 use MiniOrange\SP\Helper\Saml2\Lib\XMLSecEnc;
 use MiniOrange\SP\Helper\Saml2\Lib\XMLSecurityDSig;
 use MiniOrange\SP\Helper\Saml2\Lib\XMLSecurityKey;
-
 class SAML2Utilities
 {
-
     public static function generateID()
     {
-        return '_' . self::stringToHex(self::generateRandomBytes(21));
+        return "\x5f" . self::stringToHex(self::generateRandomBytes(21));
     }
-
-    public static function stringToHex($bytes)
+    public static function stringToHex($Eu)
     {
-        $ret = '';
-        for ($i = 0; $i < strlen($bytes); $i++) {
-            $ret .= sprintf('%02x', ord($bytes[$i]));
+        $a7 = '';
+        $nO = 0;
+        Pa:
+        if (!($nO < strlen($Eu))) {
+            goto tC;
         }
-        return $ret;
+        $a7 .= sprintf("\45\x30\62\x78", ord($Eu[$nO]));
+        BR:
+        $nO++;
+        goto Pa;
+        tC:
+        return $a7;
     }
-
-    public static function generateRandomBytes($length)
+    public static function generateRandomBytes($E4)
     {
-        return openssl_random_pseudo_bytes($length);
+        return openssl_random_pseudo_bytes($E4);
     }
-
-    public static function generateTimestamp($instant = NULL)
+    public static function generateTimestamp($dY = NULL)
     {
-        if ($instant === NULL) {
-            $instant = time();
+        if (!($dY === NULL)) {
+            goto WT;
         }
-        return gmdate('Y-m-d\TH:i:s\Z', $instant);
+        $dY = time();
+        WT:
+        return gmdate("\131\x2d\155\x2d\x64\x5c\x54\x48\72\x69\x3a\x73\x5c\x5a", $dY);
     }
-
-    public static function parseNameId(\DOMElement $xml)
+    public static function parseNameId(\DOMElement $xa)
     {
-        $ret = array('Value' => trim($xml->textContent));
-
-        foreach (array('NameQualifier', 'SPNameQualifier', 'Format') as $attr) {
-            if ($xml->hasAttribute($attr)) {
-                $ret[$attr] = $xml->getAttribute($attr);
+        $a7 = array("\x56\x61\154\x75\x65" => trim($xa->textContent));
+        foreach (array("\x4e\141\x6d\x65\x51\x75\x61\154\151\x66\x69\145\x72", "\123\x50\x4e\141\155\x65\121\165\x61\x6c\151\146\151\145\162", "\x46\x6f\162\155\x61\164") as $QX) {
+            if (!$xa->hasAttribute($QX)) {
+                goto Zj;
             }
+            $a7[$QX] = $xa->getAttribute($QX);
+            Zj:
+            aG:
         }
-
-        return $ret;
+        Lz:
+        return $a7;
     }
-
-    public static function xsDateTimeToTimestamp($time)
+    public static function xsDateTimeToTimestamp($eQ)
     {
-        $matches = array();
-
-        // We use a very strict regex to parse the timestamp.
-        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d+)?Z$/D';
-        if (preg_match($regex, $time, $matches) == 0) {
-            throw new \Exception("Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: " . $time);
+        $ob = array();
+        $UG = "\x2f\x5e\50\x5c\x64\x5c\x64\x5c\x64\134\144\x29\x2d\x28\134\144\134\x64\x29\x2d\x28\x5c\144\134\x64\51\x54\50\134\x64\134\x64\51\x3a\50\134\x64\x5c\x64\51\72\x28\134\x64\134\x64\x29\50\x3f\x3a\x5c\56\134\x64\x2b\51\77\132\44\57\104";
+        if (!(preg_match($UG, $eQ, $ob) == 0)) {
+            goto cl;
         }
-
-        // Extract the different components of the time from the  matches in the regex.
-        // intval will ignore leading zeroes in the string.
-        $year = intval($matches[1]);
-        $month = intval($matches[2]);
-        $day = intval($matches[3]);
-        $hour = intval($matches[4]);
-        $minute = intval($matches[5]);
-        $second = intval($matches[6]);
-
-        // We use gmmktime because the timestamp will always be given
-        //in UTC.
-        $ts = gmmktime($hour, $minute, $second, $month, $day, $year);
-
-        return $ts;
+        throw new \Exception("\111\x6e\x76\x61\x6c\151\x64\40\x53\101\x4d\114\x32\40\164\151\155\x65\x73\164\x61\x6d\160\40\160\141\x73\163\145\x64\x20\x74\x6f\40\170\163\104\141\x74\x65\x54\x69\x6d\x65\x54\157\124\151\x6d\145\x73\164\141\155\160\72\x20" . $eQ);
+        cl:
+        $tF = intval($ob[1]);
+        $gg = intval($ob[2]);
+        $vm = intval($ob[3]);
+        $NK = intval($ob[4]);
+        $Zw = intval($ob[5]);
+        $s0 = intval($ob[6]);
+        $OD = gmmktime($NK, $Zw, $s0, $gg, $vm, $tF);
+        return $OD;
     }
-
-    /**
-     * Decrypt an encrypted element.
-     *
-     * @param DOMElement $encryptedData The encrypted data.
-     * @param XMLSecurityKey $inputKey The decryption key.
-     * @param array $blacklist Blacklisted decryption algorithms.
-     * @return DOMElement     The decrypted element.
-     * @throws Exception
-     */
-    public static function decryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey,
-                                          array       $blacklist = array(), XMLSecurityKey $alternateKey = NULL)
+    public static function decryptElement(\DOMElement $aa, XMLSecurityKey $I2, array $cz = array(), XMLSecurityKey $As = NULL)
     {
         try {
-            return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
-        } catch (\Exception $e) {
-            //Try with alternate key
+            return self::doDecryptElement($aa, $I2, $cz);
+        } catch (\Exception $IR) {
             try {
-                return self::doDecryptElement($encryptedData, $alternateKey, $blacklist);
-            } catch (\Exception $t) {
-                throw new \Exception('Failed to decrypt XML element.');
+                return self::doDecryptElement($aa, $As, $cz);
+            } catch (\Exception $mH) {
+                throw new \Exception("\x46\141\x69\154\145\x64\40\164\157\40\144\145\x63\162\x79\160\164\40\x58\115\x4c\40\145\154\x65\x6d\145\156\164\x2e");
             }
-            /*
-             * Something went wrong during decryption, but for security
-             * reasons we cannot tell the user what failed.
-             */
-            throw new \Exception('Failed to decrypt XML element.');
+            throw new \Exception("\x46\141\151\x6c\145\144\40\x74\157\x20\144\145\x63\162\171\160\x74\40\130\115\x4c\40\145\x6c\145\x6d\145\156\164\56");
         }
     }
-
-    /**
-     * Decrypt an encrypted element.
-     *
-     * This is an internal helper function.
-     *
-     * @param DOMElement $encryptedData The encrypted data.
-     * @param XMLSecurityKey $inputKey The decryption key.
-     * @param array          &$blacklist Blacklisted decryption algorithms.
-     * @return DOMElement     The decrypted element.
-     * @throws Exception
-     */
-    private static function doDecryptElement(\DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist)
+    private static function doDecryptElement(\DOMElement $aa, XMLSecurityKey $I2, array &$cz)
     {
-        $enc = new XMLSecEnc();
-        $enc->setNode($encryptedData);
-
-        $enc->type = $encryptedData->getAttribute("Type");
-        $symmetricKey = $enc->locateKey($encryptedData);
-        if (!$symmetricKey) {
-            throw new \Exception('Could not locate key algorithm in encrypted data.');
+        $nj = new XMLSecEnc();
+        $nj->setNode($aa);
+        $nj->type = $aa->getAttribute("\124\x79\x70\145");
+        $ep = $nj->locateKey($aa);
+        if ($ep) {
+            goto nN;
         }
-
-        $symmetricKeyInfo = $enc->locateKeyInfo($symmetricKey);
-        if (!$symmetricKeyInfo) {
-            throw new \Exception('Could not locate <dsig:KeyInfo> for the encrypted key.');
+        throw new \Exception("\x43\x6f\x75\154\x64\x20\156\x6f\164\40\154\157\143\141\164\145\x20\x6b\x65\x79\40\141\x6c\x67\157\162\x69\x74\x68\155\x20\x69\x6e\x20\145\x6e\x63\162\x79\160\164\145\x64\x20\x64\141\x74\141\56");
+        nN:
+        $EQ = $nj->locateKeyInfo($ep);
+        if ($EQ) {
+            goto JJ;
         }
-        $inputKeyAlgo = $inputKey->getAlgorith();
-        if ($symmetricKeyInfo->isEncrypted) {
-            $symKeyInfoAlgo = $symmetricKeyInfo->getAlgorith();
-            if (in_array($symKeyInfoAlgo, $blacklist, TRUE)) {
-                throw new \Exception('Algorithm disabled: ' . var_export($symKeyInfoAlgo, TRUE));
-            }
-            if ($symKeyInfoAlgo === XMLSecurityKey::RSA_OAEP_MGF1P && $inputKeyAlgo === XMLSecurityKey::RSA_1_5) {
-                /*
-                 * The RSA key formats are equal, so loading an RSA_1_5 key
-                 * into an RSA_OAEP_MGF1P key can be done without problems.
-                 * We therefore pretend that the input key is an
-                 * RSA_OAEP_MGF1P key.
-                 */
-                $inputKeyAlgo = XMLSecurityKey::RSA_OAEP_MGF1P;
-            }
-            /* Make sure that the input key format is the same as the one used to encrypt the key. */
-            if ($inputKeyAlgo !== $symKeyInfoAlgo) {
-                throw new \Exception('Algorithm mismatch between input key and key used to encrypt ' .
-                    ' the symmetric key for the message. Key was: ' .
-                    var_export($inputKeyAlgo, TRUE) . '; message was: ' .
-                    var_export($symKeyInfoAlgo, TRUE));
-            }
-            /** @var XMLSecEnc $encKey */
-            $encKey = $symmetricKeyInfo->encryptedCtx;
-            $symmetricKeyInfo->key = $inputKey->key;
-            $keySize = $symmetricKey->getSymmetricKeySize();
-            if ($keySize === NULL) {
-                /* To protect against "key oracle" attacks, we need to be able to create a
-                 * symmetric key, and for that we need to know the key size.
-                 */
-                throw new \Exception('Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, TRUE));
-            }
-            try {
-                $key = $encKey->decryptKey($symmetricKeyInfo);
-                if (strlen($key) != $keySize) {
-                    throw new \Exception('Unexpected key size (' . strlen($key) * 8 . 'bits) for encryption algorithm: ' .
-                        var_export($symmetricKey->type, TRUE));
-                }
-            } catch (\Exception $e) {
-                /* We failed to decrypt this key. Log it, and substitute a "random" key. */
-
-                /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly padded. */
-                /* We base the symmetric key on the encrypted key and private key, so that we always behave the
-                 * same way for a given input key.
-                 */
-                $encryptedKey = $encKey->getCipherValue();
-                $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
-                $pkey = sha1(json_encode($pkey), TRUE);
-                $key = sha1($encryptedKey . $pkey, TRUE);
-                /* Make sure that the key has the correct length. */
-                if (strlen($key) > $keySize) {
-                    $key = substr($key, 0, $keySize);
-                } elseif (strlen($key) < $keySize) {
-                    $key = str_pad($key, $keySize);
-                }
-            }
-
-            $symmetricKey->loadkey($key);
-        } else {
-            $symKeyAlgo = $symmetricKey->getAlgorith();
-            /* Make sure that the input key has the correct format. */
-            if ($inputKeyAlgo !== $symKeyAlgo) {
-                throw new \Exception('Algorithm mismatch between input key and key in message. ' .
-                    'Key was: ' . var_export($inputKeyAlgo, TRUE) . '; message was: ' .
-                    var_export($symKeyAlgo, TRUE));
-            }
-            $symmetricKey = $inputKey;
+        throw new \Exception("\103\x6f\x75\154\x64\40\156\157\164\x20\x6c\157\143\x61\x74\x65\40\x3c\144\163\151\x67\x3a\x4b\x65\171\111\156\146\x6f\x3e\40\146\157\x72\40\x74\x68\x65\x20\145\x6e\143\162\x79\160\164\x65\144\40\153\145\x79\x2e");
+        JJ:
+        $kB = $I2->getAlgorith();
+        if ($EQ->isEncrypted) {
+            goto Mb;
         }
-        $algorithm = $symmetricKey->getAlgorith();
-        if (in_array($algorithm, $blacklist, TRUE)) {
-            throw new \Exception('Algorithm disabled: ' . var_export($algorithm, TRUE));
+        $pQ = $ep->getAlgorith();
+        if (!($kB !== $pQ)) {
+            goto sI;
         }
-        /** @var string $decrypted */
-        $decrypted = $enc->decryptNode($symmetricKey, FALSE);
-        /*
-         * This is a workaround for the case where only a subset of the XML
-         * tree was serialized for encryption. In that case, we may miss the
-         * namespaces needed to parse the XML.
-         */
-        $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ' .
-            'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
-            $decrypted .
-            '</root>';
-        $newDoc = new \DOMDocument();
-        if (!$newDoc->loadXML($xml)) {
-            throw new \Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?');
+        throw new \Exception("\101\154\x67\157\x72\x69\164\150\x6d\x20\155\151\x73\155\141\164\x63\150\40\x62\145\164\167\145\x65\156\x20\x69\156\160\x75\x74\x20\153\145\x79\40\141\156\144\x20\x6b\145\171\40\151\156\40\x6d\x65\163\x73\x61\x67\145\x2e\x20" . "\x4b\145\171\40\x77\141\x73\72\40" . var_export($kB, TRUE) . "\x3b\40\x6d\145\163\163\141\147\145\x20\x77\141\x73\x3a\40" . var_export($pQ, TRUE));
+        sI:
+        $ep = $I2;
+        goto sC;
+        Mb:
+        $Hl = $EQ->getAlgorith();
+        if (!in_array($Hl, $cz, TRUE)) {
+            goto fS;
         }
-
-        $decryptedElement = $newDoc->firstChild->firstChild;
-        if ($decryptedElement === NULL) {
-            throw new \Exception('Missing encrypted element.');
+        throw new \Exception("\101\x6c\x67\x6f\x72\x69\164\150\x6d\x20\144\151\163\x61\x62\154\145\x64\x3a\x20" . var_export($Hl, TRUE));
+        fS:
+        if (!($Hl === XMLSecurityKey::RSA_OAEP_MGF1P && $kB === XMLSecurityKey::RSA_1_5)) {
+            goto CN;
         }
-
-        if (!($decryptedElement instanceof \DOMElement)) {
-            throw new \Exception('Decrypted element was not actually a DOMElement.');
+        $kB = XMLSecurityKey::RSA_OAEP_MGF1P;
+        CN:
+        if (!($kB !== $Hl)) {
+            goto xi;
         }
-        return $decryptedElement;
-    }
-
-    public static function extractStrings(\DOMElement $parent, $namespaceURI, $localName)
-    {
-        $ret = array();
-        for ($node = $parent->firstChild; $node !== NULL; $node = $node->nextSibling) {
-            if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
-                continue;
-            }
-            $ret[] = trim($node->textContent);
+        throw new \Exception("\101\x6c\x67\x6f\162\x69\x74\150\155\x20\155\151\163\155\x61\164\x63\x68\x20\142\145\x74\x77\145\x65\156\40\151\156\x70\x75\x74\40\153\145\x79\40\x61\156\144\40\153\x65\x79\x20\165\163\x65\144\40\164\157\40\145\156\143\162\171\x70\x74\x20" . "\x20\164\150\145\40\x73\x79\155\x6d\145\164\162\151\x63\40\153\x65\171\x20\x66\157\x72\x20\x74\x68\x65\40\x6d\145\x73\x73\141\147\x65\56\40\x4b\145\x79\x20\167\141\x73\x3a\40" . var_export($kB, TRUE) . "\x3b\x20\x6d\x65\163\163\141\x67\x65\x20\x77\141\x73\72\x20" . var_export($Hl, TRUE));
+        xi:
+        $nw = $EQ->encryptedCtx;
+        $EQ->key = $I2->key;
+        $vW = $ep->getSymmetricKeySize();
+        if (!($vW === NULL)) {
+            goto Fa;
         }
-
-        return $ret;
-    }
-
-    public static function validateElement(\DOMElement $root)
-    {
-
-        /* Create an XML security object. */
-        $objXMLSecDSig = new XMLSecurityDSig();
-
-        /* Both SAML messages and SAML assertions use the 'ID' attribute. */
-        $objXMLSecDSig->idKeys[] = 'ID';
-
-
-        /* Locate the XMLDSig Signature element to be used. */
-        $signatureElement = self::xpQuery($root, './ds:Signature');
-
-        if (count($signatureElement) === 0) {
-            /* We don't have a signature element to validate. */
-            return FALSE;
-        } elseif (count($signatureElement) > 1) {
-            throw new \Exception("XMLSec: more than one signature element in root.");
-        }/*  elseif ((in_array('Response', $signatureElement) && $ocurrence['Response'] > 1) ||
-            (in_array('Assertion', $signatureElement) && $ocurrence['Assertion'] > 1) ||
-            !in_array('Response', $signatureElement) && !in_array('Assertion', $signatureElement)
-        ) {
-            return false;
-        } */
-
-        $signatureElement = $signatureElement[0];
-        $objXMLSecDSig->sigNode = $signatureElement;
-
-        /* Canonicalize the XMLDSig SignedInfo element in the message. */
-        $objXMLSecDSig->canonicalizeSignedInfo();
-
-        /* Validate referenced xml nodes. */
-        if (!$objXMLSecDSig->validateReference()) {
-            throw new \Exception("XMLsec: digest validation failed");
-        }
-
-        /* Check that $root is one of the signed nodes. */
-        $rootSigned = FALSE;
-        /** @var \DomNode $signedNode */
-        foreach ($objXMLSecDSig->getValidatedNodes() as $signedNode) {
-            if ($signedNode->isSameNode($root)) {
-                $rootSigned = TRUE;
-                break;
-            } elseif ($root->parentNode instanceof \DOMDocument && $signedNode->isSameNode($root->ownerDocument)) {
-                /* $root is the root element of a signed document. */
-                $rootSigned = TRUE;
-                break;
-            }
-        }
-
-        if (!$rootSigned) {
-            throw new \Exception("XMLSec: The root element is not signed.");
-        }
-
-        /* Now we extract all available X509 certificates in the signature element. */
-        $certificates = array();
-        foreach (self::xpQuery($signatureElement, './ds:KeyInfo/ds:X509Data/ds:X509Certificate') as $certNode) {
-            $certData = trim($certNode->textContent);
-            $certData = str_replace(array("\r", "\n", "\t", ' '), '', $certData);
-            $certificates[] = $certData;
-        }
-
-        $ret = array(
-            'Signature' => $objXMLSecDSig,
-            'Certificates' => $certificates,
-        );
-        return $ret;
-    }
-
-    public static function xpQuery(\DomNode $node, $query)
-    {
-        static $xpCache = NULL;
-
-        if ($node instanceof \DOMDocument) {
-            $doc = $node;
-        } else {
-            $doc = $node->ownerDocument;
-        }
-
-        if ($xpCache === NULL || !$xpCache->document->isSameNode($doc)) {
-            $xpCache = new \DOMXPath($doc);
-            $xpCache->registerNamespace('soap-env', 'http://schemas.xmlsoap.org/soap/envelope/');
-            $xpCache->registerNamespace('saml_protocol', 'urn:oasis:names:tc:SAML:2.0:protocol');
-            $xpCache->registerNamespace('saml_assertion', 'urn:oasis:names:tc:SAML:2.0:assertion');
-            $xpCache->registerNamespace('saml_metadata', 'urn:oasis:names:tc:SAML:2.0:metadata');
-            $xpCache->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
-            $xpCache->registerNamespace('xenc', 'http://www.w3.org/2001/04/xmlenc#');
-        }
-
-        $results = $xpCache->query($query, $node);
-        $ret = array();
-        for ($i = 0; $i < $results->length; $i++) {
-            $ret[$i] = $results->item($i);
-        }
-
-        return $ret;
-    }
-
-    public static function processResponse($idp_name, $acsUrl, $certFingerprint, $signatureData, SAML2Response $response, $cert)
-    {
-        $ResCert = $signatureData['Certificates'][0];
-        /* Validate Response-element destination. */
-        $msgDestination = $response->getDestination();
-        if ($msgDestination !== NULL && $msgDestination !== $acsUrl) {
-        }
-        $responseSigned = self::checkSign($idp_name, $certFingerprint, $signatureData, $ResCert, $cert);
-        /* Returning boolean $responseSigned */
-        return $responseSigned;
-    }
-
-    public static function checkSign($idp_name, $certFingerprint, $signatureData, $ResCert, $cert)
-    {
-
-        $certificates = $signatureData['Certificates'];
-        if (count($certificates) === 0) {
-
-            $pemCert = $cert;
-        } else {
-            $pemCert = self::findCertificate($certFingerprint, $certificates, $ResCert);
-            $lastException = NULL;
-        }
-
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'public'));
-        $key->loadKey($pemCert);
-
-
+        throw new \Exception("\125\156\x6b\x6e\157\167\x6e\40\153\145\x79\x20\x73\x69\172\x65\40\x66\x6f\x72\40\x65\x6e\143\162\x79\160\x74\x69\157\x6e\40\141\154\x67\x6f\162\151\x74\x68\155\72\40" . var_export($ep->type, TRUE));
+        Fa:
         try {
-            /*
-             * Make sure that we have a valid signature
-             */
-            self::validateSignature($signatureData, $key);
+            $On = $nw->decryptKey($EQ);
+            if (!(strlen($On) != $vW)) {
+                goto YH;
+            }
+            throw new \Exception("\x55\x6e\145\170\160\145\x63\x74\145\144\40\x6b\x65\x79\40\163\x69\x7a\145\x20\x28" . strlen($On) * 8 . "\x62\151\x74\x73\51\40\x66\x6f\162\40\x65\x6e\x63\x72\x79\x70\x74\x69\x6f\156\x20\x61\x6c\x67\x6f\162\x69\x74\x68\155\72\40" . var_export($ep->type, TRUE));
+            YH:
+        } catch (\Exception $IR) {
+            $nr = $nw->getCipherValue();
+            $L5 = openssl_pkey_get_details($EQ->key);
+            $L5 = sha1(json_encode($L5), TRUE);
+            $On = sha1($nr . $L5, TRUE);
+            if (strlen($On) > $vW) {
+                goto SJ;
+            }
+            if (strlen($On) < $vW) {
+                goto xo;
+            }
+            goto bI;
+            SJ:
+            $On = substr($On, 0, $vW);
+            goto bI;
+            xo:
+            $On = str_pad($On, $vW);
+            bI:
+        }
+        $ep->loadkey($On);
+        sC:
+        $QM = $ep->getAlgorith();
+        if (!in_array($QM, $cz, TRUE)) {
+            goto Dh;
+        }
+        throw new \Exception("\101\x6c\147\x6f\162\151\164\150\155\40\x64\x69\x73\141\x62\154\145\x64\x3a\x20" . var_export($QM, TRUE));
+        Dh:
+        $jn = $nj->decryptNode($ep, FALSE);
+        $xa = "\74\162\x6f\157\x74\x20\170\155\154\x6e\x73\72\163\x61\x6d\x6c\x3d\x22\165\162\156\x3a\x6f\141\163\x69\163\x3a\x6e\x61\155\145\x73\x3a\x74\x63\x3a\x53\101\115\114\72\62\x2e\x30\72\141\x73\x73\x65\162\164\x69\x6f\x6e\x22\x20" . "\x78\x6d\154\x6e\163\72\170\163\151\x3d\x22\x68\164\164\160\x3a\57\x2f\x77\x77\x77\x2e\x77\63\x2e\157\162\x67\x2f\x32\x30\x30\x31\x2f\x58\x4d\x4c\x53\143\x68\145\155\x61\x2d\x69\x6e\163\x74\141\x6e\x63\x65\42\x3e" . $jn . "\74\57\x72\157\157\164\76";
+        $oZ = new \DOMDocument();
+        if ($oZ->loadXML($xa)) {
+            goto N4;
+        }
+        throw new \Exception("\106\x61\151\154\145\144\x20\x74\157\40\x70\x61\x72\163\145\x20\x64\x65\143\162\x79\x70\x74\145\144\x20\130\115\x4c\x2e\40\x4d\x61\171\142\x65\40\x74\150\x65\x20\x77\x72\x6f\156\x67\x20\x73\150\x61\162\145\x64\153\145\171\40\x77\x61\163\40\x75\163\145\x64\77");
+        N4:
+        $nc = $oZ->firstChild->firstChild;
+        if (!($nc === NULL)) {
+            goto YB;
+        }
+        throw new \Exception("\x4d\151\x73\163\x69\156\x67\40\x65\156\143\162\171\160\x74\x65\144\40\145\x6c\145\155\x65\x6e\x74\56");
+        YB:
+        if ($nc instanceof \DOMElement) {
+            goto w4;
+        }
+        throw new \Exception("\x44\145\143\162\x79\x70\x74\x65\x64\x20\145\154\145\x6d\145\x6e\164\x20\167\141\x73\x20\156\x6f\x74\40\x61\143\164\x75\141\154\154\x79\40\141\x20\x44\117\115\105\x6c\x65\x6d\x65\x6e\x74\56");
+        w4:
+        return $nc;
+    }
+    public static function extractStrings(\DOMElement $iJ, $xo, $jE)
+    {
+        $a7 = array();
+        $zN = $iJ->firstChild;
+        GB:
+        if (!($zN !== NULL)) {
+            goto xx;
+        }
+        if (!($zN->namespaceURI !== $xo || $zN->localName !== $jE)) {
+            goto sl;
+        }
+        goto au;
+        sl:
+        $a7[] = trim($zN->textContent);
+        au:
+        $zN = $zN->nextSibling;
+        goto GB;
+        xx:
+        return $a7;
+    }
+    public static function validateElement(\DOMElement $OC)
+    {
+        $Jt = new XMLSecurityDSig();
+        $Jt->idKeys[] = "\x49\104";
+        $Oa = self::xpQuery($OC, "\56\x2f\x64\x73\x3a\x53\x69\x67\x6e\141\x74\165\x72\145");
+        if (count($Oa) === 0) {
+            goto gp;
+        }
+        if (count($Oa) > 1) {
+            goto kl;
+        }
+        goto ap;
+        gp:
+        return FALSE;
+        goto ap;
+        kl:
+        throw new \Exception("\130\x4d\114\123\145\143\x3a\x20\155\157\162\145\x20\164\x68\141\x6e\x20\157\156\x65\x20\x73\151\147\x6e\x61\164\x75\162\x65\40\145\154\x65\155\x65\x6e\164\40\x69\x6e\40\x72\x6f\x6f\x74\x2e");
+        ap:
+        $Oa = $Oa[0];
+        $Jt->sigNode = $Oa;
+        $Jt->canonicalizeSignedInfo();
+        if ($Jt->validateReference()) {
+            goto I9;
+        }
+        throw new \Exception("\130\115\x4c\163\145\x63\72\40\144\151\x67\145\163\164\40\x76\141\154\x69\x64\141\x74\151\x6f\156\40\146\141\151\x6c\x65\x64");
+        I9:
+        $LD = FALSE;
+        foreach ($Jt->getValidatedNodes() as $yv) {
+            if ($yv->isSameNode($OC)) {
+                goto Oz;
+            }
+            if ($OC->parentNode instanceof \DOMDocument && $yv->isSameNode($OC->ownerDocument)) {
+                goto h8;
+            }
+            goto Ba;
+            Oz:
+            $LD = TRUE;
+            goto U1;
+            goto Ba;
+            h8:
+            $LD = TRUE;
+            goto U1;
+            Ba:
+            Jq:
+        }
+        U1:
+        if ($LD) {
+            goto SP;
+        }
+        throw new \Exception("\130\115\x4c\x53\145\143\72\x20\124\x68\x65\x20\162\157\x6f\164\40\x65\x6c\x65\x6d\x65\x6e\x74\x20\x69\163\40\156\157\164\x20\x73\x69\x67\156\145\x64\56");
+        SP:
+        $T4 = array();
+        foreach (self::xpQuery($Oa, "\56\57\144\163\72\113\x65\x79\111\156\146\157\57\144\x73\72\x58\x35\x30\x39\104\x61\x74\x61\x2f\144\x73\72\130\x35\60\x39\x43\x65\x72\x74\151\146\x69\x63\x61\x74\145") as $wl) {
+            $YB = trim($wl->textContent);
+            $YB = str_replace(array("\15", "\xa", "\11", "\x20"), '', $YB);
+            $T4[] = $YB;
+            AJ:
+        }
+        mV:
+        $a7 = array("\123\x69\147\156\x61\164\165\162\145" => $Jt, "\103\145\162\164\151\146\x69\x63\x61\x74\x65\x73" => $T4);
+        return $a7;
+    }
+    public static function xpQuery(\DomNode $zN, $NB)
+    {
+        static $UM = NULL;
+        if ($zN instanceof \DOMDocument) {
+            goto Ci;
+        }
+        $st = $zN->ownerDocument;
+        goto t1;
+        Ci:
+        $st = $zN;
+        t1:
+        if (!($UM === NULL || !$UM->document->isSameNode($st))) {
+            goto n8;
+        }
+        $UM = new \DOMXPath($st);
+        $UM->registerNamespace("\163\x6f\x61\x70\x2d\145\156\x76", "\x68\x74\x74\x70\72\x2f\57\x73\x63\x68\145\155\x61\x73\56\x78\x6d\x6c\163\157\x61\160\56\x6f\162\147\57\x73\x6f\141\160\x2f\145\x6e\x76\x65\x6c\x6f\x70\x65\57");
+        $UM->registerNamespace("\163\x61\155\154\x5f\x70\162\157\x74\157\143\157\154", "\x75\162\x6e\72\x6f\141\163\151\x73\x3a\x6e\141\155\x65\163\x3a\x74\143\72\123\101\x4d\114\x3a\62\56\x30\72\x70\162\x6f\x74\x6f\x63\x6f\154");
+        $UM->registerNamespace("\163\141\x6d\x6c\x5f\x61\x73\x73\x65\162\164\151\157\x6e", "\x75\162\x6e\72\157\x61\x73\151\163\x3a\x6e\x61\x6d\x65\163\72\164\143\x3a\123\101\115\x4c\72\62\x2e\60\72\x61\x73\x73\x65\x72\164\x69\x6f\156");
+        $UM->registerNamespace("\163\141\155\x6c\137\155\x65\x74\141\x64\x61\x74\x61", "\165\x72\156\x3a\x6f\141\x73\x69\x73\72\156\141\x6d\145\x73\72\x74\143\x3a\123\101\115\114\x3a\x32\x2e\60\72\x6d\145\164\141\144\x61\x74\x61");
+        $UM->registerNamespace("\144\163", "\x68\164\164\x70\72\57\57\167\167\x77\x2e\167\x33\56\x6f\x72\x67\x2f\x32\x30\60\x30\57\x30\x39\x2f\170\x6d\x6c\x64\x73\x69\x67\x23");
+        $UM->registerNamespace("\x78\x65\x6e\x63", "\150\164\164\160\x3a\x2f\57\167\x77\167\x2e\167\63\x2e\157\x72\x67\57\62\60\60\61\x2f\x30\64\x2f\x78\155\x6c\x65\156\143\x23");
+        n8:
+        $g_ = $UM->query($NB, $zN);
+        $a7 = array();
+        $nO = 0;
+        b8:
+        if (!($nO < $g_->length)) {
+            goto E3;
+        }
+        $a7[$nO] = $g_->item($nO);
+        JS:
+        $nO++;
+        goto b8;
+        E3:
+        return $a7;
+    }
+    public static function processResponse($rq, $X9, $C6, $Mf, SAML2Response $J_, $d2)
+    {
+        $Ox = $Mf["\103\x65\162\164\151\146\x69\x63\x61\x74\x65\x73"][0];
+        $Hz = $J_->getDestination();
+        if (!($Hz !== NULL && $Hz !== $X9)) {
+            goto HF;
+        }
+        HF:
+        $MI = self::checkSign($rq, $C6, $Mf, $Ox, $d2);
+        return $MI;
+    }
+    public static function checkSign($rq, $C6, $Mf, $Ox, $d2)
+    {
+        $T4 = $Mf["\103\145\x72\x74\151\146\151\x63\x61\x74\145\163"];
+        if (count($T4) === 0) {
+            goto Sg;
+        }
+        $f5 = self::findCertificate($C6, $T4, $Ox);
+        $Ps = NULL;
+        goto kQ;
+        Sg:
+        $f5 = $d2;
+        kQ:
+        $On = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array("\x74\x79\160\x65" => "\160\165\142\154\x69\143"));
+        $On->loadKey($f5);
+        try {
+            self::validateSignature($Mf, $On);
             return TRUE;
-        } catch (Exception $e) {
-            $lastException = $e;
+        } catch (Exception $IR) {
+            $Ps = $IR;
         }
-        /* We were unable to validate the signature with any of our keys. */
-        if ($lastException !== NULL) {
-            throw $lastException;
-        } else {
-            return FALSE;
+        if ($Ps !== NULL) {
+            goto o7;
         }
-
+        return FALSE;
+        goto F9;
+        o7:
+        throw $Ps;
+        F9:
     }
-
-    public static function findCertificate($certFingerprints, $certificates, $ResCert)
+    public static function findCertificate($tW, $T4, $Ox)
     {
-        $candidates = array();
-        foreach ($certificates as $cert) {
-            $fp = strtolower(sha1(base64_decode($cert))); //8ba946937159cf145c51bd82de7110eecc872656
-            if ($fp == $certFingerprints) {
-                // We have found a matching fingerprint.
-                $pem = "-----BEGIN CERTIFICATE-----\n" . chunk_split($cert, 64) . "-----END CERTIFICATE-----\n";
-                return $pem;
+        $RP = array();
+        foreach ($T4 as $d2) {
+            $vT = strtolower(sha1(base64_decode($d2)));
+            if (!($vT == $tW)) {
+                goto r9;
             }
+            $Nj = "\55\x2d\55\55\55\102\105\x47\x49\116\x20\103\x45\122\124\111\x46\111\103\x41\x54\x45\55\55\55\x2d\55\12" . chunk_split($d2, 64) . "\x2d\x2d\55\x2d\55\x45\x4e\x44\x20\x43\x45\122\124\111\x46\111\x43\x41\124\x45\55\x2d\x2d\x2d\x2d\12";
+            return $Nj;
+            r9:
+            PI:
         }
-
+        MU:
         return FALSE;
     }
-
-    public static function validateSignature(array $info, XMLSecurityKey $key)
+    public static function validateSignature(array $BU, XMLSecurityKey $On)
     {
-        /** @var XMLSecurityDSig $objXMLSecDSig */
-        $objXMLSecDSig = $info['Signature'];
-
-        $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
-        if (empty($sigMethod)) {
-            echo sprintf('Missing SignatureMethod element');
-            exit();
+        $Jt = $BU["\x53\x69\147\x6e\x61\164\165\x72\145"];
+        $vc = self::xpQuery($Jt->sigNode, "\x2e\57\x64\163\72\x53\151\147\156\x65\x64\x49\x6e\x66\x6f\x2f\x64\163\72\123\151\147\x6e\141\x74\x75\162\145\115\145\x74\150\x6f\x64");
+        if (!empty($vc)) {
+            goto C2;
         }
-        $sigMethod = $sigMethod[0];
-        if (!$sigMethod->hasAttribute('Algorithm')) {
-            echo sprintf('Missing Algorithm-attribute on SignatureMethod element.');
-            exit;
+        echo sprintf("\115\x69\x73\163\x69\156\x67\x20\x53\151\x67\x6e\x61\164\165\162\145\115\145\164\150\x6f\144\40\145\x6c\x65\155\145\x6e\164");
+        exit;
+        C2:
+        $vc = $vc[0];
+        if ($vc->hasAttribute("\x41\154\147\157\162\151\164\150\155")) {
+            goto dv;
         }
-        $algo = $sigMethod->getAttribute('Algorithm');
-
-        if ($key->type === XMLSecurityKey::RSA_SHA1 && $algo !== $key->type) {
-            $key = self::castKey($key, $algo);
+        echo sprintf("\x4d\151\163\x73\x69\156\147\x20\101\154\x67\157\162\x69\x74\150\x6d\x2d\141\x74\164\x72\151\142\165\164\x65\x20\x6f\x6e\x20\123\x69\x67\x6e\x61\x74\165\162\145\x4d\145\164\150\x6f\x64\40\145\x6c\145\x6d\145\x6e\164\56");
+        exit;
+        dv:
+        $Vl = $vc->getAttribute("\101\154\147\157\162\151\164\x68\155");
+        if (!($On->type === XMLSecurityKey::RSA_SHA1 && $Vl !== $On->type)) {
+            goto NX;
         }
-        /* Check the signature. */
-        if (!$objXMLSecDSig->verify($key)) {
-            echo sprintf('Unable to validate Sgnature');
-            exit;
+        $On = self::castKey($On, $Vl);
+        NX:
+        if ($Jt->verify($On)) {
+            goto eF;
         }
+        echo sprintf("\x55\156\x61\x62\154\145\x20\164\157\x20\x76\141\154\x69\144\x61\x74\145\40\123\x67\156\x61\164\165\x72\145");
+        exit;
+        eF:
     }
-
-    public static function castKey(XMLSecurityKey $key, $algorithm, $type = 'public')
+    public static function castKey(XMLSecurityKey $On, $QM, $qI = "\x70\x75\x62\x6c\x69\x63")
     {
-
-        // do nothing if algorithm is already the type of the key
-        if ($key->type === $algorithm) {
-            return $key;
+        if (!($On->type === $QM)) {
+            goto nQ;
         }
-
-        $keyInfo = openssl_pkey_get_details($key->key);
-        if ($keyInfo === FALSE) {
-            throw new \Exception('Unable to get key details from XMLSecurityKey.');
+        return $On;
+        nQ:
+        $He = openssl_pkey_get_details($On->key);
+        if (!($He === FALSE)) {
+            goto pN;
         }
-        if (!!empty($keyInfo['key'])) {
-            throw new \Exception('Missing key in public key details.');
+        throw new \Exception("\125\156\x61\x62\x6c\145\x20\x74\157\x20\x67\x65\x74\40\x6b\x65\171\x20\x64\145\164\141\151\x6c\x73\x20\146\x72\157\155\x20\130\115\114\x53\x65\x63\165\x72\151\x74\171\113\x65\171\56");
+        pN:
+        if (!empty($He["\153\145\x79"])) {
+            goto Wd;
         }
-
-        $newKey = new XMLSecurityKey($algorithm, array('type' => $type));
-
-        $newKey->loadKey($keyInfo['key']);
-
-        return $newKey;
+        throw new \Exception("\x4d\151\163\163\151\x6e\147\40\x6b\145\x79\40\x69\156\x20\x70\x75\x62\x6c\x69\143\x20\x6b\x65\x79\x20\x64\145\164\141\x69\x6c\x73\x2e");
+        Wd:
+        $Zy = new XMLSecurityKey($QM, array("\164\x79\160\x65" => $qI));
+        $Zy->loadKey($He["\153\x65\x79"]);
+        return $Zy;
     }
-
-    /**
-     * Parse a boolean attribute.
-     *
-     * @param \\DOMElement $node          The element we should fetch the attribute from.
-     * @param string $attributeName The name of the attribute.
-     * @param mixed $default The value that should be returned if the attribute doesn't exist.
-     * @return bool|mixed The value of the attribute, or $default if the attribute doesn't exist.
-     * @throws \Exception
-     */
-    public static function parseBoolean(\DOMElement $node, $attributeName, $default = null)
+    public static function parseBoolean(\DOMElement $zN, $XE, $Rp = null)
     {
-        if (!$node->hasAttribute($attributeName)) {
-            return $default;
+        if ($zN->hasAttribute($XE)) {
+            goto nF;
         }
-        $value = $node->getAttribute($attributeName);
-        switch (strtolower($value)) {
-            case '0':
-            case 'false':
+        return $Rp;
+        nF:
+        $VP = $zN->getAttribute($XE);
+        switch (strtolower($VP)) {
+            case "\x30":
+            case "\146\x61\154\x73\x65":
                 return false;
-            case '1':
-            case 'true':
+            case "\61":
+            case "\x74\162\x75\x65":
                 return true;
             default:
-                throw new \Exception('Invalid value of boolean attribute ' . var_export($attributeName, true) . ': ' . var_export($value, true));
+                throw new \Exception("\111\156\x76\x61\x6c\x69\144\40\166\141\x6c\165\145\x20\157\x66\40\x62\157\157\x6c\145\141\156\40\x61\x74\x74\162\x69\x62\165\x74\145\x20" . var_export($XE, true) . "\72\40" . var_export($VP, true));
         }
+        bk:
+        M0:
     }
-
-    public static function signXML($xml, $publicCertificate, $privateKey, $insertBeforeTagName = "")
+    public static function signXML($xa, $I5, $p5, $EX = '')
     {
-        $param = array('type' => 'private');
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, $param);
-
-        $key->loadKey($privateKey);
-        $document = new \DOMDocument();
-        $document->loadXML($xml);
-        $element = $document->firstChild;
-        if (!empty($insertBeforeTagName)) {
-            $domNode = $document->getElementsByTagName($insertBeforeTagName)->item(0);
-            self::insertSignature($key, array($publicCertificate), $element, $domNode);
-        } else {
-            self::insertSignature($key, array($publicCertificate), $element);
+        $Cv = array("\x74\x79\x70\x65" => "\x70\162\x69\166\141\164\145");
+        $On = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, $Cv);
+        $On->loadKey($p5);
+        $rT = new \DOMDocument();
+        $rT->loadXML($xa);
+        $hL = $rT->firstChild;
+        if (!empty($EX)) {
+            goto Xz;
         }
-        $requestXML = $element->ownerDocument->saveXML($element);
-        return $requestXML;
+        self::insertSignature($On, array($I5), $hL);
+        goto Tq;
+        Xz:
+        $Jy = $rT->getElementsByTagName($EX)->item(0);
+        self::insertSignature($On, array($I5), $hL, $Jy);
+        Tq:
+        $Y5 = $hL->ownerDocument->saveXML($hL);
+        return $Y5;
     }
-
-    /**
-     * Insert a Signature-node.
-     *
-     * @param XMLSecurityKey $key The key we should use to sign the message.
-     * @param array $certificates The certificates we should add to the signature node.
-     * @param \DOMElement $root The XML node we should sign.
-     * @param \DomNode $insertBefore The XML element we should insert the signature element before.
-     */
-    public static function insertSignature(
-        XMLSecurityKey $key,
-        array          $certificates,
-        \DOMElement    $root,
-        \DomNode       $insertBefore = NULL
-    )
+    public static function insertSignature(XMLSecurityKey $On, array $T4, \DOMElement $OC, \DomNode $A9 = NULL)
     {
-        $objXMLSecDSig = new XMLSecurityDSig();
-        $objXMLSecDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
-
-        switch ($key->type) {
+        $Jt = new XMLSecurityDSig();
+        $Jt->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+        switch ($On->type) {
             case XMLSecurityKey::RSA_SHA256:
-                $type = XMLSecurityDSig::SHA256;
-                break;
+                $qI = XMLSecurityDSig::SHA256;
+                goto SB;
             case XMLSecurityKey::RSA_SHA384:
-                $type = XMLSecurityDSig::SHA384;
-                break;
+                $qI = XMLSecurityDSig::SHA384;
+                goto SB;
             case XMLSecurityKey::RSA_SHA512:
-                $type = XMLSecurityDSig::SHA512;
-                break;
+                $qI = XMLSecurityDSig::SHA512;
+                goto SB;
             default:
-                $type = XMLSecurityDSig::SHA1;
+                $qI = XMLSecurityDSig::SHA1;
         }
-
-        $objXMLSecDSig->addReferenceList(
-            array($root),
-            $type,
-            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
-            array('id_name' => 'ID', 'overwrite' => FALSE)
-        );
-
-        $objXMLSecDSig->sign($key);
-
-        foreach ($certificates as $certificate) {
-            $objXMLSecDSig->add509Cert($certificate, TRUE);
+        e2:
+        SB:
+        $Jt->addReferenceList(array($OC), $qI, array("\x68\164\x74\160\x3a\57\57\x77\x77\x77\56\x77\63\x2e\x6f\162\x67\57\x32\x30\x30\60\x2f\60\71\x2f\170\x6d\x6c\144\x73\151\147\43\x65\x6e\x76\x65\154\x6f\160\145\x64\x2d\x73\x69\x67\x6e\x61\x74\x75\162\145", XMLSecurityDSig::EXC_C14N), array("\151\144\x5f\x6e\x61\x6d\145" => "\111\x44", "\x6f\x76\x65\162\x77\162\x69\164\145" => FALSE));
+        $Jt->sign($On);
+        foreach ($T4 as $UY) {
+            $Jt->add509Cert($UY, TRUE);
+            KN:
         }
-        $objXMLSecDSig->insertSignature($root, $insertBefore);
+        qh:
+        $Jt->insertSignature($OC, $A9);
     }
-
-    public static function getEncryptionAlgorithm($method)
+    public static function getEncryptionAlgorithm($vh)
     {
-        switch ($method) {
-            case 'http://www.w3.org/2001/04/xmlenc#tripledes-cbc':
+        switch ($vh) {
+            case "\150\164\164\x70\x3a\57\x2f\x77\x77\x77\56\167\63\x2e\x6f\x72\147\57\x32\x30\x30\61\57\60\x34\x2f\170\155\x6c\x65\156\143\x23\x74\x72\x69\160\x6c\x65\144\145\x73\55\143\142\143":
                 return XMLSecurityKey::TRIPLEDES_CBC;
-
-            case 'http://www.w3.org/2001/04/xmlenc#aes128-cbc':
+            case "\150\164\164\160\72\x2f\x2f\x77\167\x77\x2e\167\63\x2e\157\x72\147\x2f\x32\x30\x30\61\x2f\60\x34\x2f\x78\x6d\154\145\156\143\43\141\x65\163\61\x32\70\x2d\x63\142\x63":
                 return XMLSecurityKey::AES128_CBC;
-
-            case 'http://www.w3.org/2001/04/xmlenc#aes192-cbc':
+            case "\x68\164\x74\160\x3a\x2f\x2f\x77\x77\167\x2e\167\x33\56\157\x72\x67\x2f\62\x30\x30\x31\x2f\60\x34\x2f\170\155\x6c\x65\x6e\x63\x23\x61\145\x73\61\x39\62\x2d\x63\142\x63":
                 return XMLSecurityKey::AES192_CBC;
-
-            case 'http://www.w3.org/2001/04/xmlenc#aes256-cbc':
+            case "\150\164\x74\160\72\57\x2f\167\x77\167\56\167\63\x2e\x6f\162\x67\x2f\62\x30\60\61\x2f\x30\64\57\x78\155\154\145\x6e\x63\43\x61\x65\x73\x32\65\x36\55\143\x62\x63":
                 return XMLSecurityKey::AES256_CBC;
-
-            case 'http://www.w3.org/2001/04/xmlenc#rsa-1_5':
+            case "\150\x74\x74\160\x3a\57\x2f\x77\167\x77\x2e\167\63\56\x6f\x72\147\x2f\x32\x30\x30\61\57\x30\x34\x2f\x78\155\154\x65\x6e\143\43\x72\163\141\x2d\61\x5f\65":
                 return XMLSecurityKey::RSA_1_5;
-
-            case 'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p':
+            case "\150\x74\x74\160\72\57\x2f\x77\167\x77\56\x77\63\56\157\162\147\x2f\62\x30\60\61\57\60\x34\57\x78\155\x6c\x65\x6e\143\x23\x72\x73\x61\55\157\141\x65\x70\55\x6d\147\146\x31\160":
                 return XMLSecurityKey::RSA_OAEP_MGF1P;
-
-            case 'http://www.w3.org/2000/09/xmldsig#dsa-sha1':
+            case "\x68\x74\164\160\72\x2f\57\167\x77\x77\x2e\x77\63\56\x6f\x72\147\57\62\60\60\x30\57\x30\x39\57\x78\x6d\154\x64\163\151\x67\x23\144\163\141\55\x73\150\x61\x31":
                 return XMLSecurityKey::DSA_SHA1;
-
-            case 'http://www.w3.org/2000/09/xmldsig#rsa-sha1':
+            case "\x68\164\164\x70\72\x2f\57\x77\167\167\x2e\167\63\x2e\x6f\162\x67\57\62\x30\x30\x30\x2f\60\71\57\170\155\x6c\144\163\151\147\43\x72\x73\141\x2d\163\x68\141\61":
                 return XMLSecurityKey::RSA_SHA1;
-
-            case 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256':
+            case "\150\x74\164\x70\x3a\x2f\57\x77\167\167\56\167\x33\x2e\x6f\162\147\57\62\x30\60\x31\57\60\x34\x2f\x78\x6d\x6c\x64\x73\x69\x67\x2d\155\x6f\x72\x65\x23\x72\x73\141\x2d\x73\150\141\x32\65\x36":
                 return XMLSecurityKey::RSA_SHA256;
-
-            case 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha384':
+            case "\x68\164\164\160\72\57\x2f\167\x77\167\56\167\x33\56\157\x72\x67\57\x32\60\x30\61\57\x30\64\x2f\x78\x6d\x6c\144\163\x69\147\55\155\157\162\x65\x23\x72\x73\141\55\x73\150\x61\x33\70\x34":
                 return XMLSecurityKey::RSA_SHA384;
-
-            case 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha512':
+            case "\150\164\x74\x70\72\x2f\x2f\167\167\167\56\167\63\56\x6f\162\147\x2f\62\x30\x30\x31\x2f\x30\x34\x2f\170\x6d\154\x64\163\151\147\x2d\155\157\162\x65\x23\162\163\x61\55\163\x68\x61\65\x31\62":
                 return XMLSecurityKey::RSA_SHA512;
-
             default:
-                throw new \Exception('Invalid Encryption Method: ' . $method);
+                throw new \Exception("\111\x6e\x76\141\x6c\x69\144\40\x45\156\x63\x72\x79\160\x74\151\x6f\156\40\x4d\x65\164\x68\x6f\144\72\x20" . $vh);
         }
+        VP:
+        sL:
     }
-
-    public static function sanitize_certificate($certificate)
+    public static function sanitize_certificate($UY)
     {
-        $certificate = preg_replace("/[\r\n]+/", "", $certificate);
-        $certificate = str_replace("-", "", $certificate);
-        $certificate = str_replace("BEGIN CERTIFICATE", "", $certificate);
-        $certificate = str_replace("END CERTIFICATE", "", $certificate);
-        $certificate = str_replace(" ", "", $certificate);
-        $certificate = chunk_split($certificate, 64, "\r\n");
-        $certificate = "-----BEGIN CERTIFICATE-----\r\n" . $certificate . "-----END CERTIFICATE-----";
-        return $certificate;
+        $UY = preg_replace("\x2f\133\xd\12\x5d\53\57", '', $UY);
+        $UY = str_replace("\55", '', $UY);
+        $UY = str_replace("\x42\x45\x47\111\116\x20\103\105\x52\124\x49\106\x49\x43\x41\124\x45", '', $UY);
+        $UY = str_replace("\x45\x4e\104\40\103\x45\x52\124\111\x46\111\x43\x41\124\x45", '', $UY);
+        $UY = str_replace("\x20", '', $UY);
+        $UY = chunk_split($UY, 64, "\15\12");
+        $UY = "\x2d\x2d\x2d\x2d\55\x42\105\x47\111\116\x20\103\105\122\124\x49\106\111\103\101\x54\x45\x2d\x2d\55\x2d\x2d\xd\xa" . $UY . "\x2d\55\55\55\x2d\105\x4e\x44\40\103\105\122\124\x49\106\111\x43\x41\x54\105\55\55\x2d\55\55";
+        return $UY;
     }
-
-    public static function desanitize_certificate($certificate)
+    public static function desanitize_certificate($UY)
     {
-        $certificate = preg_replace("/[\r\n]+/", "", $certificate);
-        $certificate = str_replace("-----BEGIN CERTIFICATE-----", "", $certificate);
-        $certificate = str_replace("-----END CERTIFICATE-----", "", $certificate);
-        $certificate = str_replace(" ", "", $certificate);
-        return $certificate;
+        $UY = preg_replace("\57\133\15\12\135\53\57", '', $UY);
+        $UY = str_replace("\55\x2d\x2d\55\55\x42\105\x47\x49\x4e\x20\x43\x45\x52\124\x49\106\111\103\x41\x54\105\x2d\55\x2d\x2d\55", '', $UY);
+        $UY = str_replace("\x2d\x2d\55\x2d\x2d\105\x4e\104\x20\103\105\122\124\x49\x46\111\x43\x41\x54\x45\x2d\55\x2d\55\55", '', $UY);
+        $UY = str_replace("\x20", '', $UY);
+        return $UY;
     }
-
-    public static function generateRandomAlphanumericValue($length)
+    public static function generateRandomAlphanumericValue($E4)
     {
-        $chars = "abcdef0123456789";
-        $chars_len = strlen($chars);
-        $uniqueID = "";
-        for ($i = 0; $i < $length; $i++)
-            $uniqueID .= substr($chars, rand(0, 15), 1);
-        return 'a' . $uniqueID;
+        $MO = "\141\142\x63\x64\145\146\60\61\62\x33\64\65\66\67\70\x39";
+        $ek = strlen($MO);
+        $zG = '';
+        $nO = 0;
+        TD:
+        if (!($nO < $E4)) {
+            goto nJ;
+        }
+        $zG .= substr($MO, rand(0, 15), 1);
+        OU:
+        $nO++;
+        goto TD;
+        nJ:
+        return "\141" . $zG;
     }
 }

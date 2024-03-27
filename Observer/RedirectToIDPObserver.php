@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Observer;
 
 use Magento\Framework\App\Request\Http;
@@ -15,34 +16,16 @@ use MiniOrange\SP\Controller\Actions\ShowTestResultsAction;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPUtility;
 use Psr\Log\LoggerInterface;
-use \Magento\Framework\UrlInterface;
-
 class RedirectToIDPObserver implements ObserverInterface
 {
-
-    private $requestParams = array(
-        'SAMLRequest',
-        'SAMLResponse',
-        'option'
-    );
-
-    private $controllerActionPair = array(
-        'account' => array('login', 'create'),
-        'auth' => array('login'),
-    );
-
-    private $adminControllerActionPair = array (
-		'index' => array('login','index'),
-		'auth' => array('login'),
-    );
-
+    private $requestParams = array("\123\x41\115\114\122\145\161\x75\145\163\x74", "\x53\101\x4d\114\x52\x65\x73\x70\157\x6e\163\x65", "\157\x70\164\151\157\156");
+    private $controllerActionPair = array("\x61\143\143\157\165\156\x74" => array("\154\x6f\x67\151\156", "\x63\162\x65\x61\x74\x65"), "\141\x75\x74\150" => array("\154\157\147\x69\156"));
     private $messageManager;
     private $logger;
     private $readResponseAction;
     private $spUtility;
     private $adminLoginAction;
     private $testAction;
-
     private $currentControllerName;
     private $currentActionName;
     private $readLogoutRequestAction;
@@ -50,144 +33,72 @@ class RedirectToIDPObserver implements ObserverInterface
     private $request;
     private $storeManager;
     private $_storeManager;
-    private $urlBuilder;
-    protected $customerSession;
-
-    public function __construct(
-        ManagerInterface        $messageManager,
-        LoggerInterface         $logger,
-        ReadResponseAction      $readResponseAction,
-        SPUtility               $spUtility,
-        AdminLoginAction        $adminLoginAction,
-        Http                    $httpRequest,
-        ReadLogoutRequestAction $readLogoutRequestAction,
-        RequestInterface        $request,
-        ShowTestResultsAction   $testAction,
-        StoreManagerInterface   $storeManager,
-        UrlInterface $urlBuilder,
-        \Magento\Customer\Model\Session $customerSession)
+    public function __construct(ManagerInterface $b_, LoggerInterface $kU, ReadResponseAction $kn, SPUtility $fR, AdminLoginAction $oS, Http $Q0, ReadLogoutRequestAction $Jn, RequestInterface $E1, ShowTestResultsAction $Ip, StoreManagerInterface $VO)
     {
-        //You can use dependency injection to get any class this observer may need.
-        $this->_storeManager = $storeManager;
-        $this->messageManager = $messageManager;
-        $this->logger = $logger;
-        $this->readResponseAction = $readResponseAction;
-        $this->spUtility = $spUtility;
-        $this->adminLoginAction = $adminLoginAction;
-        $this->readLogoutRequestAction = $readLogoutRequestAction;
-        $this->currentControllerName = $httpRequest->getControllerName();
-        $this->currentActionName = $httpRequest->getActionName();
-        $this->request = $request;
-        $this->testAction = $testAction;
-        $this->urlBuilder = $urlBuilder;
-        $this->customerSession = $customerSession;
+        $this->_storeManager = $VO;
+        $this->messageManager = $b_;
+        $this->logger = $kU;
+        $this->readResponseAction = $kn;
+        $this->spUtility = $fR;
+        $this->adminLoginAction = $oS;
+        $this->readLogoutRequestAction = $Jn;
+        $this->currentControllerName = $Q0->getControllerName();
+        $this->currentActionName = $Q0->getActionName();
+        $this->request = $E1;
+        $this->testAction = $Ip;
     }
-
-    /**
-     * This function is called as soon as the observer class is initialized.
-     * Checks if the request parameter has any of the configured request
-     * parameters and handles any exception that the system might throw.
-     *
-     * @param $observer
-     */
-    public function execute(Observer $observer)
+    public function execute(Observer $UJ)
     {
-        $currentUrl = $this->urlBuilder->getCurrentUrl();
-        $currentWebsiteId = $this->getCurrentWebsite();
-        $websiteIds = $this->getWebsiteIds();
-        $selectedWebsites = $this->spUtility->isBlank($websiteIds) ? array() : json_decode($websiteIds);
-        if (!$this->spUtility->isBlank($selectedWebsites))
-            foreach ($selectedWebsites as $key => $website) {
-                if ($currentWebsiteId == $key) {
-                    $keys = array_keys($this->request->getParams());
-                    $operation = array_intersect($keys, $this->requestParams);
-                    try {
-                        if ($this->checkIfUserShouldBeRedirected($currentUrl)) {        
-                            //redirecting to the loginrequest controller
-                            $this->spUtility->log_debug("RedirectToIDPObserver : checkIfUserShouldBeRedirected is true: backdoor not enabled");
-                            $autoRedirect_appName = $this->spUtility->getStoreConfig(SPConstants::AUTO_REDIRECT_APP);
-                            $observer->getControllerAction()->getResponse()
-                                ->setRedirect($this->spUtility->getSPInitiatedUrl() . $autoRedirect_appName);
-                        }
-                    } catch (\Exception $e) {
-                        $this->messageManager->addErrorMessage($e->getMessage());
-                        $this->logger->debug($e->getMessage());
-                    }
-                }
+        $u9 = $this->getCurrentWebsite();
+        $hq = $this->getWebsiteIds();
+        $L_ = $this->spUtility->isBlank($hq) ? array() : json_decode($hq);
+        if ($this->spUtility->isBlank($L_)) {
+            goto aZ;
+        }
+        foreach ($L_ as $On => $Kt) {
+            if (!($u9 == $On)) {
+                goto lE;
             }
+            $pb = array_keys($this->request->getParams());
+            $F6 = array_intersect($pb, $this->requestParams);
+            try {
+                if (!$this->checkIfUserShouldBeRedirected()) {
+                    goto AU;
+                }
+                $ZJ = $this->spUtility->getStoreConfig(SPConstants::AUTO_REDIRECT_APP);
+                $UJ->getControllerAction()->getResponse()->setRedirect($this->spUtility->getSPInitiatedUrl() . $ZJ);
+                AU:
+            } catch (\Exception $IR) {
+                $this->messageManager->addErrorMessage($IR->getMessage());
+                $this->logger->debug($IR->getMessage());
+            }
+            lE:
+            CF:
+        }
+        ol:
+        aZ:
     }
-
     public function getCurrentWebsite()
     {
         return $this->_storeManager->getStore()->getWebsiteId();
     }
-
     public function getWebsiteIds()
     {
         return $this->spUtility->getStoreConfig(SPConstants::WEBSITE_IDS);
     }
-
-    /**
-     * This function checks if user needs to be redirected to the
-     * registered IDP with AUthnRequest. First check if admin has
-     * enabled autoRedirect. Then check if user is landing on one of the
-     * admin or customer login pages. If both of those are true
-     * then return TRUE other return FALSE.
-     */
-    private function checkIfUserShouldBeRedirected($currentUrl)
+    private function checkIfUserShouldBeRedirected()
     {
-        // return false if auto redirect is not enabled
-        $isFlowStartedFromBackend = $this->spUtility->checkIfFlowStartedFromBackend($currentUrl);
-        if($isFlowStartedFromBackend)
-        {
-            $this->spUtility->log_debug("RedirectToIDPObserver : Flow started from backend");
-            $adminAutoRedirect = $this->spUtility->getStoreConfig(SPConstants::ADMIN_AUTO_REDIRECT);
-
-            $this->spUtility->log_debug("RedirectToIDPObserver : is Admin Autoredirect enabled? ",$adminAutoRedirect);
-            if ($this->spUtility->isUserLoggedIn()) return FALSE;
-            // check if backdoor is enabled and samlsso=false
-            $params = $this->request->getParams();
-            $backdoor = isset($params['backdoor']) ? true : false;
-            $adminAction = array_key_exists($this->currentControllerName,$this->adminControllerActionPair)
-            ? $this->adminControllerActionPair[$this->currentControllerName] : array();
-            $backdoorInSession = $this->customerSession->getData('backdoor');
-            $backdoorInSession = isset($backdoorInSession) ? $backdoorInSession : 'false';
-            if($isFlowStartedFromBackend && !isset($params['backdoor']) && $backdoorInSession != 'true')
-            {
-                $this->spUtility->log_debug("SP Observer: From admin page:");
-                return $adminAutoRedirect == true ? in_array($this->currentActionName,$adminAction) : false;
-            }
-            else
-            {
-                $backdoorInSession = $this->customerSession->getData('backdoor');
-                if($backdoorInSession == 'true')
-                {
-                    $this->customerSession->setData('backdoor', 'false');
-                }
-                else
-                {
-                    $this->customerSession->setData('backdoor', 'true');
-                }
-
-                $backdoorInSession = $this->customerSession->getData('backdoor');
-                $this->spUtility->log_debug("SP Observer:Flow started from backdoor Url: updated backdoorInSession: ",$backdoorInSession);
-            }
-            return false;
+        if (!($this->spUtility->getStoreConfig(SPConstants::AUTO_REDIRECT) != "\x31" || $this->spUtility->isUserLoggedIn())) {
+            goto Ww;
         }
-        else
-        {
-            $this->spUtility->log_debug("RedirectToIDPObserver : Flow started from Frontend");
-            // return false if auto redirect is not enabled
-            if ($this->spUtility->getStoreConfig(SPConstants::AUTO_REDIRECT) != "1"
-            || $this->spUtility->isUserLoggedIn()) return FALSE;
-            // check if backdoor is enabled and samlsso=false
-            if ($this->spUtility->getStoreConfig(SPConstants::BACKDOOR) == "1"
-                && !empty($this->request->getParams()[SPConstants::SAML_SSO_FALSE])) return FALSE;
-            // now check if user is landing on one of the login pages
-            $action = !empty($this->controllerActionPair[$this->currentControllerName])
-                ? $this->controllerActionPair[$this->currentControllerName] : NULL;
-            return !is_null($action) && is_array($action) ? in_array($this->currentActionName, $action) : FALSE;
+        return FALSE;
+        Ww:
+        if (!($this->spUtility->getStoreConfig(SPConstants::BACKDOOR) == "\x31" && !empty($this->request->getParams()[SPConstants::SAML_SSO_FALSE]))) {
+            goto C7;
         }
+        return FALSE;
+        C7:
+        $JS = !empty($this->controllerActionPair[$this->currentControllerName]) ? $this->controllerActionPair[$this->currentControllerName] : NULL;
+        return !is_null($JS) && is_array($JS) ? in_array($this->currentActionName, $JS) : FALSE;
     }
-
 }

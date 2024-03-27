@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper;
 
 use DOMDocument;
@@ -30,13 +31,6 @@ use MiniOrange\SP\Helper\Saml2\SAML2Utilities;
 use MiniOrange\SP\Logger\Logger;
 use MiniOrange\SP\Model\MiniorangeSamlIDPsFactory;
 use Psr\Log\LoggerInterface;
-
-/**
- * This class contains some common Utility functions
- * which can be called from anywhere in the module. This is
- * mostly used in the action classes to get any utility
- * function or data from the database.
- */
 class SPUtility extends Data
 {
     public $_storeManager;
@@ -61,1113 +55,808 @@ class SPUtility extends Data
     protected $_response;
     protected $productMetadata;
     protected $storeManager;
-
-    public function __construct(
-        ScopeConfigInterface                $scopeConfig,
-        UserFactory                         $adminFactory,
-        CustomerFactory                     $customerFactory,
-        UrlInterface                        $urlInterface,
-        WriterInterface                     $configWriter,
-        Repository                          $assetRepo,
-        \Magento\Backend\Helper\Data        $helperBackend,
-        Url                                 $frontendUrl,
-        \Magento\Backend\Model\Session      $adminSession,
-        \Magento\Customer\Model\Session     $customerSession,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        TypeListInterface                   $cacheTypeList,
-        Pool                                $cacheFrontendPool,
-        File                                $fileSystem,
-        LoggerInterface                     $logger,
-        ReinitableConfigInterface           $reinitableConfig,
-        StoreManagerInterface               $storeManager,
-        CustomerRepositoryInterface         $customerRepository,
-        Website                             $websiteModel,
-        WebsiteRepositoryInterface          $websiteRepository,
-        ResourceConnection                  $resource,
-        ResultFactory                       $resultFactory,
-        UserFactory                         $userFactory,
-        \Magento\Backend\Helper\Data        $backendHelper,
-        ResponseFactory                     $responseFactory,
-        ManagerInterface                    $messageManager,
-        MiniorangeSamlIDPsFactory           $miniorangeSamlIDPsFactory,
-        ResponseInterface                   $response,
-        ProductMetadataInterface            $productMetadata,
-        DateTime                            $dateTime,
-        Logger                              $logger2
-    )
+    public function __construct(ScopeConfigInterface $uc, UserFactory $na, CustomerFactory $kD, UrlInterface $kL, WriterInterface $z0, Repository $FG, \Magento\Backend\Helper\Data $NX, Url $Z2, \Magento\Backend\Model\Session $y6, \Magento\Customer\Model\Session $fD, \Magento\Backend\Model\Auth\Session $VX, TypeListInterface $df, Pool $mu, File $B1, LoggerInterface $kU, ReinitableConfigInterface $XG, StoreManagerInterface $VO, CustomerRepositoryInterface $oa, Website $O5, WebsiteRepositoryInterface $QL, ResourceConnection $dy, ResultFactory $ps, UserFactory $Do, \Magento\Backend\Helper\Data $Q2, ResponseFactory $Jv, ManagerInterface $b_, MiniorangeSamlIDPsFactory $S2, ResponseInterface $J_, ProductMetadataInterface $g8, DateTime $fO, Logger $Q9)
     {
-        $this->adminSession = $adminSession;
-        $this->customerSession = $customerSession;
-        $this->authSession = $authSession;
-        $this->cacheTypeList = $cacheTypeList;
-        $this->cacheFrontendPool = $cacheFrontendPool;
-        $this->fileSystem = $fileSystem;
-        $this->logger = $logger;
-        $this->userFactory = $userFactory;
-        $this->websiteRepository = $websiteRepository;
-        $this->websiteModel = $websiteModel;
-        $this->_storeManager = $storeManager;
-        $this->resultFactory = $resultFactory;
-        $this->customerRepository = $customerRepository;
-        $this->reinitableConfig = $reinitableConfig;
-        $this->resource = $resource;
-        $this->messageManager = $messageManager;
-        $this->backendHelper = $backendHelper;
-        $this->responseFactory = $responseFactory;
-        $this->_logger = $logger2;
-        $this->_response = $response;
-        $this->productMetadata = $productMetadata;
-        parent::__construct($scopeConfig, $adminFactory, $customerFactory, $urlInterface,
-            $configWriter, $assetRepo, $helperBackend, $frontendUrl, $dateTime, $productMetadata, $miniorangeSamlIDPsFactory);
+        $this->adminSession = $y6;
+        $this->customerSession = $fD;
+        $this->authSession = $VX;
+        $this->cacheTypeList = $df;
+        $this->cacheFrontendPool = $mu;
+        $this->fileSystem = $B1;
+        $this->logger = $kU;
+        $this->userFactory = $Do;
+        $this->websiteRepository = $QL;
+        $this->websiteModel = $O5;
+        $this->_storeManager = $VO;
+        $this->resultFactory = $ps;
+        $this->customerRepository = $oa;
+        $this->reinitableConfig = $XG;
+        $this->resource = $dy;
+        $this->messageManager = $b_;
+        $this->backendHelper = $Q2;
+        $this->responseFactory = $Jv;
+        $this->_logger = $Q9;
+        $this->_response = $J_;
+        $this->productMetadata = $g8;
+        parent::__construct($uc, $na, $kD, $kL, $z0, $FG, $NX, $Z2, $fO, $g8, $S2);
     }
-
-    /**
-     * This function returns phone number as a obfuscated
-     * string which can be used to show as a message to the user.
-     *
-     * @param $phone references the phone number.
-     */
-    public function getHiddenPhone($phone)
+    public function getHiddenPhone($zw)
     {
-        $hidden_phone = 'xxxxxxx' . substr($phone, strlen($phone) - 3);
-        return $hidden_phone;
+        $O0 = "\170\x78\170\x78\170\x78\170" . substr($zw, strlen($zw) - 3);
+        return $O0;
     }
-
-    /**
-     * This function checks if cURL has been installed
-     * or enabled on the site.
-     *
-     * @return True or False
-     */
     public function isCurlInstalled()
     {
-        if (in_array('curl', get_loaded_extensions())) {
-            return 1;
-        } else
-            return 0;
+        if (in_array("\x63\x75\x72\154", get_loaded_extensions())) {
+            goto EX;
+        }
+        return 0;
+        goto z5;
+        EX:
+        return 1;
+        z5:
     }
-
-    /**
-     * This function checks if the phone number is in the correct format or not.
-     *
-     * @param $phone refers to the phone number entered
-     */
-    public function validatePhoneNumber($phone)
+    public function validatePhoneNumber($zw)
     {
-        if (!preg_match(MoIDPConstants::PATTERN_PHONE, $phone, $matches))
-            return FALSE;
-        else
-            return TRUE;
+        if (!preg_match(MoIDPConstants::PATTERN_PHONE, $zw, $ob)) {
+            goto Nz;
+        }
+        return TRUE;
+        goto aC;
+        Nz:
+        return FALSE;
+        aC:
     }
-
-    /**
-     * This function is used to obfuscate and return
-     * the email in question.
-     *
-     * @param $email refers to the email id to be obfuscated
-     * @return obfuscated email id.
-     */
-    public function getHiddenEmail($email)
+    public function getHiddenEmail($EK)
     {
-        if (empty($email) || trim($email) === '')
-            return "";
-
-        $emailsize = strlen($email);
-        $partialemail = substr($email, 0, 1);
-        $temp = strrpos($email, "@");
-        $endemail = substr($email, $temp - 1, $emailsize);
-        for ($i = 1; $i < $temp; $i++)
-            $partialemail = $partialemail . 'x';
-
-        $hiddenemail = $partialemail . $endemail;
-
-        return $hiddenemail;
+        if (!(empty($EK) || trim($EK) === '')) {
+            goto Ev;
+        }
+        return '';
+        Ev:
+        $gk = strlen($EK);
+        $gZ = substr($EK, 0, 1);
+        $Dq = strrpos($EK, "\100");
+        $Fl = substr($EK, $Dq - 1, $gk);
+        $nO = 1;
+        Px:
+        if (!($nO < $Dq)) {
+            goto hJ;
+        }
+        $gZ = $gZ . "\170";
+        FJ:
+        $nO++;
+        goto Px;
+        hJ:
+        $j3 = $gZ . $Fl;
+        return $j3;
     }
-
-    /**
-     * get Admin Session data based of on the key
-     *
-     * @param $key
-     * @param $remove
-     */
-    public function getAdminSessionData($key, $remove = false)
+    public function getAdminSessionData($On, $Vr = false)
     {
-        return $this->adminSession->getData($key, $remove);
+        return $this->adminSession->getData($On, $Vr);
     }
-
-    /**
-     * Get customer Session data based off on the key
-     *
-     * @param $key
-     * @param $remove
-     */
-    public function getSessionData($key, $remove = false)
+    public function getSessionData($On, $Vr = false)
     {
-        return $this->customerSession->getData($key, $remove);
+        return $this->customerSession->getData($On, $Vr);
     }
-
-    /**
-     * unset customer Session Data
-     *
-     * @param $key
-     * @param $remove
-     */
-    public function unsetSessionData($key, $remove = false)
+    public function unsetSessionData($On, $Vr = false)
     {
-        return $this->customerSession->unsetData($key, $remove);
+        return $this->customerSession->unsetData($On, $Vr);
     }
-
-    /**
-     * Set Session data for logged in user based on if he/she
-     * is in the backend of frontend. Call this function only if
-     * you are not sure where the user is logged in at.
-     *
-     * @param $key
-     * @param $value
-     */
-    public function setSessionDataForCurrentUser($key, $value)
+    public function setSessionDataForCurrentUser($On, $VP)
     {
-        if ($this->customerSession->isLoggedIn())
-            $this->setSessionData($key, $value);
-        elseif ($this->authSession->isLoggedIn())
-            $this->setAdminSessionData($key, $value);
+        if ($this->customerSession->isLoggedIn()) {
+            goto fQ;
+        }
+        if ($this->authSession->isLoggedIn()) {
+            goto jk;
+        }
+        goto b3;
+        fQ:
+        $this->setSessionData($On, $VP);
+        goto b3;
+        jk:
+        $this->setAdminSessionData($On, $VP);
+        b3:
     }
-
-    /**
-     * set customer Session Data
-     *
-     * @param $key
-     * @param $value
-     */
-    public function setSessionData($key, $value)
+    public function setSessionData($On, $VP)
     {
-        return $this->customerSession->setData($key, $value);
+        return $this->customerSession->setData($On, $VP);
     }
-
-    /**
-     * set Admin Session Data
-     *
-     * @param $key
-     * @param $value
-     */
-    public function setAdminSessionData($key, $value)
+    public function setAdminSessionData($On, $VP)
     {
-        return $this->adminSession->setData($key, $value);
+        return $this->adminSession->setData($On, $VP);
     }
-
-    /**
-     * Check if the admin has configured the plugin with
-     * the Identity Provier. Returns true or false
-     */
     public function isSPConfigured()
     {
-        $loginUrl = $this->getStoreConfig(SPConstants::IDP_NAME);
-        return $this->isBlank($loginUrl) ? FALSE : TRUE;
+        $ay = $this->getStoreConfig(SPConstants::IDP_NAME);
+        return $this->isBlank($ay) ? FALSE : TRUE;
     }
-
-    /**
-     * This function checks if a value is set or
-     * empty. Returns true if value is empty
-     *
-     * @param $value references the variable passed.
-     * @return True or False
-     */
-    public function isBlank($value)
+    public function isBlank($VP)
     {
-        if (empty($value)) return TRUE;
+        if (!empty($VP)) {
+            goto vI;
+        }
+        return TRUE;
+        vI:
         return FALSE;
     }
-
-    /**
-     * This function is used to check if customer has completed
-     * the registration process. Returns TRUE or FALSE. Checks
-     * for the email and customerkey in the database are set
-     * or not.
-     */
     public function micr()
     {
-        if ($this->check_license_plan(4))
-            return true;
-
-        $email = $this->getStoreConfig(SPConstants::SAMLSP_EMAIL);
-        $key = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
-        return !$this->isBlank($email) && !$this->isBlank($key) ? TRUE : FALSE;
+        if (!$this->check_license_plan(4)) {
+            goto jS;
+        }
+        return true;
+        jS:
+        $EK = $this->getStoreConfig(SPConstants::SAMLSP_EMAIL);
+        $On = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
+        return !$this->isBlank($EK) && !$this->isBlank($On) ? TRUE : FALSE;
     }
-
-    public function check_license_plan($lvl)
+    public function check_license_plan($Gd)
     {
-        return ($this->get_license_plan() >= $lvl);
+        return $this->get_license_plan() >= $Gd;
     }
-
     public function get_license_plan()
     {
-        $version = SPConstants::LICENSE_PLAN;
-        return $version === 'magento_saml_trial_plan' ? 4 : ($version === 'magento_saml_enterprise_plan' ? 3 : ($version === 'magento_saml_premium_plan' ? 2 : ($version === 'magento_saml_standard_plan' ? 1 : 0)));
+        $N5 = SPConstants::LICENSE_PLAN;
+        return $N5 === "\155\x61\147\x65\156\164\x6f\137\163\x61\x6d\154\137\164\x72\151\x61\x6c\137\160\x6c\141\156" ? 4 : ($N5 === "\x6d\x61\147\x65\156\x74\x6f\137\x73\141\x6d\154\x5f\145\156\x74\145\x72\160\x72\151\x73\x65\x5f\160\x6c\x61\x6e" ? 3 : ($N5 === "\155\x61\x67\145\156\164\157\137\x73\141\x6d\154\137\x70\162\145\155\151\165\x6d\x5f\x70\154\141\x6e" ? 2 : ($N5 === "\x6d\x61\147\145\x6e\x74\x6f\x5f\163\141\x6d\154\137\163\164\141\x6e\x64\x61\162\144\137\x70\x6c\x61\156" ? 1 : 0)));
     }
-
-    /**
-     * Check if there's an active session of the user
-     * for the frontend or the backend. Returns TRUE
-     * or FALSE
-     */
     public function isUserLoggedIn()
     {
-        return $this->customerSession->isLoggedIn()
-            || $this->authSession->isLoggedIn();
+        return $this->customerSession->isLoggedIn() || $this->authSession->isLoggedIn();
     }
-
-    /**
-     * Get the Current Admin User who is logged in
-     */
     public function getCurrentAdminUser()
     {
         return $this->authSession->getUser();
     }
-
-    /**
-     * Get the Current Admin User who is logged in
-     */
     public function getCurrentUser()
     {
         return $this->customerSession->getCustomer();
     }
-
-    public function getCustomer($id)
+    public function getCustomer($Gh)
     {
-        return $this->customerRepository->getById($id);
+        return $this->customerRepository->getById($Gh);
     }
-
-    /**
-     * Desanitize the cert
-     */
-    public function desanitizeCert($cert)
+    public function desanitizeCert($d2)
     {
-        return SAML2Utilities::desanitize_certificate($cert);
+        return SAML2Utilities::desanitize_certificate($d2);
     }
-
-    /**
-     * Sanitize the cert
-     */
-    public function sanitizeCert($cert)
+    public function sanitizeCert($d2)
     {
-        return SAML2Utilities::sanitize_certificate($cert);
+        return SAML2Utilities::sanitize_certificate($d2);
     }
-
-    /**
-     * Get data in the file specified by the path
-     */
-    public function getFileContents($file)
+    public function getFileContents($SI)
     {
-        return $this->fileSystem->fileGetContents($file);
+        return $this->fileSystem->fileGetContents($SI);
     }
-
-    /**
-     * Put data in the file specified by the path
-     */
-    public function putFileContents($file, $data)
+    public function putFileContents($SI, $or)
     {
-        $this->fileSystem->filePutContents($file, $data);
+        $this->fileSystem->filePutContents($SI, $or);
     }
-
-    /**
-     * Get the Current User's logout url
-     */
     public function getLogoutUrl()
     {
-        if ($this->customerSession->isLoggedIn()) return $this->getUrl('customer/account/logout');
-        if ($this->authSession->isLoggedIn()) return $this->getAdminUrl('adminhtml/auth/logout');
-        return '/';
+        if (!$this->customerSession->isLoggedIn()) {
+            goto Ic;
+        }
+        return $this->getUrl("\143\x75\163\164\157\x6d\145\162\57\x61\x63\143\157\165\156\x74\57\x6c\157\x67\157\x75\x74");
+        Ic:
+        if (!$this->authSession->isLoggedIn()) {
+            goto NR;
+        }
+        return $this->getAdminUrl("\141\x64\x6d\151\x6e\x68\x74\x6d\154\57\x61\165\x74\x68\57\154\x6f\147\157\165\x74");
+        NR:
+        return "\57";
     }
-
-    /*===========================================================================================
-                        THESE ARE PREMIUM PLUGIN SPECIFIC FUNCTIONS
-    =============================================================================================*/
-
-    /**
-     * Function to get the url based on where the user is.
-     *
-     * @param $url
-     * @return
-     */
-    public function getUrl($url, $params = array())
+    public function getUrl($At, $Te = array())
     {
-        return parent::getUrl($url, $params);
+        return parent::getUrl($At, $Te);
     }
-
     public function getcustomerLogoutUrl()
     {
-        return $this->getBaseUrl() . 'customer/account/logout';
+        return $this->getBaseUrl() . "\x63\x75\163\x74\157\x6d\x65\x72\x2f\x61\x63\143\x6f\x75\156\x74\x2f\x6c\x6f\147\157\x75\x74";
     }
-
-    /**
-     * This function is used to check if customer has completed
-     * the registration process. Returns TRUE or FALSE. Checks
-     * for the email and customerkey in the database are set
-     * or not. Then checks if license key has been verified.
-     */
     public function mclv()
     {
-        if ($this->check_license_plan(4))
-            return true;
-
-        $token = $this->getStoreConfig(SPConstants::TOKEN);
-        $isVerified = AESEncryption::decrypt_data($this->getStoreConfig(SPConstants::SAMLSP_CKL), $token);
-        $licenseKey = $this->getStoreConfig(SPConstants::SAMLSP_LK);
-        return $isVerified == "true" && !$this->isBlank($licenseKey) ? TRUE : FALSE;
+        if (!$this->check_license_plan(4)) {
+            goto NZ;
+        }
+        return true;
+        NZ:
+        $Ai = $this->getStoreConfig(SPConstants::TOKEN);
+        $zb = AESEncryption::decrypt_data($this->getStoreConfig(SPConstants::SAMLSP_CKL), $Ai);
+        $rg = $this->getStoreConfig(SPConstants::SAMLSP_LK);
+        return $zb == "\x74\162\165\x65" && !$this->isBlank($rg) ? TRUE : FALSE;
     }
-
-    /**
-     * This function is used to validate the license key entered by
-     * the user by calling the vml cURL function.
-     *
-     * @return JSONEncoded response
-     */
-    public function vml($code)
+    public function vml($wI)
     {
-        $customerKey = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
-        $apiKey = $this->getStoreConfig(SPConstants::API_KEY);
-        $content = Curl::vml($customerKey, $apiKey, $code, $this->getBaseUrl());
-        return $content;
+        $rY = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
+        $UE = $this->getStoreConfig(SPConstants::API_KEY);
+        $Qz = Curl::vml($rY, $UE, $wI, $this->getBaseUrl());
+        return $Qz;
     }
-
-    /*===========================================================================================
-                        THESE ARE PREMIUM PLUGIN SPECIFIC FUNCTIONS
-    =============================================================================================*/
-
-    /**
-     * This function is updates the status of the licenseKey
-     * on the server by calling the mius cURL function.
-     *
-     * @return JSONEncoded response
-     */
     public function mius()
     {
-        $customerKey = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
-        $apiKey = $this->getStoreConfig(SPConstants::API_KEY);
-        $token = $this->getStoreConfig(SPConstants::TOKEN);
-        $code = AESEncryption::decrypt_data($this->getStoreConfig(SPConstants::SAMLSP_LK), $token);
-        $content = Curl::mius($customerKey, $apiKey, trim($code));
-        return $content;
+        $rY = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
+        $UE = $this->getStoreConfig(SPConstants::API_KEY);
+        $Ai = $this->getStoreConfig(SPConstants::TOKEN);
+        $wI = AESEncryption::decrypt_data($this->getStoreConfig(SPConstants::SAMLSP_LK), $Ai);
+        $Qz = Curl::mius($rY, $UE, trim($wI));
+        return $Qz;
     }
-
     public function getB2bStoreUrl()
     {
-        $b2bStoreUrl = $this->getStoreConfig(SPConstants::B2B_STORE_URL);
-        return !$this->isBlank($b2bStoreUrl) ? $b2bStoreUrl : '';
+        $XC = $this->getStoreConfig(SPConstants::B2B_STORE_URL);
+        return !$this->isBlank($XC) ? $XC : '';
     }
-
     public function getB2cStoreUrl()
     {
-        $b2cStoreUrl = $this->getStoreConfig(SPConstants::B2C_STORE_URL);
-        return !$this->isBlank($b2cStoreUrl) ? $b2cStoreUrl : '';
+        $JV = $this->getStoreConfig(SPConstants::B2C_STORE_URL);
+        return !$this->isBlank($JV) ? $JV : '';
     }
-
-    /**
-     * Is the option to auto create Admin while SSO enabled
-     * by the admin.
-     */
     public function getAutoCreateAdmin()
     {
         return $this->getStoreConfig(SPConstants::AUTO_CREATE_ADMIN);
     }
-
-    /**
-     * Is the option to auto create Customer while SSO
-     * by the admin.
-     */
     public function getAutoCreateCustomer()
     {
         return $this->getStoreConfig(SPConstants::AUTO_CREATE_CUSTOMER);
     }
-
-    /**
-     * if B2c flow is disabled
-     */
     public function getDisableB2C()
     {
         return $this->getStoreConfig(SPConstants::DISABLE_B2C);
     }
-
-
-    /* Get customer object by id */
-
-    /**
-     * Check if the admin has configured the plugin with
-     * SLO settings. Returns true or false
-     */
     public function isSLOConfigured()
     {
-        $logoutUrl = $this->getStoreConfig(SPConstants::SAML_SLO_URL);
-        return $this->isBlank($logoutUrl) ? FALSE : TRUE;
+        $ty = $this->getStoreConfig(SPConstants::SAML_SLO_URL);
+        return $this->isBlank($ty) ? FALSE : TRUE;
     }
-
-    public function getAdminUserById($id)
+    public function getAdminUserById($Gh)
     {
-        $user = $this->userFactory->create()->load($id);
-//      $user->getStoredData();
+        $user = $this->userFactory->create()->load($Gh);
         return $user;
     }
-
-    /**
-     *** Magento Store/Website specific Methods
-     * @param $givenUrl
-     * @return
-     */
-    public function getBaseUrlFromUrl($givenUrl)
+    public function getBaseUrlFromUrl($CM)
     {
-        $this->log_debug(" SpUtility: getBaseUrlFromUrl() for:" . $givenUrl);
-        $websites = $this->_storeManager->getStores();
-        foreach ($websites as $store) {
-            $url = $store->getBaseUrl();
-            $pos = strpos($givenUrl, $url);
-            if ($pos !== false) {
-                ;
-                $this->log_debug("SpUtility : getBaseUrlFromUrl(). " . $url);
-                return $url;
+        $this->log_debug("\40\123\160\x55\164\x69\x6c\151\164\171\x3a\x20\x67\145\x74\x42\x61\x73\145\x55\162\154\x46\162\x6f\x6d\x55\x72\154\x28\51\x20\146\157\x72\72" . $CM);
+        $ZB = $this->_storeManager->getStores();
+        foreach ($ZB as $vH) {
+            $At = $vH->getBaseUrl();
+            $Tj = strpos($CM, $At);
+            if (!($Tj !== false)) {
+                goto pb;
             }
+            $this->log_debug("\123\160\x55\164\151\154\x69\164\x79\x20\x3a\40\147\145\164\x42\141\x73\145\x55\162\x6c\106\x72\157\155\x55\162\154\50\x29\56\x20" . $At);
+            return $At;
+            pb:
+            D1:
         }
-        $givenUrl = parse_url($givenUrl, PHP_URL_HOST);
-        $this->log_debug("SpUtility: getBaseUrlFromUrl():" . $givenUrl . '/');
-        return $givenUrl;
+        He:
+        $CM = parse_url($CM, PHP_URL_HOST);
+        $this->log_debug("\x53\160\125\x74\151\154\x69\x74\x79\72\40\147\145\164\102\x61\163\145\125\x72\x6c\x46\x72\x6f\x6d\125\x72\154\x28\x29\72" . $CM . "\57");
+        return $CM;
     }
-
-    //Get Store Object by store_id
-
-    /**
-     *Common Log Method .. Accessible in all classes through
-     **/
-    public function log_debug($msg = "", $obj = null)
+    public function log_debug($Fx = '', $u2 = null)
     {
-
-        if (is_object($msg)) {
-            $this->customlog("MO SAML  : " . print_r($obj, true));
-        } else {
-            $this->customlog("MO SAML : " . $msg);
-
+        if (is_object($Fx)) {
+            goto xX;
         }
-
-        if ($obj != null) {
-            $this->customlog("MO SAML : " . var_export($obj, true));
-
-
+        $this->customlog("\115\x4f\x20\x53\x41\x4d\x4c\40\x3a\x20" . $Fx);
+        goto hS;
+        xX:
+        $this->customlog("\x4d\117\x20\123\x41\115\114\40\x20\72\40" . print_r($u2, true));
+        hS:
+        if (!($u2 != null)) {
+            goto G3;
         }
+        $this->customlog("\115\117\40\123\x41\x4d\114\40\x3a\x20" . var_export($u2, true));
+        G3:
     }
-
-    /**
-     * This function print custom log in var/log/mo_saml.log file.
-     */
-    public function customlog($txt)
+    public function customlog($Op)
     {
-
-        $this->isLogEnable() ? $this->_logger->debug($txt) : NULL;
+        $this->isLogEnable() ? $this->_logger->debug($Op) : NULL;
     }
-
-    //get websiteName By website_id
-
     public function isLogEnable()
     {
         return $this->getStoreConfig(SPConstants::ENABLE_DEBUG_LOG);
     }
-
-    //get website Object By website_id
-
-    public function getStoreById($id)
+    public function getStoreById($Gh)
     {
-        return $this->_storeManager->getStore($id);
+        return $this->_storeManager->getStore($Gh);
     }
-
     public function getWebsiteCode()
     {
         return $this->_storeManager->getWebsite()->getCode();
     }
-
-
-    /**
-     ****DATABASE Querying Methods
-     * @param $table
-     * @param $data
-     */
-
-    //Insert a row in any table
-    public function getWebsiteName($websiteId)
+    public function getWebsiteName($Ed)
     {
-        $collection = $this->_websiteModel->load($websiteId, 'website_id');
-        $websiteData = $collection->getData();
-        return $websiteData[0]['name'];
+        $yG = $this->_websiteModel->load($Ed, "\x77\x65\142\163\x69\x74\x65\x5f\151\x64");
+        $Lw = $yG->getData();
+        return $Lw[0]["\x6e\x61\155\145"];
     }
-
-    public function getWebsiteById($id)
+    public function getWebsiteById($Gh)
     {
-        return $this->websiteRepository->getById($id);
+        return $this->websiteRepository->getById($Gh);
     }
-
-
-    //Update a set of values of a row in any table
-
-
-    public function insertRowInTable($table, $data)
+    public function insertRowInTable($O7, $or)
     {
-        $this->resource->getConnection()->insertMultiple($table, $data);
+        $this->resource->getConnection()->insertMultiple($O7, $or);
     }
-
-    /**
-     * Update a set of values of a row in any table
-     **/
-    public function updateColumnInTable($table, $colName, $colValue, $idKey, $idValue)
+    public function updateColumnInTable($O7, $iH, $QD, $OY, $Gu)
     {
-        $this->log_debug("updateColumnInTable" . $colName);
-        $connection = $this->resource->getConnection();
-        if ($connection->tableColumnExists($table, $colName) === false) {
-            $connection->addColumn($table, $colName, array(
-                'type' => 'text',
-                'nullable' => false,
-                'length' => 255,
-                'after' => null, // column name to insert new column after
-                'comment' => $colName
-            ));
-
+        $this->log_debug("\165\x70\x64\141\164\x65\103\157\154\165\155\x6e\111\x6e\124\141\x62\154\145" . $iH);
+        $oD = $this->resource->getConnection();
+        if (!($oD->tableColumnExists($O7, $iH) === false)) {
+            goto Ti;
         }
-        $this->resource->getConnection()->update(
-            $table, [$colName => $colValue],
-            [$idKey . " = ?" => $idValue]
-        );
+        $oD->addColumn($O7, $iH, array("\x74\171\x70\x65" => "\164\x65\x78\164", "\156\x75\x6c\154\141\x62\x6c\x65" => false, "\154\145\x6e\147\164\x68" => 255, "\141\146\164\145\162" => null, "\143\157\x6d\x6d\x65\x6e\164" => $iH));
+        Ti:
+        $this->resource->getConnection()->update($O7, [$iH => $QD], [$OY . "\x20\75\x20\x3f" => $Gu]);
     }
-
-    //check if flow started from Admin Url
-    //It just checks if relayState contains admin base url
-
-    public function updateRowInTable($table, $valArray, $idKey, $idValue)
+    public function updateRowInTable($O7, $uf, $OY, $Gu)
     {
-        $this->log_debug("updateRowInTable");
-        $this->resource->getConnection()->update(
-            $table, $valArray, [$idKey . " = ?" => $idValue]
-        );
+        $this->log_debug("\x75\160\144\141\164\x65\122\x6f\x77\111\x6e\x54\x61\x62\154\x65");
+        $this->resource->getConnection()->update($O7, $uf, [$OY . "\40\75\x20\77" => $Gu]);
     }
-
-    /**
-     * Get value of any column from a table.
-     * @param $table
-     * @param $col
-     * @param $idKey
-     * @param $idValue
-     * @return
-     */
-    public function getValueFromTableSQL($table, $col, $idKey, $idValue)
+    public function getValueFromTableSQL($O7, $wH, $OY, $Gu)
     {
-        $connection = $this->resource->getConnection();
-        //Select Data from table
-        $sqlQuery = "SELECT " . $col . " FROM " . $table . " WHERE " . $idKey . " = " . $idValue;
-        $this->log_debug("SQL: " . $sqlQuery);
-        $result = $connection->fetchOne($sqlQuery);
-        $this->log_debug("result sql: " . $result);
-        return $result;
+        $oD = $this->resource->getConnection();
+        $Q8 = "\123\x45\114\x45\103\124\x20" . $wH . "\x20\106\122\x4f\x4d\x20" . $O7 . "\x20\127\x48\x45\x52\x45\x20" . $OY . "\40\75\40" . $Gu;
+        $this->log_debug("\x53\121\x4c\x3a\x20" . $Q8);
+        $bs = $oD->fetchOne($Q8);
+        $this->log_debug("\162\145\163\x75\154\x74\x20\x73\x71\x6c\x3a\40" . $bs);
+        return $bs;
     }
-
-    public function checkIfFlowStartedFromBackend($relayState)
+    public function checkIfFlowStartedFromBackend($Nf)
     {
-        $admin_path = $this->helperBackend->getAreaFrontName();
-        if (str_contains($relayState, $admin_path)) {
-            $this->log_debug("checkIfFlowStartedFromBackend: true");
-            return true;
+        $x7 = $this->helperBackend->getAreaFrontName();
+        if (!str_contains($Nf, $x7)) {
+            goto OF;
         }
-        $this->log_debug("checkIfFlowStartedFromBackend: false");
+        $this->log_debug("\x63\x68\x65\143\153\x49\146\x46\x6c\157\167\123\164\141\162\164\x65\x64\x46\162\157\x6d\102\141\x63\153\145\156\144\x3a\x20\164\x72\165\x65");
+        return true;
+        OF:
+        $this->log_debug("\x63\x68\x65\143\153\111\x66\106\x6c\157\167\x53\x74\141\162\164\145\x64\x46\x72\157\155\x42\x61\143\153\145\x6e\x64\x3a\40\x66\141\154\163\145");
         return false;
     }
-
     public function getadmincode()
     {
-        $admin_path = $this->helperBackend->getAreaFrontName();
-        return $admin_path;
+        $x7 = $this->helperBackend->getAreaFrontName();
+        return $x7;
     }
-
-    public function handle_upload_metadata($file, $url, $params)
+    public function handle_upload_metadata($SI, $At, $Te)
     {
-        if (!empty($file) || !empty($url)) {
-            if (!empty($file['tmp_name'])) {
-                $file = file_get_contents($file['tmp_name']);
-            } else {
-                $url = filter_var($url, FILTER_SANITIZE_URL);
-                $arrContextOptions = array(
-                    "ssl" => array(
-                        "verify_peer" => false,
-                        "verify_peer_name" => false,
-                    ),
-                );
-                if (empty($url)) {
-                    return;
-                } else {
-                    $file = file_get_contents($url, false, stream_context_create($arrContextOptions));
-                }
-            }
-            $this->upload_metadata($file, $params);
+        if (!(!empty($SI) || !empty($At))) {
+            goto ev;
         }
+        if (!empty($SI["\x74\x6d\160\137\156\x61\155\145"])) {
+            goto vR;
+        }
+        $At = filter_var($At, FILTER_SANITIZE_URL);
+        $B8 = array("\163\163\x6c" => array("\166\x65\x72\x69\146\171\x5f\160\x65\145\162" => false, "\x76\x65\162\151\x66\x79\137\160\145\145\162\137\x6e\141\155\145" => false));
+        if (empty($At)) {
+            goto Nr;
+        }
+        $SI = file_get_contents($At, false, stream_context_create($B8));
+        goto ob;
+        Nr:
+        return;
+        ob:
+        goto jQ;
+        vR:
+        $SI = file_get_contents($SI["\164\x6d\160\x5f\x6e\x61\155\x65"]);
+        jQ:
+        $this->upload_metadata($SI, $Te);
+        ev:
     }
-
-    public function upload_metadata($file, $params)
+    public function upload_metadata($SI, $Te)
     {
-        $document = new DOMDocument();
-        $document->loadXML($file);
+        $rT = new DOMDocument();
+        $rT->loadXML($SI);
         restore_error_handler();
-        $first_child = $document->firstChild;
-        if (!empty($first_child)) {
-            $metadata = new IDPMetadataReader($document);
-            $identity_providers = $metadata->getIdentityProviders();
-            if (empty($identity_providers)) {
-                return;
-            }
-            foreach ($identity_providers as $key => $idp) {
-                $saml_login_url = $idp->getLoginURL('HTTP-Redirect');
-                $saml_issuer = $idp->getEntityID();
-                $saml_x509_certificate = $idp->getSigningCertificate();
-                $database_name = 'saml';
-                $updatefieldsarray = array(
-                    'samlIssuer' => !empty($saml_issuer) ? $saml_issuer : 0,
-                    'ssourl' => !empty($saml_login_url) ? $saml_login_url : 0,
-                    'loginBindingType' => 'HttpRedirect',
-                    'certificate' => !empty($saml_x509_certificate) ? $saml_x509_certificate[0] : 0,
-                );
-
-                $this->generic_update_query($database_name, $updatefieldsarray, $params);
-                break;
-            }
-            return;
-        } else {
-
-            return;
+        $dI = $rT->firstChild;
+        if (!empty($dI)) {
+            goto qJ;
         }
+        return;
+        goto Ch;
+        qJ:
+        $BF = new IDPMetadataReader($rT);
+        $pZ = $BF->getIdentityProviders();
+        if (!empty($pZ)) {
+            goto k3;
+        }
+        return;
+        k3:
+        foreach ($pZ as $On => $bf) {
+            $z1 = $bf->getLoginURL("\x48\124\x54\x50\x2d\122\x65\x64\x69\162\x65\x63\164");
+            $Lr = $bf->getEntityID();
+            $rO = $bf->getSigningCertificate();
+            $sD = "\x73\x61\155\x6c";
+            $fT = array("\x73\x61\x6d\154\111\163\x73\x75\145\x72" => !empty($Lr) ? $Lr : 0, "\x73\x73\x6f\x75\162\x6c" => !empty($z1) ? $z1 : 0, "\154\157\147\151\156\102\151\x6e\144\x69\x6e\147\124\171\x70\x65" => "\110\164\164\160\122\145\x64\x69\x72\x65\143\164", "\x63\x65\x72\x74\151\x66\151\x63\x61\x74\x65" => !empty($rO) ? $rO[0] : 0);
+            $this->generic_update_query($sD, $fT, $Te);
+            goto Gq;
+            Al:
+        }
+        Gq:
+        return;
+        Ch:
     }
-
-    public function generic_update_query($database_name, $updatefieldsarray, $params)
+    public function generic_update_query($sD, $fT, $Te)
     {
-        $this->log_debug("In generic_update_query function");
-        $idp_obj = json_encode($updatefieldsarray);
-
-        if (empty($params['saml_identity_name']))
-            $params['saml_identity_name'] = $params['selected_provider'];
-
-        $mo_idp_app_name = trim($params['saml_identity_name']);
-        $collection = $this->getIDPApps();
-        $idpDetails = null;
-        foreach ($collection as $item) {
-            if ($item->getData()["idp_name"] === $mo_idp_app_name) {
-                $idpDetails = $item->getData();
+        $this->log_debug("\x49\x6e\40\x67\145\x6e\145\x72\x69\143\x5f\165\160\x64\141\164\x65\137\161\165\145\x72\x79\x20\x66\x75\156\143\x74\x69\157\x6e");
+        $yf = json_encode($fT);
+        if (!empty($Te["\163\141\155\x6c\x5f\x69\x64\145\156\164\x69\x74\x79\x5f\156\141\x6d\145"])) {
+            goto e7;
+        }
+        $Te["\x73\x61\155\x6c\137\151\x64\145\x6e\164\151\164\x79\137\156\x61\155\x65"] = $Te["\x73\145\154\145\x63\164\x65\x64\x5f\160\x72\x6f\x76\151\x64\145\x72"];
+        e7:
+        $gu = trim($Te["\163\x61\155\154\x5f\151\x64\145\x6e\164\x69\164\171\137\156\x61\155\x65"]);
+        $yG = $this->getIDPApps();
+        $hR = null;
+        foreach ($yG as $ub) {
+            if (!($ub->getData()["\151\x64\160\137\x6e\141\155\x65"] === $gu)) {
+                goto LQ;
             }
+            $hR = $ub->getData();
+            LQ:
+            aH:
         }
-        foreach ($updatefieldsarray as $key => $value) {
-            if ($key == 'samlIssuer')
-                $mo_idp_entity_id = trim($value);
-            if ($key == 'ssourl')
-                $mo_idp_saml_login_url = trim($value);
-            if ($key == 'loginBindingType')
-                $mo_idp_saml_login_binding = trim($value);
-            if ($key == 'certificate')
-                $mo_idp_x509_certificate = SAML2Utilities::sanitize_certificate(trim($value));
+        jZ:
+        foreach ($fT as $On => $VP) {
+            if (!($On == "\163\141\x6d\154\111\163\163\165\145\x72")) {
+                goto MJ;
+            }
+            $FW = trim($VP);
+            MJ:
+            if (!($On == "\x73\163\x6f\x75\x72\x6c")) {
+                goto kF;
+            }
+            $I_ = trim($VP);
+            kF:
+            if (!($On == "\154\x6f\147\x69\x6e\102\x69\x6e\x64\x69\x6e\147\x54\171\x70\145")) {
+                goto lj;
+            }
+            $CI = trim($VP);
+            lj:
+            if (!($On == "\143\x65\x72\x74\151\x66\x69\143\x61\164\145")) {
+                goto Lk;
+            }
+            $zS = SAML2Utilities::sanitize_certificate(trim($VP));
+            Lk:
+            rj:
         }
-
-        $mo_idp_saml_logout_url = !empty($params['saml_logout_url']) ? trim($params['saml_logout_url']) : '';
-        $mo_idp_saml_logout_binding = 'HttpRedirect';
-        $mo_idp_response_signed = !empty($params['saml_response_signed']) && $params['saml_response_signed'] == 'Yes' ? 1 : 0;
-        $mo_idp_assertion_signed = !empty($params['saml_assertion_signed']) && $params['saml_assertion_signed'] == 'Yes' ? 1 : 0;
-        $mo_idp_show_admin_link = !empty($idpDetails['show_admin_link']) && $idpDetails['show_admin_link'] == true ? 1 : 0;
-        $mo_idp_show_customer_link = !empty($idpDetails['show_customer_link']) && $idpDetails['show_customer_link'] == true ? 1 : 0;
-        $mo_idp_auto_create_admin_users = !empty($idpDetails['auto_create_admin_users']) && $idpDetails['auto_create_admin_users'] == true ? 1 : 0;
-        $mo_idp_auto_create_customers = !empty($idpDetails['auto_create_customers']) && $idpDetails['auto_create_customers'] == true ? 1 : 0;
-        $mo_idp_disable_b2c = !empty($idpDetails['disable_b2c']) && $idpDetails['disable_b2c'] == true ? 1 : 0;
-        $mo_idp_force_authentication_with_idp = !empty($idpDetails['force_authentication_with_idp']) && $idpDetails['force_authentication_with_idp'] == true ? 1 : 0;
-        $mo_idp_auto_redirect_to_idp = !empty($idpDetails['auto_redirect_to_idp']) && $idpDetails['auto_redirect_to_idp'] == true ? 1 : 0;
-        $mo_idp_link_to_initiate_sso = !empty($idpDetails['link_to_initiate_sso']) && $idpDetails['link_to_initiate_sso'] == true ? 1 : 0;
-        $mo_idp_update_attributes_on_login = !empty($idpDetails['update_attributes_on_login']) ? $idpDetails['update_attributes_on_login'] : 'unchecked';
-        $mo_idp_create_magento_account_by = !empty($idpDetails['create_magento_account_by']) ? $idpDetails['create_magento_account_by'] : '';
-        $mo_idp_email_attribute = !empty($idpDetails['email_attribute']) ? $idpDetails['email_attribute'] : '';
-        $mo_idp_username_attribute = !empty($idpDetails['username_attribute']) ? $idpDetails['username_attribute'] : '';
-        $mo_idp_firstname_attribute = !empty($idpDetails['firstname_attribute']) ? $idpDetails['firstname_attribute'] : '';
-        $mo_idp_lastname_attribute = !empty($idpDetails['lastname_attribute']) ? $idpDetails['lastname_attribute'] : '';
-        $mo_idp_group_attribute = !empty($idpDetails['group_attribute']) ? $idpDetails['group_attribute'] : '';
-        $mo_idp_billing_city_attribute = !empty($idpDetails['billing_city_attribute']) ? $idpDetails['billing_city_attribute'] : '';
-        $mo_idp_billing_state_attribute = !empty($idpDetails['billing_state_attribute']) ? $idpDetails['billing_state_attribute'] : '';
-        $mo_idp_billing_country_attribute = !empty($idpDetails['billing_country_attribute']) ? $idpDetails['billing_country_attribute'] : '';
-        $mo_idp_billing_address_attribute = !empty($idpDetails['billing_address_attribute']) ? $idpDetails['billing_address_attribute'] : '';
-        $mo_idp_billing_phone_attribute = !empty($idpDetails['billing_phone_attribute']) ? $idpDetails['billing_phone_attribute'] : '';
-        $mo_idp_billing_zip_attribute = !empty($idpDetails['billing_zip_attribute']) ? $idpDetails['billing_zip_attribute'] : '';
-        $mo_idp_shipping_city_attribute = !empty($idpDetails['shipping_city_attribute']) ? $idpDetails['shipping_city_attribute'] : '';
-        $mo_idp_shipping_state_attribute = !empty($idpDetails['shipping_state_attribute']) ? $idpDetails['shipping_state_attribute'] : '';
-        $mo_idp_shipping_country_attribute = !empty($idpDetails['shipping_country_attribute']) ? $idpDetails['shipping_country_attribute'] : '';
-        $mo_idp_shipping_address_attribute = !empty($idpDetails['shipping_address_attribute']) ? $idpDetails['shipping_address_attribute'] : '';
-        $mo_idp_shipping_phone_attribute = !empty($idpDetails['shipping_phone_attribute']) ? $idpDetails['shipping_phone_attribute'] : '';
-        $mo_idp_shipping_zip_attribute = !empty($idpDetails['shipping_zip_attribute']) ? $idpDetails['shipping_zip_attribute'] : '';
-        $mo_idp_b2b_attribute = !empty($idpDetails['b2b_attribute']) ? $idpDetails['b2b_attribute'] : '';
-        $mo_idp_custom_tablename = !empty($idpDetails['custom_tablename']) ? $idpDetails['custom_tablename'] : '';
-        $mo_idp_custom_attributes = !empty($idpDetails['custom_attributes']) ? $idpDetails['custom_attributes'] : '';
-        $mo_idp_do_not_autocreate_if_roles_not_mapped = !empty($idpDetails['do_not_autocreate_if_roles_not_mapped']) && $idpDetails['do_not_autocreate_if_roles_not_mapped'] == true ? 1 : 0;
-        $mo_idp_update_backend_roles_on_sso = !empty($idpDetails['update_backend_roles_on_sso']) && $idpDetails['update_backend_roles_on_sso'] == true ? 1 : 0;
-        $mo_idp_update_frontend_groups_on_sso = !empty($idpDetails['update_frontend_groups_on_sso']) && $idpDetails['update_frontend_groups_on_sso'] == true ? 1 : 0;
-        $mo_idp_default_group = !empty($idpDetails['default_group']) ? $idpDetails['default_group'] : '';
-        $mo_idp_default_role = !empty($idpDetails['default_role']) ? $idpDetails['default_role'] : '';
-        $mo_idp_groups_mapped = !empty($idpDetails['groups_mapped']) ? $idpDetails['groups_mapped'] : '';
-        $mo_idp_roles_mapped = !empty($idpDetails['roles_mapped']) ? $idpDetails['roles_mapped'] : '';
-        $mo_saml_logout_redirect_url = !empty($idpDetails['saml_logout_redirect_url']) ? $idpDetails['saml_logout_redirect_url'] : '';
-        $billinandshippingchcekbox = !empty($idpDetails['saml_enable_billingandshipping']) ? $idpDetails['saml_enable_billingandshipping'] : 'none';
-        $sameasbilling = !empty($idpDetails['saml_sameasbilling']) ? $idpDetails['saml_sameasbilling'] : 'none';
-        $mo_saml_headless_sso = !empty($idpDetails['mo_saml_headless_sso']) && $idpDetails['mo_saml_headless_sso'] == true ? 1 : 0;
-        $mo_saml_frontend_post_url = !empty($idpDetails['mo_saml_frontend_post_url']) ? $idpDetails['mo_saml_frontend_post_url'] : '';
-
-        if (!is_null($idpDetails)) {
-            $this->deleteIDPApps((int)$idpDetails['id']);
-        } else {
-            $this->checkIdpLimit();
+        iI:
+        $tb = !empty($Te["\x73\x61\x6d\x6c\x5f\154\157\x67\x6f\165\164\x5f\165\162\154"]) ? trim($Te["\163\141\155\154\137\x6c\157\x67\x6f\x75\x74\x5f\165\162\x6c"]) : '';
+        $fF = "\x48\164\x74\x70\122\x65\144\151\x72\145\x63\x74";
+        $LT = !empty($Te["\163\141\x6d\154\137\162\x65\163\x70\157\156\x73\145\137\x73\151\x67\156\x65\x64"]) && $Te["\163\141\155\x6c\x5f\x72\x65\x73\x70\x6f\x6e\163\x65\x5f\163\x69\147\x6e\x65\x64"] == "\131\145\x73" ? 1 : 0;
+        $GK = !empty($Te["\163\x61\155\154\x5f\x61\163\x73\x65\x72\164\x69\157\156\137\163\x69\x67\x6e\x65\x64"]) && $Te["\163\x61\x6d\154\x5f\x61\x73\163\x65\162\x74\151\x6f\x6e\x5f\x73\151\x67\x6e\145\144"] == "\x59\x65\163" ? 1 : 0;
+        $y4 = !empty($hR["\x73\150\157\x77\137\x61\x64\155\x69\156\x5f\x6c\151\156\x6b"]) && $hR["\x73\150\157\x77\x5f\x61\x64\x6d\151\x6e\137\154\151\156\x6b"] == true ? 1 : 0;
+        $t8 = !empty($hR["\x73\150\157\167\x5f\143\165\163\x74\157\155\145\162\137\x6c\151\x6e\153"]) && $hR["\x73\150\157\167\x5f\x63\x75\x73\164\x6f\155\145\x72\137\x6c\x69\156\x6b"] == true ? 1 : 0;
+        $Ab = !empty($hR["\141\x75\x74\x6f\x5f\x63\162\145\x61\x74\145\137\x61\x64\x6d\151\x6e\137\x75\x73\x65\162\x73"]) && $hR["\141\x75\x74\x6f\137\143\x72\145\x61\164\145\x5f\141\x64\x6d\x69\x6e\137\165\x73\x65\162\163"] == true ? 1 : 0;
+        $Cx = !empty($hR["\141\x75\x74\x6f\x5f\143\x72\x65\x61\164\x65\x5f\x63\165\163\164\x6f\x6d\x65\162\163"]) && $hR["\141\x75\164\157\137\x63\x72\145\x61\164\145\137\x63\x75\163\164\x6f\x6d\145\x72\x73"] == true ? 1 : 0;
+        $kY = !empty($hR["\x64\151\x73\141\142\154\145\137\142\62\143"]) && $hR["\144\151\x73\x61\142\x6c\x65\x5f\142\x32\143"] == true ? 1 : 0;
+        $ni = !empty($hR["\x66\x6f\x72\143\x65\x5f\141\x75\x74\x68\x65\x6e\164\151\x63\141\x74\x69\x6f\156\137\x77\151\164\x68\137\x69\144\x70"]) && $hR["\146\x6f\x72\143\x65\137\x61\x75\164\x68\145\x6e\164\x69\143\x61\x74\x69\x6f\156\137\167\151\164\x68\x5f\151\x64\160"] == true ? 1 : 0;
+        $j2 = !empty($hR["\141\x75\164\157\137\162\x65\144\x69\x72\x65\x63\x74\x5f\164\x6f\137\151\144\160"]) && $hR["\x61\165\x74\x6f\x5f\162\x65\x64\151\162\x65\x63\x74\x5f\x74\x6f\137\x69\144\x70"] == true ? 1 : 0;
+        $zL = !empty($hR["\x6c\151\x6e\x6b\137\x74\157\x5f\x69\156\151\164\151\x61\x74\145\137\163\x73\x6f"]) && $hR["\x6c\151\156\153\137\x74\157\x5f\x69\x6e\x69\164\x69\141\x74\145\x5f\x73\x73\157"] == true ? 1 : 0;
+        $Ql = !empty($hR["\165\x70\144\141\x74\x65\137\141\x74\164\x72\x69\142\x75\x74\145\163\137\x6f\156\137\154\x6f\x67\x69\x6e"]) ? $hR["\165\x70\x64\x61\164\x65\x5f\141\164\x74\x72\151\x62\x75\164\145\163\137\x6f\156\x5f\154\x6f\147\x69\x6e"] : "\165\x6e\143\x68\145\143\x6b\145\144";
+        $Hr = !empty($hR["\143\162\145\x61\164\145\137\x6d\x61\x67\x65\x6e\x74\x6f\x5f\x61\143\143\x6f\165\156\164\137\x62\171"]) ? $hR["\x63\x72\145\x61\x74\145\x5f\155\141\147\x65\x6e\164\x6f\137\x61\143\x63\x6f\x75\x6e\x74\137\142\171"] : '';
+        $Qx = !empty($hR["\145\155\141\x69\154\137\141\x74\164\x72\x69\x62\165\164\x65"]) ? $hR["\x65\x6d\x61\x69\154\x5f\141\164\164\162\151\x62\x75\164\x65"] : '';
+        $pf = !empty($hR["\165\x73\x65\162\156\141\155\x65\137\x61\x74\x74\162\x69\x62\165\x74\x65"]) ? $hR["\165\163\145\162\x6e\x61\x6d\145\137\x61\x74\164\x72\x69\142\165\x74\x65"] : '';
+        $Z3 = !empty($hR["\146\x69\162\163\x74\156\x61\x6d\x65\137\x61\164\164\162\x69\x62\x75\x74\x65"]) ? $hR["\x66\x69\x72\x73\x74\156\141\155\145\137\x61\164\164\162\x69\142\165\164\145"] : '';
+        $ph = !empty($hR["\154\141\x73\x74\x6e\x61\x6d\x65\x5f\x61\164\164\162\x69\142\x75\164\145"]) ? $hR["\154\x61\163\164\156\141\x6d\145\137\141\164\x74\x72\x69\x62\x75\x74\145"] : '';
+        $qS = !empty($hR["\147\x72\157\x75\160\137\141\x74\164\162\x69\x62\x75\164\145"]) ? $hR["\147\162\157\x75\x70\x5f\x61\164\164\162\x69\x62\x75\x74\145"] : '';
+        $pY = !empty($hR["\142\x69\154\x6c\151\x6e\x67\x5f\x63\x69\x74\171\x5f\x61\164\x74\162\x69\x62\x75\x74\x65"]) ? $hR["\x62\x69\154\x6c\x69\156\x67\137\143\151\x74\171\137\x61\164\x74\x72\x69\x62\x75\x74\x65"] : '';
+        $mP = !empty($hR["\142\151\x6c\154\x69\x6e\147\137\163\164\141\164\145\x5f\141\164\164\162\x69\142\165\164\x65"]) ? $hR["\x62\x69\154\x6c\151\x6e\x67\x5f\163\164\x61\x74\x65\137\x61\164\x74\162\x69\x62\165\164\145"] : '';
+        $gr = !empty($hR["\x62\x69\x6c\x6c\151\156\x67\x5f\x63\x6f\165\x6e\164\162\171\x5f\x61\164\164\162\151\x62\x75\164\145"]) ? $hR["\x62\x69\x6c\154\151\156\147\x5f\x63\157\x75\156\x74\x72\x79\137\x61\164\x74\x72\x69\x62\165\x74\x65"] : '';
+        $lF = !empty($hR["\x62\151\154\154\x69\156\x67\x5f\x61\144\x64\162\x65\x73\163\137\141\x74\164\x72\151\142\165\164\145"]) ? $hR["\142\x69\x6c\154\x69\x6e\147\137\141\x64\144\x72\145\163\x73\x5f\141\164\164\162\151\142\165\164\x65"] : '';
+        $M8 = !empty($hR["\142\151\x6c\x6c\151\x6e\147\137\x70\x68\x6f\156\x65\x5f\141\x74\x74\x72\x69\142\165\164\x65"]) ? $hR["\142\x69\x6c\154\x69\156\147\x5f\160\x68\x6f\156\145\137\141\x74\164\162\151\x62\165\164\x65"] : '';
+        $h5 = !empty($hR["\142\x69\x6c\x6c\x69\156\147\x5f\x7a\151\x70\x5f\x61\164\x74\162\151\x62\x75\x74\145"]) ? $hR["\x62\151\x6c\x6c\151\156\x67\137\x7a\x69\x70\x5f\141\164\x74\162\x69\142\165\164\145"] : '';
+        $se = !empty($hR["\163\x68\151\x70\x70\151\156\x67\137\143\151\x74\171\x5f\141\x74\x74\162\151\x62\x75\x74\x65"]) ? $hR["\x73\x68\x69\160\x70\151\156\147\137\143\151\x74\171\137\141\164\x74\162\151\x62\165\164\x65"] : '';
+        $zd = !empty($hR["\x73\x68\x69\x70\x70\x69\156\x67\x5f\163\164\141\x74\x65\137\141\164\164\x72\151\142\x75\x74\x65"]) ? $hR["\163\150\151\x70\160\151\x6e\x67\x5f\163\164\x61\x74\145\137\141\x74\x74\162\x69\x62\165\x74\x65"] : '';
+        $il = !empty($hR["\x73\x68\x69\x70\x70\x69\x6e\x67\x5f\x63\157\165\156\164\x72\x79\137\141\164\164\162\151\x62\x75\x74\145"]) ? $hR["\x73\x68\151\160\160\151\x6e\x67\x5f\x63\157\165\x6e\x74\162\x79\137\141\164\164\x72\x69\142\x75\x74\x65"] : '';
+        $We = !empty($hR["\x73\150\151\x70\x70\151\156\147\137\x61\x64\x64\162\x65\x73\163\137\141\x74\x74\x72\151\x62\x75\164\145"]) ? $hR["\x73\150\151\x70\x70\151\x6e\x67\137\141\144\144\162\x65\163\163\137\x61\x74\164\162\151\x62\x75\x74\145"] : '';
+        $Qn = !empty($hR["\163\x68\151\x70\160\x69\156\x67\x5f\x70\x68\x6f\x6e\x65\x5f\x61\x74\164\x72\x69\142\165\164\x65"]) ? $hR["\163\x68\x69\160\x70\x69\156\x67\x5f\x70\x68\157\x6e\145\137\x61\164\164\x72\x69\x62\x75\x74\145"] : '';
+        $Pt = !empty($hR["\163\x68\151\160\160\151\x6e\147\137\x7a\151\160\x5f\x61\x74\x74\x72\x69\142\x75\164\x65"]) ? $hR["\x73\x68\x69\x70\160\151\156\x67\x5f\172\151\x70\x5f\141\x74\x74\x72\x69\142\165\164\x65"] : '';
+        $Dx = !empty($hR["\x62\62\142\137\141\164\x74\162\151\x62\x75\x74\x65"]) ? $hR["\142\62\x62\137\x61\164\164\162\151\x62\165\164\x65"] : '';
+        $C5 = !empty($hR["\x63\165\x73\164\x6f\155\137\164\141\x62\154\145\x6e\x61\x6d\x65"]) ? $hR["\x63\x75\x73\x74\x6f\155\137\164\x61\142\154\145\x6e\141\155\x65"] : '';
+        $V9 = !empty($hR["\x63\165\x73\x74\157\x6d\137\x61\x74\164\162\151\x62\x75\164\x65\x73"]) ? $hR["\x63\x75\x73\164\x6f\x6d\137\x61\164\x74\x72\x69\x62\x75\164\145\163"] : '';
+        $WD = !empty($hR["\144\x6f\x5f\x6e\157\x74\x5f\x61\165\x74\x6f\x63\162\x65\141\164\145\x5f\x69\x66\137\162\157\x6c\145\x73\x5f\x6e\157\x74\137\155\x61\160\160\145\144"]) && $hR["\x64\157\137\156\x6f\x74\137\x61\165\164\157\x63\162\x65\141\164\145\137\x69\x66\137\162\157\154\x65\163\x5f\156\157\164\x5f\155\141\160\160\145\x64"] == true ? 1 : 0;
+        $VJ = !empty($hR["\165\160\144\141\164\145\137\142\x61\x63\153\145\156\x64\137\162\157\x6c\145\x73\137\157\x6e\x5f\163\163\157"]) && $hR["\x75\160\x64\x61\164\x65\x5f\x62\x61\143\x6b\x65\x6e\144\137\162\x6f\x6c\145\x73\x5f\x6f\156\x5f\163\163\157"] == true ? 1 : 0;
+        $mk = !empty($hR["\x75\160\x64\141\x74\x65\x5f\146\x72\157\x6e\164\145\x6e\144\137\147\162\x6f\165\160\163\x5f\157\156\137\x73\x73\x6f"]) && $hR["\165\x70\x64\141\164\145\x5f\146\x72\x6f\156\x74\x65\156\x64\137\x67\162\157\165\160\163\137\157\156\137\x73\x73\157"] == true ? 1 : 0;
+        $YO = !empty($hR["\x64\x65\x66\141\165\x6c\164\x5f\x67\162\x6f\165\x70"]) ? $hR["\144\x65\x66\x61\165\x6c\164\137\x67\x72\x6f\x75\160"] : '';
+        $Le = !empty($hR["\144\x65\146\141\x75\x6c\x74\137\x72\x6f\154\145"]) ? $hR["\x64\x65\146\x61\x75\154\x74\x5f\x72\157\154\145"] : '';
+        $Qu = !empty($hR["\x67\162\157\x75\x70\163\x5f\x6d\x61\160\x70\145\x64"]) ? $hR["\147\162\x6f\165\x70\163\x5f\x6d\141\160\x70\145\144"] : '';
+        $by = !empty($hR["\x72\157\x6c\145\x73\137\155\x61\x70\160\x65\x64"]) ? $hR["\x72\x6f\154\x65\163\137\x6d\x61\160\x70\x65\144"] : '';
+        $bw = !empty($hR["\x73\x61\155\154\137\154\157\147\157\x75\x74\x5f\162\145\x64\151\162\x65\x63\x74\x5f\165\162\x6c"]) ? $hR["\163\x61\155\x6c\x5f\154\157\x67\157\x75\164\x5f\x72\x65\x64\151\162\x65\x63\164\x5f\165\x72\x6c"] : '';
+        $Yx = !empty($hR["\163\141\x6d\x6c\x5f\145\x6e\141\142\154\145\x5f\x62\151\x6c\x6c\x69\x6e\x67\x61\x6e\x64\163\150\x69\160\160\x69\156\x67"]) ? $hR["\163\x61\155\x6c\x5f\145\x6e\x61\142\154\145\137\142\151\x6c\x6c\151\x6e\x67\141\x6e\144\163\x68\151\x70\160\151\x6e\147"] : "\x6e\157\x6e\145";
+        $lN = !empty($hR["\x73\x61\155\x6c\137\x73\x61\x6d\x65\141\163\142\151\154\x6c\151\156\x67"]) ? $hR["\x73\141\155\x6c\137\163\x61\155\145\141\x73\142\151\154\154\x69\156\147"] : "\156\157\156\x65";
+        $GE = !empty($hR["\x6d\157\x5f\163\141\155\154\137\150\145\x61\144\x6c\x65\x73\x73\137\163\x73\x6f"]) && $hR["\x6d\x6f\x5f\x73\141\x6d\154\x5f\x68\x65\x61\x64\154\x65\x73\163\137\x73\x73\157"] == true ? 1 : 0;
+        $Q7 = !empty($hR["\x6d\157\137\163\x61\155\x6c\137\146\162\x6f\x6e\164\x65\156\x64\137\x70\x6f\x73\164\x5f\165\x72\x6c"]) ? $hR["\155\157\x5f\163\141\155\154\x5f\146\x72\157\x6e\x74\145\156\144\137\x70\157\x73\164\x5f\x75\x72\x6c"] : '';
+        if (!is_null($hR)) {
+            goto wP;
         }
-        if (!empty($mo_idp_app_name))
-            $this->setIDPApps(
-                $mo_idp_app_name,
-                $mo_idp_entity_id,
-                $mo_idp_saml_login_url,
-                $mo_idp_saml_login_binding,
-                $mo_idp_saml_logout_url,
-                $mo_idp_saml_logout_binding,
-                $mo_idp_x509_certificate,
-                $mo_idp_response_signed,
-                $mo_idp_assertion_signed,
-                $mo_idp_show_admin_link,
-                $mo_idp_show_customer_link,
-                $mo_idp_auto_create_admin_users,
-                $mo_idp_auto_create_customers,
-                $mo_idp_disable_b2c,
-                $mo_idp_force_authentication_with_idp,
-                $mo_idp_auto_redirect_to_idp,
-                $mo_idp_link_to_initiate_sso,
-                $mo_idp_update_attributes_on_login,
-                $mo_idp_create_magento_account_by,
-                $mo_idp_email_attribute,
-                $mo_idp_username_attribute,
-                $mo_idp_firstname_attribute,
-                $mo_idp_lastname_attribute,
-                $mo_idp_group_attribute,
-                $mo_idp_billing_city_attribute,
-                $mo_idp_billing_state_attribute,
-                $mo_idp_billing_country_attribute,
-                $mo_idp_billing_address_attribute,
-                $mo_idp_billing_phone_attribute,
-                $mo_idp_billing_zip_attribute,
-                $mo_idp_shipping_city_attribute,
-                $mo_idp_shipping_state_attribute,
-                $mo_idp_shipping_country_attribute,
-                $mo_idp_shipping_address_attribute,
-                $mo_idp_shipping_phone_attribute,
-                $mo_idp_shipping_zip_attribute,
-                $mo_idp_b2b_attribute,
-                $mo_idp_custom_tablename,
-                $mo_idp_custom_attributes,
-                $mo_idp_do_not_autocreate_if_roles_not_mapped,
-                $mo_idp_update_backend_roles_on_sso,
-                $mo_idp_update_frontend_groups_on_sso,
-                $mo_idp_default_group,
-                $mo_idp_default_role,
-                $mo_idp_groups_mapped,
-                $mo_idp_roles_mapped,
-                $mo_saml_logout_redirect_url,
-                $billinandshippingchcekbox,
-                $sameasbilling,
-                $mo_saml_headless_sso,
-                $mo_saml_frontend_post_url);
-        $this->setStoreConfig(SPConstants::IDP_NAME, $mo_idp_app_name);
-        $this->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $mo_idp_app_name);
+        $this->checkIdpLimit();
+        goto kO;
+        wP:
+        $this->deleteIDPApps((int) $hR["\x69\144"]);
+        kO:
+        if (empty($gu)) {
+            goto DY;
+        }
+        $this->setIDPApps($gu, $FW, $I_, $CI, $tb, $fF, $zS, $LT, $GK, $y4, $t8, $Ab, $Cx, $kY, $ni, $j2, $zL, $Ql, $Hr, $Qx, $pf, $Z3, $ph, $qS, $pY, $mP, $gr, $lF, $M8, $h5, $se, $zd, $il, $We, $Qn, $Pt, $Dx, $C5, $V9, $WD, $VJ, $mk, $YO, $Le, $Qu, $by, $bw, $Yx, $lN, $GE, $Q7);
+        DY:
+        $this->setStoreConfig(SPConstants::IDP_NAME, $gu);
+        $this->setStoreConfig(SPConstants::DEFAULT_PROVIDER, $gu);
         $this->reinitConfig();
     }
-
-//change name result to redirectURL()
-
     public function checkIdpLimit()
     {
-        $count = $this->getcounttable();
+        $ov = $this->getcounttable();
         if ($this->check_license_plan(4)) {
-            $idpLimit = 2;
-        } elseif ($this->check_license_plan(3)) {
-            $idpLimit = $this->getWebsiteLimit();
-        } else {
-            $idpLimit = 1;
+            goto vo;
         }
-        if (!($count < $idpLimit)) {
-            $this->messageManager->addErrorMessage(__("To configure more Identity Providers (IDPs), please upgrade to the Multi-IDP plan."));
-            $this->responseFactory->create()->setRedirect($this->getAdminUrl('mospsaml/idps/index'))->sendResponse();
-            exit;
+        if ($this->check_license_plan(3)) {
+            goto Ov;
         }
+        $H5 = 1;
+        goto bE;
+        vo:
+        $H5 = 2;
+        goto bE;
+        Ov:
+        $H5 = $this->getWebsiteLimit();
+        bE:
+        if ($ov < $H5) {
+            goto Rm;
+        }
+        $this->messageManager->addErrorMessage(__("\124\157\40\x63\x6f\156\146\151\147\165\162\145\40\x6d\x6f\162\145\40\x49\144\x65\x6e\164\x69\x74\171\40\x50\x72\x6f\x76\151\x64\x65\x72\x73\x20\50\111\104\120\163\51\54\x20\160\x6c\145\x61\163\145\40\165\x70\x67\162\141\144\145\40\x74\x6f\x20\164\150\145\x20\x4d\165\x6c\x74\151\x2d\111\104\x50\x20\160\x6c\x61\156\x2e"));
+        $this->responseFactory->create()->setRedirect($this->getAdminUrl("\x6d\x6f\163\160\x73\x61\155\154\x2f\x69\144\x70\x73\57\x69\156\144\x65\170"))->sendResponse();
+        exit;
+        Rm:
     }
-
     public function getWebsiteLimit()
     {
         return AESEncryption::decrypt_data($this->getStoreConfig(SPConstants::WEBSITES_LIMIT), SPConstants::DEFAULT_TOKEN_VALUE);
     }
-
     public function reinitConfig()
     {
         $this->reinitableConfig->reinit();
     }
-
-    //CUSTOM LOG FILE OPERATION
-
-    public function isAllPageAutoRedirectEnabled($default_provider)
+    public function isAllPageAutoRedirectEnabled($Yh)
     {
-        $auto_redirect_app = $this->getStoreConfig(SPConstants::AUTO_REDIRECT_APP);
-        if ($auto_redirect_app == $default_provider) {
-            return $this->getStoreConfig(SPConstants::ALL_PAGE_AUTO_REDIRECT);
-        } else {
-            return 0;
-        }
-
-    }
-
-    public function isAutoRedirectEnabled($default_provider)
-    {
-        $auto_redirect_app = $this->getStoreConfig(SPConstants::AUTO_REDIRECT_APP);
-        if ($auto_redirect_app == $default_provider) {
-            return $this->getStoreConfig(SPConstants::AUTO_REDIRECT);
-        } else {
-            return 0;
-        }
-
-    }
-
-    public function result($url)
-    {
-
-        $this->responseFactory->create()->setRedirect($url)->sendResponse();
-        exit;
-    }
-
-    public function defaultlog($txt)
-    {
-        $this->logger->debug($txt);
-    }
-
-    /**
-     * This function check whether any custom log file exist or not.
-     */
-    public function isCustomLogExist()
-    {
-        if ($this->fileSystem->isExists("../var/log/mo_saml.log")) {
-            return 1;
-        } elseif ($this->fileSystem->isExists("var/log/mo_saml.log")) {
-            return 1;
+        $P6 = $this->getStoreConfig(SPConstants::AUTO_REDIRECT_APP);
+        if ($P6 == $Yh) {
+            goto UH;
         }
         return 0;
+        goto JT;
+        UH:
+        return $this->getStoreConfig(SPConstants::ALL_PAGE_AUTO_REDIRECT);
+        JT:
     }
-
+    public function isAutoRedirectEnabled($Yh)
+    {
+        $P6 = $this->getStoreConfig(SPConstants::AUTO_REDIRECT_APP);
+        if ($P6 == $Yh) {
+            goto JH;
+        }
+        return 0;
+        goto wr;
+        JH:
+        return $this->getStoreConfig(SPConstants::AUTO_REDIRECT);
+        wr:
+    }
+    public function result($At)
+    {
+        $this->responseFactory->create()->setRedirect($At)->sendResponse();
+        exit;
+    }
+    public function defaultlog($Op)
+    {
+        $this->logger->debug($Op);
+    }
+    public function isCustomLogExist()
+    {
+        if ($this->fileSystem->isExists("\56\x2e\x2f\166\x61\162\57\x6c\x6f\x67\x2f\155\157\137\x73\x61\x6d\x6c\56\x6c\157\x67")) {
+            goto wC;
+        }
+        if ($this->fileSystem->isExists("\166\141\x72\x2f\x6c\157\x67\x2f\x6d\x6f\x5f\163\x61\155\x6c\x2e\x6c\x6f\147")) {
+            goto II;
+        }
+        goto BU;
+        wC:
+        return 1;
+        goto BU;
+        II:
+        return 1;
+        BU:
+        return 0;
+    }
     public function deleteCustomLogFile()
     {
-        if ($this->fileSystem->isExists("../var/log/mo_saml.log")) {
-            $this->fileSystem->deleteFile("../var/log/mo_saml.log");
-        } elseif ($this->fileSystem->isExists("var/log/mo_saml.log")) {
-            $this->fileSystem->deleteFile("var/log/mo_saml.log");
+        if ($this->fileSystem->isExists("\x2e\x2e\x2f\166\141\x72\x2f\154\x6f\x67\57\155\157\137\163\141\x6d\154\x2e\x6c\157\147")) {
+            goto Od;
         }
+        if ($this->fileSystem->isExists("\x76\x61\x72\x2f\x6c\x6f\x67\57\155\157\137\163\141\x6d\x6c\56\154\x6f\147")) {
+            goto mv;
+        }
+        goto PZ;
+        Od:
+        $this->fileSystem->deleteFile("\x2e\56\x2f\166\141\x72\57\x6c\157\147\57\155\157\x5f\163\141\x6d\x6c\x2e\154\x6f\x67");
+        goto PZ;
+        mv:
+        $this->fileSystem->deleteFile("\166\x61\x72\x2f\154\157\x67\x2f\x6d\x6f\x5f\163\x61\x6d\x6c\x2e\x6c\157\147");
+        PZ:
     }
-
-    public function update_status($code)
+    public function update_status($wI)
     {
-
-        $customerKey = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
-        $apiKey = $this->getStoreConfig(SPConstants::API_KEY);
-        $content = Curl::update_status($customerKey, $apiKey, $code, $this->getBaseUrl());
-
-        return $content;
+        $rY = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
+        $UE = $this->getStoreConfig(SPConstants::API_KEY);
+        $Qz = Curl::update_status($rY, $UE, $wI, $this->getBaseUrl());
+        return $Qz;
     }
-
-    public function errorPageRedirection($errorMessage)
+    public function errorPageRedirection($zR)
     {
-
-        // Add an error message using the message manager
-        $this->messageManager->addErrorMessage($errorMessage);
-
-        // Create the result redirect
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setUrl($this->urlInterface->getUrl('noroute'));
-
-        return $resultRedirect;
+        $this->messageManager->addErrorMessage($zR);
+        $PJ = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $PJ->setUrl($this->urlInterface->getUrl("\x6e\157\x72\x6f\x75\x74\x65"));
+        return $PJ;
     }
-
-    public function redirectURL($url)
+    public function redirectURL($At)
     {
-        return $this->_response->setRedirect($url)->sendResponse();
+        return $this->_response->setRedirect($At)->sendResponse();
     }
-
-    //This function checks license expiry date and selects appropriate notifications to be sent.
-
     public function check_license_expiry_date()
     {
-        $key = $this->getStoreConfig(SPConstants::TOKEN);
-        $date = $this->getStoreConfig(SPConstants::LICENSE_EXPIRY_DATE);
-        $expiry = null;
-
-        if ($date == null) {
-            $content = json_decode(self::ccl(), true);
-            $expiry = array_key_exists('licenseExpiry', $content) ? (strtotime($content['licenseExpiry']) === false ? null : strtotime($content['licenseExpiry'])) : null;
-            if (!$this->isBlank($expiry)) {
-                $this->setStoreConfig(SPConstants::LICENSE_EXPIRY_DATE, AESEncryption::encrypt_data($expiry, $key));
-            }
-        } else {
-            $expiry = AESEncryption::decrypt_data($date, $key);
+        $On = $this->getStoreConfig(SPConstants::TOKEN);
+        $fq = $this->getStoreConfig(SPConstants::LICENSE_EXPIRY_DATE);
+        $XF = null;
+        if ($fq == null) {
+            goto XC;
         }
-        $expiryDate = new \DateTime("@$expiry");
-        $now = new \DateTime();
-        $daysTillExpiry = $now->diff($expiryDate)->format("%r%a");
-        if ($daysTillExpiry <= 30) {
-            $this->flushCache();
-            $licenseAlert = $this->getStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT);
-            if ($daysTillExpiry > 7) {
-                if ($licenseAlert == null) {
-                    $this->license_expiry_notification_before_expiry($daysTillExpiry);
-                    $this->setStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT, $daysTillExpiry);
-                }
-            } elseif ($daysTillExpiry <= 7 && $daysTillExpiry > 0) {
-                if ($licenseAlert == null || $licenseAlert > 7) {
-                    $this->license_expiry_notification_before_expiry($daysTillExpiry);
-                    $this->setStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT, $daysTillExpiry);
-                }
-            } elseif ($daysTillExpiry <= -5) {
-                if ($licenseAlert == null || $licenseAlert >= 0) {
-                    $this->license_expiry_notification_after_expiry();
-                    $this->setStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT, 0);
-                }
-            }
+        $XF = AESEncryption::decrypt_data($fq, $On);
+        goto Wc;
+        XC:
+        $Qz = json_decode(self::ccl(), true);
+        $XF = array_key_exists("\x6c\151\x63\x65\156\163\x65\x45\x78\160\x69\162\x79", $Qz) ? strtotime($Qz["\x6c\151\143\145\x6e\x73\x65\x45\x78\160\151\x72\x79"]) === false ? null : strtotime($Qz["\x6c\x69\x63\x65\156\163\x65\105\170\160\x69\x72\x79"]) : null;
+        if ($this->isBlank($XF)) {
+            goto nP;
         }
-        return $daysTillExpiry;
+        $this->setStoreConfig(SPConstants::LICENSE_EXPIRY_DATE, AESEncryption::encrypt_data($XF, $On));
+        nP:
+        Wc:
+        $lG = new \DateTime("\100{$XF}");
+        $l4 = new \DateTime();
+        $zU = $l4->diff($lG)->format("\x25\x72\x25\141");
+        if (!($zU <= 30)) {
+            goto py;
+        }
+        $this->flushCache();
+        $eP = $this->getStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT);
+        if ($zU > 7) {
+            goto J3;
+        }
+        if ($zU <= 7 && $zU > 0) {
+            goto D7;
+        }
+        if ($zU <= -5) {
+            goto VX;
+        }
+        goto WC;
+        J3:
+        if (!($eP == null)) {
+            goto x_;
+        }
+        $this->license_expiry_notification_before_expiry($zU);
+        $this->setStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT, $zU);
+        x_:
+        goto WC;
+        D7:
+        if (!($eP == null || $eP > 7)) {
+            goto Hh;
+        }
+        $this->license_expiry_notification_before_expiry($zU);
+        $this->setStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT, $zU);
+        Hh:
+        goto WC;
+        VX:
+        if (!($eP == null || $eP >= 0)) {
+            goto C9;
+        }
+        $this->license_expiry_notification_after_expiry();
+        $this->setStoreConfig(SPConstants::SAMLSP_LICENSE_ALERT_SENT, 0);
+        C9:
+        WC:
+        py:
+        return $zU;
     }
-
-    /**
-     * This function is used to get the user license associated
-     * with IDP plugin from the server by calling the ccl cURL
-     * function.
-     *
-     * @return JSONEncoded response
-     */
     public function ccl()
     {
-        $customerKey = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
-        $apiKey = $this->getStoreConfig(SPConstants::API_KEY);
-        $content = Curl::ccl($customerKey, $apiKey);
-        return $content;
+        $rY = $this->getStoreConfig(SPConstants::SAMLSP_KEY);
+        $UE = $this->getStoreConfig(SPConstants::API_KEY);
+        $Qz = Curl::ccl($rY, $UE);
+        return $Qz;
     }
-
-    /**
-     * Flush Magento Cache. This has been added to make
-     * sure the admin/user has a smooth experience and
-     * doesn't have to flush his cache over and over again
-     * to see his changes.
-     */
     public function flushCache()
     {
-        $types = array('db_ddl'); // we just need to clear the database cache
-        foreach ($types as $type) {
-            $this->cacheTypeList->cleanType($type);
+        $uy = array("\144\x62\x5f\144\144\154");
+        foreach ($uy as $qI) {
+            $this->cacheTypeList->cleanType($qI);
+            Qj:
         }
-
-        foreach ($this->cacheFrontendPool as $cacheFrontend) {
-            $cacheFrontend->getBackend()->clean();
+        Xf:
+        foreach ($this->cacheFrontendPool as $Gv) {
+            $Gv->getBackend()->clean();
+            B2:
         }
+        AW:
     }
-
-    /**
-     * This function is used to send an email notification to the user
-     * letting him know that their one year license is going to over within @param $days days and they need
-     * to renew their license. Calls the notify cURL call to send notifications
-     */
-    public function license_expiry_notification_before_expiry($days)
+    public function license_expiry_notification_before_expiry($cm)
     {
-        $customerKey = SPConstants::DEFAULT_CUSTOMER_KEY;
-        $apiKey = SPConstants::DEFAULT_API_KEY;
-        $toEmail = $this->getStoreConfig(SPConstants::SAMLSP_EMAIL);
-        $content = "Hello,<br><br>This email is to notify you that your 1 year license for Magento SAML SSO Plugin will expire
-                          within " . $days . " days.<br><br>
-                          <br><br>Contact us at <a href='mailto:magentosupport@xecurify.com'>magentosupport@xecurify.com</a> in order to renew your license.<br><br>Thanks,<br>miniOrange";
-        $subject = 'License Expiry - Magento SAML SSO Plugin';
-        CURL::notify($customerKey, $apiKey, $toEmail, $content, $subject);
+        $rY = SPConstants::DEFAULT_CUSTOMER_KEY;
+        $UE = SPConstants::DEFAULT_API_KEY;
+        $XV = $this->getStoreConfig(SPConstants::SAMLSP_EMAIL);
+        $Qz = "\x48\x65\154\x6c\x6f\54\x3c\142\162\x3e\x3c\142\x72\x3e\124\x68\x69\x73\x20\145\155\x61\x69\x6c\40\151\163\40\164\157\40\156\157\164\x69\x66\x79\x20\x79\157\x75\x20\164\x68\x61\164\x20\171\157\x75\162\40\x31\40\171\145\x61\162\x20\x6c\151\143\x65\156\x73\145\x20\146\157\x72\x20\115\x61\147\145\156\x74\157\40\123\101\115\x4c\x20\123\x53\x4f\40\x50\154\x75\147\151\x6e\40\x77\x69\x6c\x6c\40\x65\x78\x70\x69\162\x65\xd\12\40\x20\x20\x20\x20\x20\x20\40\40\x20\x20\x20\x20\x20\x20\x20\40\40\40\40\40\40\40\40\x20\40\167\151\164\150\x69\x6e\x20" . $cm . "\x20\x64\x61\171\x73\x2e\74\142\x72\x3e\74\142\162\76\xd\12\40\x20\40\x20\40\x20\x20\40\40\40\40\40\40\40\40\40\x20\x20\x20\x20\x20\x20\x20\x20\40\x20\x3c\142\x72\76\x3c\142\162\x3e\103\157\156\164\141\x63\x74\x20\165\163\40\141\x74\x20\x3c\x61\x20\150\x72\x65\x66\75\47\155\141\x69\x6c\164\157\72\x6d\141\147\x65\x6e\164\157\163\x75\x70\160\157\x72\x74\100\170\x65\143\165\162\x69\x66\171\x2e\143\157\155\x27\x3e\155\141\147\x65\156\164\157\x73\x75\160\x70\157\162\164\100\x78\145\x63\x75\x72\151\146\171\x2e\143\157\x6d\74\x2f\141\x3e\40\x69\156\x20\157\162\144\x65\x72\40\164\157\40\162\x65\156\145\167\40\x79\x6f\x75\x72\40\154\x69\143\145\x6e\x73\x65\x2e\x3c\x62\162\76\x3c\x62\x72\x3e\124\150\141\156\x6b\163\54\74\x62\x72\x3e\155\x69\156\151\x4f\x72\x61\x6e\x67\x65";
+        $fH = "\x4c\151\143\x65\156\163\145\40\105\x78\160\151\162\171\x20\x2d\40\x4d\x61\147\x65\156\x74\x6f\x20\x53\101\x4d\x4c\x20\123\x53\117\x20\120\x6c\x75\x67\x69\x6e";
+        CURL::notify($rY, $UE, $XV, $Qz, $fH);
     }
-
-    /**
-     * This function is used to send an email notification to the user
-     * letting him know that their one year license is over and the plugin
-     * has been deactivated on their site because they didn't renew within
-     * the 5 days grace period.
-     */
     public function license_expiry_notification_after_expiry()
     {
-        $customerKey = SPConstants::DEFAULT_CUSTOMER_KEY;
-        $apiKey = SPConstants::DEFAULT_API_KEY;
-        $toEmail = $this->getStoreConfig(SPConstants::SAMLSP_EMAIL);
-        $content = "Hello,<br><br>Your 1 year license for Magento SAML SSO Plugin has expired.<br><br>
-						Contact us at <a href='mailto:magentosupport@xecurify.com'>magentosupport@xecurify.com</a> in order to renew your license.<br><br>Thanks,<br>miniOrange";
-        $subject = 'License Expired - Magento SAML SSO Plugin ';
-        CURL::notify($customerKey, $apiKey, $toEmail, $content, $subject);
+        $rY = SPConstants::DEFAULT_CUSTOMER_KEY;
+        $UE = SPConstants::DEFAULT_API_KEY;
+        $XV = $this->getStoreConfig(SPConstants::SAMLSP_EMAIL);
+        $Qz = "\110\x65\x6c\x6c\x6f\x2c\x3c\142\162\x3e\74\x62\162\x3e\131\157\x75\x72\x20\61\x20\171\x65\141\x72\40\154\151\x63\x65\156\x73\x65\x20\x66\x6f\162\x20\115\x61\147\145\x6e\x74\x6f\40\x53\x41\115\114\x20\x53\123\x4f\x20\120\x6c\165\x67\x69\x6e\40\x68\x61\163\40\x65\x78\x70\x69\x72\x65\x64\56\74\142\x72\76\74\142\x72\x3e\15\xa\11\x9\11\11\11\x9\x43\x6f\156\164\x61\143\164\x20\165\x73\x20\x61\164\x20\x3c\141\x20\x68\162\x65\146\75\x27\x6d\x61\x69\x6c\x74\x6f\72\x6d\141\147\145\156\x74\157\x73\x75\x70\160\157\162\x74\100\170\145\x63\x75\x72\151\x66\x79\56\x63\x6f\x6d\47\x3e\x6d\x61\147\145\x6e\164\x6f\x73\165\160\x70\x6f\162\164\100\170\x65\x63\165\162\151\x66\171\56\x63\157\155\x3c\57\141\76\x20\151\x6e\40\x6f\x72\x64\x65\162\x20\164\x6f\40\162\145\156\x65\x77\40\171\x6f\x75\162\40\x6c\151\143\145\x6e\163\x65\x2e\x3c\x62\162\x3e\74\x62\162\76\x54\150\x61\x6e\x6b\x73\x2c\74\142\162\76\x6d\151\156\151\x4f\x72\x61\x6e\147\x65";
+        $fH = "\x4c\151\x63\x65\x6e\x73\x65\40\x45\170\x70\151\x72\x65\x64\40\55\40\x4d\141\x67\x65\x6e\x74\x6f\x20\123\101\115\114\40\x53\x53\117\40\x50\x6c\x75\x67\151\x6e\x20";
+        CURL::notify($rY, $UE, $XV, $Qz, $fH);
     }
-
-    //Function to check Website limit for the current plan
-
-    /** Get the Magento Version */
     public function getMagnetoVersion()
     {
         return $this->productMetadata->getVersion();
     }
-
-    //Function to check number of IDPs limit
-
-    public function update_customer_id_in_customer_visitor($customerid)
+    public function update_customer_id_in_customer_visitor($Mi)
     {
-
-        $this->log_debug("Updating customer_visitor table");
-
-        $connection = $this->resource->getConnection();
-        // Perform a select count query
-        $select = $connection->select()->from('customer_visitor', 'COUNT(*)');
-
-        // Execute the query and fetch the count
-        $rowCount = $connection->fetchOne($select);
-
-        $this->resource->getConnection()->update(
-            'customer_visitor', ['customer_id' => $customerid],
-            ["visitor_id = ?" => $rowCount]
-        );
-
+        $this->log_debug("\x55\160\x64\x61\x74\x69\156\x67\40\x63\x75\x73\x74\x6f\155\x65\x72\137\x76\151\163\151\x74\157\x72\x20\164\x61\x62\154\x65");
+        $oD = $this->resource->getConnection();
+        $d8 = $oD->select()->from("\x63\x75\x73\164\157\155\x65\162\x5f\166\x69\163\x69\164\x6f\x72", "\103\x4f\125\116\x54\50\x2a\51");
+        $uu = $oD->fetchOne($d8);
+        $this->resource->getConnection()->update("\143\165\x73\164\157\155\x65\x72\137\166\151\163\151\x74\x6f\162", ["\143\x75\x73\x74\157\155\x65\x72\x5f\151\144" => $Mi], ["\x76\x69\163\x69\x74\x6f\x72\137\151\144\x20\75\40\x3f" => $uu]);
     }
-
-    //Function to check if the RelayState URL matches any Magento Site
-
-    public function checkIfRelayStateIsMatchingAnySite($relayState)
+    public function checkIfRelayStateIsMatchingAnySite($Nf)
     {
-        $websites = $this->_storeManager->getWebsites();
-        foreach ($websites as $website) {
-            // Get all groups within the website
-            $storeGroups = $website->getGroups();
-            foreach ($storeGroups as $storeGroup) {
-                // Get all stores within the store group
-                $stores = $storeGroup->getStores();
-
-                foreach ($stores as $store) {
-                    // Do something with the store information
-                    $this->log_debug("Storecode: " . $store->getCode());
-                    $this->log_debug("StoreId: " . $store->getId());
-                    $this->log_debug("WebsiteId: " . $store->getWebsiteId());
-                    $this->log_debug("WebsiteName: " . $store->getWebsite()->getName());
-                    $this->log_debug("-------------------------------------------------------");
-
-                    if ($store->getWebsiteId() == $relayState) {
-                        $this->log_debug("Website Id matched with relayState - " . $store->getWebsiteId());
-                        return $store->getBaseUrl();
+        $ZB = $this->_storeManager->getWebsites();
+        foreach ($ZB as $Kt) {
+            $VQ = $Kt->getGroups();
+            foreach ($VQ as $m1) {
+                $kk = $m1->getStores();
+                foreach ($kk as $vH) {
+                    $this->log_debug("\x53\164\157\162\x65\143\157\x64\145\x3a\x20" . $vH->getCode());
+                    $this->log_debug("\x53\x74\x6f\x72\x65\111\144\72\x20" . $vH->getId());
+                    $this->log_debug("\127\x65\142\163\x69\x74\145\x49\144\x3a\x20" . $vH->getWebsiteId());
+                    $this->log_debug("\127\145\x62\x73\151\x74\145\116\x61\155\x65\72\x20" . $vH->getWebsite()->getName());
+                    $this->log_debug("\55\55\55\x2d\x2d\55\x2d\x2d\55\55\x2d\x2d\55\x2d\x2d\55\x2d\x2d\55\x2d\55\x2d\x2d\55\x2d\x2d\x2d\55\x2d\55\55\55\x2d\x2d\55\55\x2d\x2d\x2d\x2d\55\x2d\55\55\x2d\x2d\55\x2d\x2d\55\55\x2d\55\x2d\x2d");
+                    if (!($vH->getWebsiteId() == $Nf)) {
+                        goto SQ;
                     }
+                    $this->log_debug("\127\x65\142\x73\x69\x74\145\40\x49\144\40\155\x61\164\x63\150\x65\144\x20\x77\x69\164\x68\40\162\x65\x6c\141\x79\x53\x74\141\164\145\40\55\x20" . $vH->getWebsiteId());
+                    return $vH->getBaseUrl();
+                    SQ:
+                    cB:
                 }
+                eq:
+                Q5:
             }
+            qH:
+            Cf:
         }
+        wi:
         return false;
     }
-
-    //Function to fetch current store
     public function getCurrentStore()
     {
         return $this->_storeManager->getStore();
     }
-
-    //Function to fetch Current Website Id
     public function getCurrentWebsiteId()
     {
         return $this->_storeManager->getStore()->getWebsiteId();
     }
-
 }

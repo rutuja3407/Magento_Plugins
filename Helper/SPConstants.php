@@ -1,240 +1,172 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper;
 
-/** This class lists down constant values used all over our Module. */
 class SPConstants
 {
-    const MODULE_DIR = 'MiniOrange_SP';
-    const MODULE_TITLE = 'SAML 2.0 SP';
-    const MODULE_MULTISITE = '::multisite_settings';
-
-    //ACL Settings
-    const MODULE_BASE = '::SP';
-    const MODULE_SPSETTINGS = '::sp_settings';
-    const MODULE_IDPSETTINGS = '::idp_settings';
-    const MODULE_SIGNIN = '::signin_settings';
-    const MODULE_ATTR = '::attr_settings';
-    const MODULE_ROLE = '::role_settings';
-    const MODULE_FAQ = '::faq_settings';
-    const METADATA_DOWNLOAD = '::metadata';
-    const MODULE_ACCOUNT = '::account_settings';
-    const MODULE_SUPPORT = '::support';
-    const MODULE_UPGRADE = '::upgrade';
-
-    const MODULE_IMAGES = '::images/';
-    const MODULE_CERTS = '::certs/';
-    const MODULE_CSS = '::css/';
-    const MODULE_JS = '::js/';
-    const MODULE_GUIDES = '::idpsetupguides/';
-    const MODULE_METADATA = '::metadata/metadata.xml';
-
-    // request option parameter values
-    const LOGIN_ADMIN_OPT = 'loginAdminUser';
-    const TEST_CONFIG_OPT = 'testConfig';
-    const SAML_SSO_FALSE = 'saml_sso';
-
-    //database keys
-    const SESSION_INDEX = 'sessionIndex';
-    const NAME_ID = 'nameId';
-    const IDP_NAME = 'identityProviderName';
-    const X509CERT = 'certificate';
-    const RESPONSE_SIGNED = 'responseSigned';
-    const ASSERTION_SIGNED = 'assertionSigned';
-    const ISSUER = 'samlIssuer';
-    const DB_FIRSTNAME = 'firstname';
-    const DB_LASTNAME = 'lastname';
-    const AUTO_REDIRECT = 'autoRedirect';
-    const AUTO_REDIRECT_APP = 'autoRedirectappname';
-    const SAML_SSO_URL = 'ssourl';
-    const IDP_COUNT = 'idpcount';
-    const SAML_SLO_URL = 'logouturl';
-    const BINDING_TYPE = 'loginBindingType';
-    const LOGOUT_BINDING = 'logoutBindingType';
-    const FORCE_AUTHN = 'forceAuthn';
-    const SAMLSP_KEY = 'customerKey';
-    const SAMLSP_EMAIL = 'email';
-    const SAMLSP_PHONE = 'phone';
-    const SAMLSP_CNAME = 'cname';
-    const SAMLSP_FIRSTNAME = 'customerFirstName';
-    const SAMLSP_LASTNAME = 'customerLastName';
-    const SAMLSP_CKL = 'ckl';
-    const SAMLSP_LK = 'lk';
-    const BACKDOOR = 'backdoor';
-    const SHOW_ADMIN_LINK = 'showadminlink';
-    const SHOW_CUSTOMER_LINK = 'showcustomerlink';
-    const REG_STATUS = 'registrationStatus';
-    const API_KEY = 'apiKey';
-    const TOKEN = 'token';
-    const BUTTON_TEXT = 'buttonText';
-    const OTP_TYPE = 'otpType';
-    const AUTO_CREATE_ADMIN = 'mo_saml_auto_create_admin';
-    const AUTO_CREATE_CUSTOMER = 'mo_saml_auto_create_customer';
-    const DISABLE_B2C = 'mo_saml_disable_b2c';
-    const INSTALLATION_DATE = 'installation_date';
-    const IS_TRIAL_EXTENDED = 'is_trial_extended';
-    const SEND_EXPIRED_EMAIL = 'send_expired_email';
-    const LICENSE_EXPIRY_DATE = 'license_expiry';
-    const SAMLSP_LICENSE_ALERT_SENT = "samlsp_license_alert_sent";
-    const DEFAULT_TOKEN = 'default_token';
-    const DEFAULT_TOKEN_VALUE = 'E7XIXCVVUOYAIA2';
-    const MAGENTO_COUNTER = 'magento_counter';
-    const ADMIN_AUTO_REDIRECT = 'adminAutoRedirect';
-
-    // B2B related constants;
-    const B2B_STORE_URL = 'b2bStoreUrl';
-    const B2C_STORE_URL = 'b2cStoreUrl';
-    const B2B_ACCOUNT_ID = 'account_id';
-    const COMPANY_TABLE = 'company';
-    const AX_COMPANY_ATTR = 'ax_company_id';
-
-    //Attribute Mapping Constants (names)
-    const MAP_EMAIL = 'amEmail';
-    const MAP_USERNAME = 'amUsername';
-    const MAP_FIRSTNAME = 'amFirstName';
-    const MAP_LASTNAME = 'amLastName';
-    const MAP_GROUP = 'amGroupName';
-    const MAP_MAP_BY = 'amAccountMatcher';
-    const MAP_COMPANY_ID = 'amCompanyId';
-
-    const MAP_COUNTRY_BILLING = 'ambillingCountry';
-    const MAP_CITY_BILLING = 'ambillingCity';
-    const MAP_ADDRESS_BILLING = 'ambillingAddress';
-    const MAP_PHONE_BILLING = 'ambillingPhone';
-    const MAP_STATE_BILLING = 'ambillingState';
-    const MAP_ZIPCODE_BILLING = 'ambillingZipcode';
-
-    const MAP_COUNTRY_SHIPPING = 'amshippingCountry';
-    const MAP_CITY_SHIPPING = 'amshippingCity';
-    const MAP_ADDRESS_SHIPPING = 'amshippingAddress';
-    const MAP_PHONE_SHIPPING = 'amshippingPhone';
-    const MAP_STATE_SHIPPING = 'amshippingState';
-    const MAP_ZIPCODE_SHIPPING = 'amshippingZipcode';
-
-    //Default Attributes values if no mapping found
-    const DEFAULT_MAP_EMAIL = 'email';
-    const DEFAULT_MAP_USERN = 'username';
-    const DEFAULT_MAP_FN = 'firstName';
-    const DEFAULT_MAP_LN = 'lastName';
-    const DEFAULT_MAP_BY = 'email';
-    const DEFAULT_GROUP = 'General';
-    const DEFAULT_ROLE = 'Administrators';
-
-    //default  attribute mapping constants
-    const DEFAULT_MAP_CN = 'country';
-    const DEFAULT_MAP_CITY = 'city';
-    const DEFAULT_MAP_PHONE = 'phone';
-    const DEFAULT_MAP_ADD = 'streetaddress';
-    const DEFAULT_MAP_STATE = 'state';
-    const DEFAULT_MAP_ZIP = 'zipcode';
-    const CUSTOM_MAPPED = 'customAttributeMapping';
-
-
-    const MAP_DEFAULT_ROLE = 'defaultRole';
-    const MAP_DEFAULT_GROUP = 'defaultGroup';
-
-    const TEST_RELAYSTATE = 'testvalidate';
-    const UNLISTED_ROLE = 'unlistedRole';
-    const CREATEIFNOTMAP = 'createUserIfRoleNotMapped';
-    const ROLES_MAPPED = 'samlAdminRoleMapping';
-    const GROUPS_MAPPED = 'samlCustomerRoleMapping';
-    const UPDATEROLE = 'updateRole';
-    const UPDATEFRONTENDROLE = 'updateFrontendRole';
-    const UPDATEATTRIBUTE = 'updateAttibute';
-
-    //Tables
-    const MAP_TABLE = 'amTable';
-    const COLUMN_ENTITY = "entity_id";
-
-    //Column Not Found
-
-    const COLUMN_NOT_FOUND = "Column Not Found for the configured table.Please enter correct column name";
-
-
-    //SUFFIX_URLs
-    const SUFFIX_ISSUER_URL_PATH = 'mospsaml/metadata/index';
-    const SUFFIX_SAML_LOGIN_URL = 'mospsaml/actions/sendAuthnRequest';
-    const SUFFIX_SPOBSERVER = 'mospsaml/actions/spObserver';
-    const SUFFIX_ACCOUNT_LOGIN = 'customer/account/login';
-    const LOGOUT_AUTO_REDIRECT_URL = 'saml_postlogout_url';
-
-
-    //session data
-    const USER_LOGOUT_DETAIL = 'userDetails';
-    const SEND_RESPONSE = 'sendLogoutResponse';
-    const LOGOUT_REQUEST_ID = 'logoutRequestId';
-    const TXT_ID = 'miniorange/samlsp/transactionID';
-
-    //images
-    const IMAGE_RIGHT = 'right.png';
-    const IMAGE_WRONG = 'wrong.png';
-
-    //certs
-    const SP_KEY = 'sp-key.key';
-
-    const SP_KEYS = '-----BEGIN PRIVATE KEY-----
-	MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAN6Wb3vWL0VEwAOt
-	waY1SPqDyupjbxgs4dMWBvWZDMB/5y2XhqZ3utyaJcCt/sgTsHjk9AUC8/9UxlYO
-	ljo9V0TT1gu3gVkHCzq1/2Y0tLyM5gszZZ4nmWfa4iD26RdCguZLGkda5BvGspsg
-	LFoJJIGUAgvQHbz/C8VX/Dd875RVAgMBAAECgYEAvUonkqOJ3ZlixX4dgbAs2MX9
-	aSiYUHHStcU0s+WtH4Nl4LLMkoKdiX8Zfes6EYIVACqMjjp9r3SzmnmbLfn+XHbc
-	EZT+N40Cci+nedlDqhLgkfr2lg26DtZ3Sjk7kJnLHxhFVqWO4eaullcqn0wgqUyW
-	sJ8vX0tEeCK7L8DCtJ0CQQDu1cFN8aiQdZLf5oeZ5GHnZbEiKJ3oOw4GJLu3Odq2
-	dftZsdWHSSJ9pVD07+JuLUtV+vqdy1MKzDsJzbb2bETrAkEA7pXAP9PE5dzS4UPc
-	XUisvsMAbkAm48ga6MCbj/7I2BScsZ9+/dWBI8B4hXQ1sAfm7sdpb1utKlOY8927
-	EVI7vwJAP0aMfyz+Hr+3mPBHjsMOGTM8+bLPGx7COWhz/zgptNuPKxVNYBlFNQqe
-	ZzZCxDPl2LK0wSeEKcEwBwnkZmcK3wJBAOcgKx2qCRSk16ViGBhGTxJ91ez4OLRx
-	JaBU9l6IdAjf7uwjluJP8sqvqhGegmQFQ7INfBZkuVxHn+Se6JnfEAECQDJq0Fvi
-	Ezbp2ziTla1MCJ2DAVAka2ZpRtgAX5tT1ES8lrtgBfsXggj0mz2xnE78WfY4CLYs
-	CeDDPLctn+tuIns=
-	-----END PRIVATE KEY-----';
-
-    const ALTERNATE_KEY = 'miniorange_sp_priv_key.key';
-    const PUBLIC_KEY = 'sp-certificate.crt';
-
-    //SAML Constants
-    const SAML = 'SAML';
-    const AUTHN_REQUEST = 'AuthnRequest';
-    const SAML_RESPONSE = 'SamlResponse';
-    const WS_FED_RESPONSE = 'WsFedResponse';
-    const HTTP_REDIRECT = 'HttpRedirect';
-    const LOGOUT_REQUEST = 'LogoutRequest';
-
-    //OTP Constants
-    const OTP_TYPE_EMAIL = 'email';
-    const OTP_TYPE_PHONE = 'sms';
-
-    //Registration Status
-    const STATUS_VERIFY_LOGIN = "MO_VERIFY_CUSTOMER";
-    const STATUS_COMPLETE_LOGIN = "MO_VERIFIED";
-    const STATUS_VERIFY_EMAIL = "MO_OTP_EMAIL_VALIDATE";
-
-    //plugin constants
-    const DEFAULT_CUSTOMER_KEY = "16555";
-    const DEFAULT_API_KEY = "fFd2XcvTGDemZvbw1bcUesNJWEqKbbUq";
-    const APPLICATION_NAME = "MAGENTO_SAML_ENTERPRISE_EXTENSION";
-    const HOSTNAME = "https://login.xecurify.com";
-    const AREA_OF_INTEREST = 'Magento 2.0 Saml SP Enterprise Plugin'; //change according to license plan selected
-    const DB_USER = 'user';
-    const LICENSE_PLAN = 'magento_saml_enterprise_plan'; //change according to license plan selected
-
-    //constants for multisite check
-    const WEBSITE_COUNT = 'website count';
-    const WEBSITE_IDS = 'website ids';
-    const WEBSITES_LIMIT = 'websites limit';
-    const enable = 'checked';
-    const disable = 'unchecked';
-    const DEFAULT_PROVIDER = 'default_provider';
-
-    const ALL_PAGE_AUTO_REDIRECT = 'allPageAutoRedirect';
-    const SAML_LOGIN_URL = 'mospsaml/actions/sendAuthnRequest';
-
-    //Debug log
-    const ENABLE_DEBUG_LOG = 'debug_log_saml_all_inclusive';
-    const LOG_FILE_TIME = 'log_file_time';
-    const SEND_EMAIL = 'send_email';
-    const ADMINEMAIL = 'admin_email';
-    const VERSION = 'v13.1.2';
-
-
+    const MODULE_DIR = "\x4d\151\156\151\x4f\x72\x61\x6e\147\145\x5f\x53\x50";
+    const MODULE_TITLE = "\123\x41\115\114\x20\x32\x2e\x30\40\123\120";
+    const MODULE_MULTISITE = "\72\72\155\x75\x6c\164\151\163\151\x74\x65\x5f\163\x65\164\x74\151\x6e\x67\x73";
+    const MODULE_BASE = "\x3a\x3a\123\120";
+    const MODULE_SPSETTINGS = "\x3a\x3a\163\160\137\x73\x65\x74\164\151\156\147\x73";
+    const MODULE_IDPSETTINGS = "\x3a\72\x69\144\x70\x5f\x73\x65\x74\164\x69\x6e\x67\163";
+    const MODULE_SIGNIN = "\72\72\163\x69\x67\156\x69\x6e\137\163\x65\x74\x74\x69\x6e\147\x73";
+    const MODULE_ATTR = "\72\x3a\x61\164\164\x72\137\x73\x65\164\164\151\x6e\147\163";
+    const MODULE_ROLE = "\72\x3a\162\x6f\154\145\x5f\163\x65\164\164\x69\156\147\x73";
+    const MODULE_FAQ = "\x3a\72\x66\x61\x71\137\x73\145\164\164\x69\x6e\147\163";
+    const METADATA_DOWNLOAD = "\x3a\72\155\x65\164\x61\x64\141\x74\141";
+    const MODULE_ACCOUNT = "\72\x3a\141\143\143\x6f\x75\x6e\164\137\163\x65\x74\x74\151\156\x67\x73";
+    const MODULE_SUPPORT = "\72\x3a\x73\165\x70\x70\x6f\x72\164";
+    const MODULE_UPGRADE = "\x3a\72\x75\160\147\x72\x61\144\145";
+    const MODULE_IMAGES = "\72\72\x69\x6d\141\x67\x65\x73\x2f";
+    const MODULE_CERTS = "\72\72\143\145\162\x74\163\57";
+    const MODULE_CSS = "\72\72\x63\163\x73\x2f";
+    const MODULE_JS = "\72\x3a\152\163\x2f";
+    const MODULE_GUIDES = "\x3a\x3a\x69\144\160\x73\x65\164\165\x70\x67\165\151\144\145\163\57";
+    const MODULE_METADATA = "\72\x3a\x6d\145\164\x61\x64\141\164\141\x2f\x6d\145\164\x61\144\x61\x74\x61\x2e\170\x6d\x6c";
+    const LOGIN_ADMIN_OPT = "\x6c\157\x67\x69\x6e\101\x64\155\151\156\125\163\145\x72";
+    const TEST_CONFIG_OPT = "\164\145\163\164\103\x6f\x6e\x66\x69\147";
+    const SAML_SSO_FALSE = "\163\x61\155\x6c\137\163\163\157";
+    const SESSION_INDEX = "\163\145\163\x73\x69\x6f\156\x49\156\144\x65\170";
+    const NAME_ID = "\x6e\x61\x6d\145\111\144";
+    const IDP_NAME = "\x69\144\x65\156\x74\151\164\x79\120\x72\157\166\151\144\145\x72\116\x61\x6d\145";
+    const X509CERT = "\x63\x65\x72\x74\151\x66\x69\x63\141\164\x65";
+    const RESPONSE_SIGNED = "\x72\145\163\160\x6f\x6e\x73\145\123\x69\x67\x6e\145\x64";
+    const ASSERTION_SIGNED = "\x61\x73\x73\145\162\x74\x69\x6f\156\x53\151\x67\156\145\x64";
+    const ISSUER = "\163\141\155\154\111\x73\163\165\x65\162";
+    const DB_FIRSTNAME = "\146\x69\x72\x73\164\156\141\x6d\145";
+    const DB_LASTNAME = "\154\141\x73\164\x6e\141\x6d\145";
+    const AUTO_REDIRECT = "\141\165\164\x6f\122\x65\x64\151\162\145\x63\x74";
+    const AUTO_REDIRECT_APP = "\141\x75\164\x6f\x52\145\144\151\162\x65\143\164\141\160\160\x6e\x61\155\x65";
+    const SAML_SSO_URL = "\163\x73\157\165\162\x6c";
+    const IDP_COUNT = "\151\x64\160\143\x6f\165\x6e\x74";
+    const SAML_SLO_URL = "\x6c\157\x67\x6f\x75\164\165\162\154";
+    const BINDING_TYPE = "\x6c\157\x67\151\x6e\x42\151\x6e\144\x69\156\147\124\x79\160\x65";
+    const LOGOUT_BINDING = "\x6c\157\147\157\x75\164\x42\151\x6e\x64\151\156\x67\x54\171\x70\x65";
+    const FORCE_AUTHN = "\x66\x6f\162\x63\x65\101\x75\164\x68\156";
+    const SAMLSP_KEY = "\143\165\x73\x74\x6f\x6d\145\162\x4b\145\171";
+    const SAMLSP_EMAIL = "\x65\155\x61\151\154";
+    const SAMLSP_PHONE = "\160\150\x6f\156\x65";
+    const SAMLSP_CNAME = "\143\156\141\x6d\145";
+    const SAMLSP_FIRSTNAME = "\143\165\x73\164\x6f\x6d\145\x72\106\151\162\x73\164\x4e\x61\x6d\x65";
+    const SAMLSP_LASTNAME = "\143\165\163\164\x6f\155\x65\x72\x4c\x61\x73\164\116\x61\x6d\145";
+    const SAMLSP_CKL = "\x63\x6b\154";
+    const SAMLSP_LK = "\x6c\153";
+    const BACKDOOR = "\x62\141\143\x6b\x64\157\x6f\x72";
+    const SHOW_ADMIN_LINK = "\163\150\x6f\167\x61\x64\x6d\x69\x6e\x6c\151\156\153";
+    const SHOW_CUSTOMER_LINK = "\163\150\x6f\x77\143\x75\x73\x74\157\155\145\162\154\x69\156\153";
+    const REG_STATUS = "\x72\x65\x67\151\163\164\162\141\164\151\x6f\156\123\x74\x61\x74\165\163";
+    const API_KEY = "\141\x70\x69\113\x65\x79";
+    const TOKEN = "\164\157\153\145\156";
+    const BUTTON_TEXT = "\x62\x75\164\x74\157\156\124\145\170\x74";
+    const OTP_TYPE = "\157\164\160\x54\171\x70\x65";
+    const AUTO_CREATE_ADMIN = "\155\157\137\x73\x61\155\x6c\137\141\x75\164\157\x5f\x63\x72\145\141\164\x65\137\x61\x64\x6d\151\156";
+    const AUTO_CREATE_CUSTOMER = "\x6d\x6f\137\163\x61\x6d\154\137\141\x75\x74\x6f\137\x63\x72\145\x61\x74\145\x5f\143\x75\163\x74\x6f\155\x65\162";
+    const DISABLE_B2C = "\x6d\x6f\137\x73\x61\155\x6c\x5f\x64\x69\x73\141\x62\154\x65\137\142\x32\x63";
+    const INSTALLATION_DATE = "\x69\156\163\164\141\154\x6c\141\x74\x69\x6f\156\x5f\144\x61\x74\x65";
+    const IS_TRIAL_EXTENDED = "\151\x73\x5f\x74\162\151\x61\x6c\x5f\x65\170\164\x65\156\x64\x65\144";
+    const SEND_EXPIRED_EMAIL = "\x73\145\156\144\137\x65\x78\x70\x69\162\x65\144\137\145\155\x61\151\x6c";
+    const LICENSE_EXPIRY_DATE = "\154\151\143\x65\156\163\145\x5f\x65\x78\160\x69\162\x79";
+    const SAMLSP_LICENSE_ALERT_SENT = "\163\141\x6d\154\163\x70\x5f\x6c\x69\x63\x65\x6e\x73\x65\x5f\141\x6c\145\162\x74\x5f\x73\145\x6e\x74";
+    const DEFAULT_TOKEN = "\144\x65\146\x61\165\154\164\137\x74\x6f\x6b\145\x6e";
+    const DEFAULT_TOKEN_VALUE = "\105\67\130\111\130\x43\x56\x56\125\117\x59\101\111\101\x32";
+    const MAGENTO_COUNTER = "\155\x61\147\x65\156\164\157\137\143\157\x75\156\x74\x65\x72";
+    const B2B_STORE_URL = "\142\x32\142\123\x74\157\162\x65\125\x72\x6c";
+    const B2C_STORE_URL = "\x62\62\143\x53\164\x6f\162\x65\125\x72\x6c";
+    const B2B_ACCOUNT_ID = "\141\x63\x63\157\165\x6e\164\137\x69\x64";
+    const COMPANY_TABLE = "\143\x6f\x6d\160\141\156\171";
+    const AX_COMPANY_ATTR = "\141\x78\x5f\x63\157\x6d\160\141\156\171\137\151\144";
+    const MAP_EMAIL = "\x61\155\x45\x6d\141\x69\154";
+    const MAP_USERNAME = "\141\155\125\163\x65\x72\x6e\141\155\x65";
+    const MAP_FIRSTNAME = "\x61\x6d\x46\x69\162\x73\164\116\x61\155\145";
+    const MAP_LASTNAME = "\141\x6d\x4c\141\163\x74\x4e\141\155\x65";
+    const MAP_GROUP = "\141\155\107\162\x6f\165\x70\x4e\x61\155\145";
+    const MAP_MAP_BY = "\x61\155\x41\143\143\157\165\156\164\x4d\x61\164\x63\x68\x65\x72";
+    const MAP_COMPANY_ID = "\x61\x6d\103\157\x6d\x70\141\x6e\171\111\144";
+    const MAP_COUNTRY_BILLING = "\141\155\x62\151\x6c\154\151\156\147\x43\157\x75\x6e\164\162\x79";
+    const MAP_CITY_BILLING = "\141\155\142\151\154\154\151\x6e\147\103\151\x74\x79";
+    const MAP_ADDRESS_BILLING = "\141\x6d\142\x69\x6c\x6c\151\156\x67\101\x64\144\x72\x65\x73\x73";
+    const MAP_PHONE_BILLING = "\141\155\142\x69\154\x6c\151\x6e\147\x50\150\x6f\x6e\145";
+    const MAP_STATE_BILLING = "\x61\x6d\142\x69\154\154\x69\156\147\x53\x74\141\164\x65";
+    const MAP_ZIPCODE_BILLING = "\x61\x6d\142\151\x6c\154\151\x6e\x67\x5a\x69\x70\143\x6f\144\x65";
+    const MAP_COUNTRY_SHIPPING = "\141\155\163\x68\151\x70\160\x69\x6e\x67\103\x6f\165\156\x74\x72\x79";
+    const MAP_CITY_SHIPPING = "\141\x6d\163\x68\x69\x70\160\x69\x6e\x67\x43\151\x74\171";
+    const MAP_ADDRESS_SHIPPING = "\x61\155\x73\150\151\x70\x70\151\x6e\x67\x41\144\x64\x72\145\163\163";
+    const MAP_PHONE_SHIPPING = "\141\x6d\x73\x68\x69\160\x70\151\x6e\x67\x50\150\x6f\x6e\x65";
+    const MAP_STATE_SHIPPING = "\141\155\x73\x68\x69\x70\160\151\156\147\123\164\141\164\x65";
+    const MAP_ZIPCODE_SHIPPING = "\141\x6d\x73\x68\151\160\160\x69\156\x67\x5a\x69\x70\x63\x6f\x64\x65";
+    const DEFAULT_MAP_EMAIL = "\145\155\x61\151\x6c";
+    const DEFAULT_MAP_USERN = "\x75\163\x65\162\156\141\x6d\145";
+    const DEFAULT_MAP_FN = "\x66\x69\x72\x73\x74\116\x61\155\145";
+    const DEFAULT_MAP_LN = "\x6c\x61\163\164\x4e\141\x6d\145";
+    const DEFAULT_MAP_BY = "\x65\x6d\x61\151\x6c";
+    const DEFAULT_GROUP = "\107\x65\156\x65\162\141\x6c";
+    const DEFAULT_ROLE = "\101\144\x6d\151\156\151\x73\164\x72\141\x74\x6f\x72\x73";
+    const DEFAULT_MAP_CN = "\x63\157\x75\156\164\162\171";
+    const DEFAULT_MAP_CITY = "\143\151\164\x79";
+    const DEFAULT_MAP_PHONE = "\160\x68\157\x6e\x65";
+    const DEFAULT_MAP_ADD = "\163\164\162\x65\145\164\x61\144\x64\162\145\163\163";
+    const DEFAULT_MAP_STATE = "\163\164\x61\x74\x65";
+    const DEFAULT_MAP_ZIP = "\x7a\151\160\x63\x6f\x64\145";
+    const CUSTOM_MAPPED = "\143\165\163\x74\157\x6d\x41\x74\x74\x72\x69\x62\x75\164\x65\x4d\141\x70\x70\151\156\x67";
+    const MAP_DEFAULT_ROLE = "\144\145\x66\x61\165\x6c\x74\x52\x6f\154\145";
+    const MAP_DEFAULT_GROUP = "\144\145\146\x61\x75\x6c\x74\107\x72\x6f\x75\160";
+    const TEST_RELAYSTATE = "\x74\x65\x73\164\166\141\x6c\151\144\141\x74\x65";
+    const UNLISTED_ROLE = "\165\x6e\x6c\151\163\x74\145\144\122\x6f\154\145";
+    const CREATEIFNOTMAP = "\143\162\x65\x61\x74\x65\125\163\145\x72\111\146\122\157\x6c\145\116\x6f\164\115\x61\x70\160\145\x64";
+    const ROLES_MAPPED = "\x73\141\x6d\x6c\x41\x64\x6d\151\156\x52\x6f\x6c\145\x4d\x61\x70\160\151\156\x67";
+    const GROUPS_MAPPED = "\163\x61\155\x6c\103\165\163\164\157\x6d\145\x72\x52\157\154\145\115\x61\160\160\x69\156\147";
+    const UPDATEROLE = "\x75\160\x64\141\164\145\x52\157\154\145";
+    const UPDATEFRONTENDROLE = "\165\x70\144\141\164\x65\106\x72\x6f\x6e\x74\x65\x6e\x64\x52\157\x6c\x65";
+    const UPDATEATTRIBUTE = "\x75\x70\x64\x61\x74\145\x41\164\x74\x69\142\165\x74\x65";
+    const MAP_TABLE = "\141\155\124\141\x62\154\145";
+    const COLUMN_ENTITY = "\x65\156\164\151\x74\171\137\x69\144";
+    const COLUMN_NOT_FOUND = "\103\x6f\154\x75\155\156\40\116\x6f\164\40\x46\157\165\156\x64\x20\146\157\x72\40\164\150\x65\40\x63\157\156\x66\x69\x67\x75\162\x65\144\40\x74\x61\x62\154\x65\x2e\120\154\x65\141\163\145\x20\145\156\x74\x65\x72\x20\143\x6f\x72\x72\x65\143\164\x20\143\x6f\x6c\x75\155\156\x20\x6e\141\x6d\x65";
+    const SUFFIX_ISSUER_URL_PATH = "\x6d\x6f\x73\160\x73\141\x6d\154\x2f\155\x65\x74\141\144\x61\x74\x61\x2f\x69\x6e\144\x65\170";
+    const SUFFIX_SAML_LOGIN_URL = "\155\157\x73\160\x73\141\x6d\154\57\x61\x63\164\151\157\x6e\163\x2f\x73\145\x6e\144\x41\165\x74\x68\x6e\122\x65\x71\x75\145\x73\164";
+    const SUFFIX_SPOBSERVER = "\x6d\157\x73\160\163\141\155\x6c\57\141\x63\164\151\157\156\163\57\x73\x70\117\142\163\x65\162\x76\145\x72";
+    const SUFFIX_ACCOUNT_LOGIN = "\x63\165\163\x74\x6f\155\145\x72\57\x61\x63\x63\x6f\165\156\x74\x2f\x6c\157\147\151\156";
+    const LOGOUT_AUTO_REDIRECT_URL = "\x73\x61\x6d\154\137\160\x6f\x73\164\154\157\147\157\x75\164\x5f\165\162\x6c";
+    const USER_LOGOUT_DETAIL = "\x75\x73\x65\162\104\x65\164\141\151\x6c\x73";
+    const SEND_RESPONSE = "\x73\145\156\x64\114\157\x67\157\165\164\122\145\163\160\157\x6e\163\145";
+    const LOGOUT_REQUEST_ID = "\x6c\x6f\x67\157\165\x74\x52\x65\161\x75\145\163\164\x49\144";
+    const TXT_ID = "\155\151\156\x69\x6f\x72\141\x6e\x67\145\57\163\x61\x6d\x6c\163\x70\57\164\162\141\x6e\x73\141\x63\164\x69\x6f\x6e\111\104";
+    const IMAGE_RIGHT = "\x72\x69\147\x68\x74\x2e\x70\x6e\x67";
+    const IMAGE_WRONG = "\167\162\x6f\x6e\147\56\160\156\147";
+    const SP_KEY = "\163\x70\x2d\153\x65\x79\x2e\153\145\x79";
+    const SP_KEYS = "\x2d\x2d\55\x2d\55\102\105\x47\111\116\x20\x50\x52\x49\x56\x41\x54\x45\40\x4b\105\131\55\x2d\x2d\x2d\x2d\xd\xa\11\115\111\111\103\x64\x77\x49\x42\x41\x44\101\x4e\102\147\153\x71\150\x6b\x69\x47\71\x77\x30\x42\x41\x51\x45\106\101\101\x53\103\101\155\105\167\147\x67\x4a\144\x41\x67\x45\101\x41\x6f\107\102\101\116\x36\x57\x62\x33\x76\127\x4c\60\x56\105\167\101\117\x74\xd\xa\x9\167\141\x59\x31\123\120\161\x44\171\x75\x70\x6a\142\170\147\x73\x34\144\x4d\127\x42\166\x57\132\104\x4d\102\x2f\65\x79\x32\130\150\161\132\x33\x75\164\x79\x61\112\143\103\164\x2f\x73\147\x54\163\110\152\153\x39\101\x55\x43\70\x2f\71\125\170\x6c\x59\x4f\xd\xa\11\x6c\152\x6f\x39\x56\x30\124\x54\x31\147\x75\x33\147\126\153\110\x43\172\161\61\57\x32\131\x30\164\114\x79\x4d\x35\147\x73\x7a\x5a\x5a\64\156\155\127\x66\141\64\151\x44\x32\66\x52\144\103\x67\165\x5a\x4c\107\x6b\144\x61\65\102\x76\x47\x73\x70\x73\147\xd\xa\11\114\x46\x6f\112\x4a\111\107\x55\x41\147\166\x51\x48\x62\172\x2f\103\70\126\130\x2f\x44\144\x38\67\65\122\126\x41\x67\x4d\102\x41\x41\x45\103\x67\131\105\x41\x76\125\157\x6e\x6b\161\x4f\112\x33\x5a\x6c\151\170\130\x34\x64\x67\x62\101\163\x32\x4d\x58\71\xd\xa\x9\141\x53\151\x59\125\110\110\123\164\143\125\60\163\53\x57\x74\x48\x34\x4e\x6c\x34\x4c\114\115\153\157\x4b\x64\x69\x58\70\x5a\x66\145\163\66\105\131\x49\126\101\103\161\115\152\152\160\71\x72\x33\123\x7a\x6d\x6e\x6d\142\x4c\146\x6e\x2b\x58\110\142\x63\15\xa\x9\105\132\x54\53\116\64\x30\103\x63\151\x2b\x6e\145\x64\154\104\161\x68\114\147\153\146\x72\x32\x6c\x67\x32\x36\x44\164\x5a\63\123\152\x6b\67\153\112\x6e\114\110\x78\150\x46\126\x71\127\x4f\64\145\141\165\x6c\154\x63\x71\x6e\60\x77\147\161\125\x79\127\xd\xa\11\x73\x4a\70\x76\x58\x30\164\x45\x65\x43\x4b\67\114\x38\x44\x43\164\x4a\60\x43\121\x51\104\165\61\143\106\116\70\141\x69\x51\144\132\x4c\146\65\x6f\145\x5a\65\107\x48\x6e\132\x62\105\x69\x4b\x4a\x33\157\x4f\x77\64\x47\x4a\114\x75\63\117\x64\x71\62\15\12\x9\x64\146\x74\x5a\163\x64\127\110\123\x53\112\71\160\126\104\60\x37\53\x4a\165\114\125\x74\x56\x2b\166\x71\x64\x79\61\115\x4b\172\x44\163\112\x7a\x62\142\62\x62\x45\124\162\101\153\105\101\x37\x70\130\101\x50\x39\120\x45\x35\x64\x7a\x53\64\x55\120\x63\15\xa\x9\x58\125\151\163\x76\x73\x4d\x41\x62\153\x41\155\x34\x38\x67\x61\66\115\x43\x62\152\57\x37\x49\62\102\x53\x63\x73\132\71\53\x2f\144\x57\x42\111\x38\x42\x34\150\x58\121\61\x73\101\x66\155\x37\163\144\160\x62\61\x75\164\113\x6c\117\131\70\x39\62\67\xd\12\11\105\126\111\67\x76\x77\112\101\x50\x30\x61\x4d\x66\171\x7a\53\110\162\53\63\x6d\120\102\110\x6a\x73\x4d\x4f\107\124\x4d\x38\53\x62\x4c\x50\107\x78\67\x43\x4f\127\x68\172\x2f\x7a\147\x70\x74\x4e\x75\120\x4b\170\x56\x4e\x59\x42\154\106\116\x51\x71\x65\xd\12\11\132\172\132\103\170\x44\x50\154\62\x4c\113\x30\x77\x53\x65\x45\113\143\x45\x77\x42\167\156\x6b\x5a\155\143\x4b\63\167\x4a\102\x41\x4f\143\147\x4b\170\62\161\103\x52\123\x6b\61\66\126\x69\107\102\150\x47\x54\170\x4a\x39\x31\145\172\x34\x4f\x4c\122\x78\xd\xa\11\x4a\x61\102\125\71\x6c\66\111\144\x41\x6a\146\x37\x75\167\152\x6c\165\x4a\x50\70\163\161\x76\x71\150\x47\x65\147\x6d\x51\106\x51\x37\x49\116\x66\x42\132\x6b\165\126\170\110\156\x2b\x53\x65\x36\x4a\x6e\146\105\x41\105\x43\121\x44\x4a\161\60\106\166\151\xd\12\11\105\x7a\142\160\62\x7a\x69\124\x6c\141\61\x4d\103\112\62\104\101\x56\101\x6b\141\62\132\x70\x52\x74\x67\x41\x58\65\x74\124\61\x45\x53\70\154\x72\164\147\102\146\163\130\x67\x67\152\x30\x6d\x7a\62\x78\156\x45\67\70\127\146\131\64\103\114\x59\163\xd\12\11\x43\145\104\104\x50\114\143\x74\156\x2b\164\165\x49\x6e\x73\x3d\15\12\x9\x2d\x2d\55\55\x2d\x45\116\x44\x20\x50\122\x49\x56\101\x54\105\x20\113\105\x59\x2d\55\x2d\x2d\55";
+    const ALTERNATE_KEY = "\x6d\x69\156\151\157\162\141\x6e\147\145\137\163\160\137\160\162\x69\x76\x5f\153\145\x79\x2e\153\145\171";
+    const PUBLIC_KEY = "\163\160\x2d\143\145\162\x74\x69\x66\x69\143\x61\164\x65\56\x63\x72\x74";
+    const SAML = "\x53\x41\115\114";
+    const AUTHN_REQUEST = "\x41\165\164\x68\156\122\x65\x71\x75\x65\x73\x74";
+    const SAML_RESPONSE = "\123\x61\x6d\154\122\x65\163\x70\x6f\156\163\x65";
+    const WS_FED_RESPONSE = "\x57\x73\106\x65\144\122\145\x73\160\157\156\x73\145";
+    const HTTP_REDIRECT = "\x48\x74\x74\x70\122\x65\144\151\x72\x65\143\x74";
+    const LOGOUT_REQUEST = "\x4c\x6f\x67\157\x75\x74\122\145\x71\x75\x65\163\164";
+    const OTP_TYPE_EMAIL = "\x65\155\x61\151\154";
+    const OTP_TYPE_PHONE = "\163\x6d\163";
+    const STATUS_VERIFY_LOGIN = "\x4d\x4f\137\126\105\x52\111\x46\131\x5f\103\x55\123\x54\117\115\105\x52";
+    const STATUS_COMPLETE_LOGIN = "\x4d\117\137\x56\105\122\111\106\111\105\x44";
+    const STATUS_VERIFY_EMAIL = "\x4d\117\x5f\117\x54\x50\137\105\x4d\x41\x49\x4c\x5f\x56\101\x4c\111\104\x41\x54\x45";
+    const DEFAULT_CUSTOMER_KEY = "\x31\x36\x35\x35\x35";
+    const DEFAULT_API_KEY = "\146\106\x64\62\x58\143\x76\x54\107\x44\145\155\x5a\x76\x62\167\61\142\x63\125\145\163\x4e\x4a\x57\105\161\113\x62\x62\x55\x71";
+    const APPLICATION_NAME = "\115\101\107\x45\116\x54\117\x5f\123\x41\115\114\x5f\105\116\124\105\122\120\x52\111\123\105\x5f\105\130\x54\x45\x4e\x53\111\x4f\116";
+    const HOSTNAME = "\x68\x74\x74\x70\163\72\x2f\x2f\154\x6f\x67\x69\x6e\x2e\x78\x65\143\165\162\x69\x66\171\x2e\143\x6f\x6d";
+    const AREA_OF_INTEREST = "\115\141\147\145\x6e\164\157\x20\x32\56\x30\x20\x53\x61\x6d\x6c\x20\123\120\40\105\156\164\145\x72\160\162\x69\x73\x65\x20\x50\154\165\147\151\x6e";
+    const DB_USER = "\x75\163\x65\x72";
+    const LICENSE_PLAN = "\155\141\x67\x65\156\x74\x6f\x5f\163\x61\155\x6c\137\x70\x72\145\x6d\151\x75\x6d\137\x70\x6c\x61\156";
+    const WEBSITE_COUNT = "\167\x65\x62\x73\151\x74\x65\x20\143\157\165\x6e\164";
+    const WEBSITE_IDS = "\167\x65\142\x73\x69\x74\145\x20\x69\x64\163";
+    const WEBSITES_LIMIT = "\x77\x65\x62\163\151\x74\x65\x73\x20\x6c\151\x6d\151\164";
+    const enable = "\x63\x68\145\143\x6b\145\144";
+    const disable = "\x75\156\143\150\145\x63\x6b\x65\x64";
+    const DEFAULT_PROVIDER = "\144\145\146\x61\x75\154\x74\x5f\x70\162\x6f\166\151\x64\x65\162";
+    const ALL_PAGE_AUTO_REDIRECT = "\141\x6c\154\120\x61\x67\145\101\x75\164\x6f\x52\145\x64\151\x72\145\x63\164";
+    const SAML_LOGIN_URL = "\155\157\x73\160\x73\141\x6d\x6c\x2f\141\143\164\x69\x6f\x6e\163\57\x73\145\x6e\x64\x41\x75\164\x68\156\x52\x65\161\x75\x65\x73\x74";
+    const ENABLE_DEBUG_LOG = "\x64\145\x62\x75\147\x5f\x6c\157\147\137\163\141\155\154\x5f\141\154\x6c\137\151\156\143\x6c\165\x73\151\x76\x65";
+    const LOG_FILE_TIME = "\154\x6f\x67\x5f\146\151\154\145\137\x74\x69\155\145";
+    const SEND_EMAIL = "\163\145\x6e\x64\x5f\x65\155\141\x69\154";
+    const ADMINEMAIL = "\x61\144\155\151\156\137\145\x6d\x61\151\x6c";
+    const VERSION = "\166\61\x33\x2e\x31\x2e\x32";
 }

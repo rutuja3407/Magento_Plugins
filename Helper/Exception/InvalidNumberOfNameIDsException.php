@@ -1,24 +1,19 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Exception;
 
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * Exception denotes that the request or response has more
- * than 1 NameID.
- */
 class InvalidNumberOfNameIDsException extends \Exception
 {
     public function __construct()
     {
-        $message = SPMessages::parse('INVALID_NO_OF_NAMEIDS');
-        $code = 124;
-        parent::__construct($message, $code, NULL);
+        $qx = SPMessages::parse("\111\116\x56\x41\x4c\x49\104\x5f\116\117\137\x4f\106\x5f\x4e\101\x4d\105\111\x44\123");
+        $wI = 124;
+        parent::__construct($qx, $wI, NULL);
     }
-
     public function __toString()
     {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+        return __CLASS__ . "\72\x20\x5b{$this->code}\x5d\x3a\x20{$this->message}\xa";
     }
 }

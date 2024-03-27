@@ -1,17 +1,9 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Actions;
 
 use MiniOrange\SP\Helper\SPConstants;
-
-/**
- * This action class shows the attributes coming in the SAML
- * response in a tabular form indicating if the Test SSO
- * connection was successful. Is used as a reference to do
- * attribute mapping.
- *
- * @todo - Move the html code to template files and pick it from there
- */
 class ShowTestResultsAction extends BaseAction
 {
     private $attrs;
@@ -19,183 +11,112 @@ class ShowTestResultsAction extends BaseAction
     private $samlException;
     private $hasExceptionOccurred;
     private $nameId;
-
-    private $template = '<div style="font-family:Calibri;padding:0 3%;">{{header}}{{commonbody}}{{footer}}</div>';
-    private $successHeader = ' <div style="color: #3c763d;background-color: #dff0d8; padding:2%;margin-bottom:20px;text-align:center;
-                                    border:1px solid #AEDB9A; font-size:18pt;">TEST SUCCESSFUL
-                                </div>
-                                <div style="display:block;text-align:center;margin-bottom:4%;"><img style="width:15%;" src="{{right}}"></div>';
-
-    private $noEmailAddress = ' <div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;
-                                    border:1px solid #E6B3B2;font-size:18pt;">TEST FAILED
-                                </div>
-                                <div style="color: #b01212;background-color: #def2ce; padding:2%;margin-bottom:10px;text-align:center;
-                                    border:1px solid #AEDB9A; font-size:18pt;">User Email not found !. Please send User Email from Identity provider.
-                                </div>
-                                </div><div style="display:block;text-align:center;margin-bottom:4%;"><img style="width:15%;"src="{{wrong}}"></div>';
-
-    private $errorHeader = ' <div style="color: #a94442;background-color: #f2dede;padding: 15px;margin-bottom: 20px;text-align:center;
-                                    border:1px solid #E6B3B2;font-size:18pt;">TEST FAILED
-                                </div><div style="display:block;text-align:center;margin-bottom:4%;"><img style="width:15%;"src="{{wrong}}"></div>';
-
-    private $commonBody = '<span style="font-size:14pt;"><b>Hello</b>, {{email}}</span><br/>
-                                <p style="font-weight:bold;font-size:14pt;margin-left:1%;">ATTRIBUTES RECEIVED:</p>
-                                <table style="border-collapse:collapse;border-spacing:0; display:table;width:100%;
-                                    font-size:14pt;background-color:#EDEDED;">
-                                    <tr style="text-align:center;">
-                                        <td style="font-weight:bold;border:2px solid #949090;padding:2%;">ATTRIBUTE NAME</td>
-                                        <td style="font-weight:bold;padding:2%;border:2px solid #949090; word-wrap:break-word;">ATTRIBUTE VALUE</td>
-                                    </tr>{{tablecontent}}
-                                </table>';
-
-    private $exceptionBody = '<div style="margin: 10px 0;padding: 12px;color: #D8000C;background-color: #FFBABA;font-size: 16px;
-                                line-height: 1.618;">{{exceptionmessage}}</div>{{certErrorDiv}}{{samlResponseDiv}}';
-
-    private $certError = '<p style="font-weight:bold;font-size:14pt;margin-left:1%;">CERT CONFIGURED IN PLUGIN:</p><div style="color: #373B41;
-                                font-family: Menlo,Monaco,Consolas,monospace;direction: ltr;text-align: left;white-space: pre;
-                                word-spacing: normal;word-break: normal;font-size: 13px;font-style: normal;font-weight: 400;
-                                height: auto;line-height: 19.5px;border: 1px solid #ddd;background: #fafafa;padding: 1em;
-                                margin: .5em 0;border-radius: 4px;">{{certinplugin}}</div>
-                            <p style="font-weight:bold;font-size:14pt;margin-left:1%;">CERT FOUND IN RESPONSE:</p><div style="color: #373B41;
-                                font-family: Menlo,Monaco,Consolas,monospace;direction: ltr;text-align: left;white-space: pre;
-                                word-spacing: normal;word-break: normal;font-size: 13px;font-style: normal;font-weight: 400;
-                                height: auto;line-height: 19.5px;border: 1px solid #ddd;background: #fafafa;padding: 1em;
-                                margin: .5em 0;border-radius: 4px;">{{certfromresponse}}</div>';
-
-    private $samlResponse = '<p style="font-weight:bold;font-size:14pt;margin-left:1%;">SAML RESPONSE FROM IDP:</p><div style="color: #373B41;
-                                font-family: Menlo,Monaco,Consolas,monospace;direction: ltr;text-align: left;white-space: pre;
-                                word-spacing: normal;word-break: normal;font-size: 13px;font-style: normal;font-weight: 400;
-                                height: auto;line-height: 19.5px;border: 1px solid #ddd;background: #fafafa;padding: 1em;
-                                margin: .5em 0;border-radius: 4px;overflow:scroll">{{samlresponse}}</div>';
-
-    private $footer = ' <div style="margin:3%;display:block;text-align:center;">
-                            <input style="padding:1%;width:100px;background: #0091CD none repeat scroll 0% 0%;cursor: pointer;
-                                font-size:15px;border-width: 1px;border-style: solid;border-radius: 3px;white-space: nowrap;
-                                    box-sizing: border-box;border-color: #0073AA;box-shadow: 0px 1px 0px rgba(120, 200, 230, 0.6) inset;
-                                    color: #FFF;"type="button" value="Done" onClick="self.close();"></div>';
-
-    private $tableContent = "<tr><td style='font-weight:bold;border:2px solid #949090;padding:2%;'>{{key}}</td><td style='padding:2%;
-                                    border:2px solid #949090; word-wrap:break-word;'>{{value}}</td></tr>";
-
-    /**
-     * Execute function to execute the classes function.
-     */
+    private $template = "\74\144\x69\166\x20\163\164\171\x6c\x65\75\x22\146\x6f\156\x74\55\x66\x61\x6d\151\154\x79\x3a\x43\x61\154\x69\142\x72\x69\73\160\x61\x64\x64\151\x6e\x67\x3a\x30\x20\x33\45\73\42\x3e\x7b\173\x68\x65\141\x64\x65\162\x7d\175\173\173\143\x6f\155\155\x6f\156\142\x6f\x64\171\x7d\x7d\173\x7b\x66\157\157\x74\x65\162\x7d\x7d\x3c\57\144\151\166\76";
+    private $successHeader = "\x20\x3c\144\x69\x76\x20\x73\164\171\x6c\x65\75\x22\143\x6f\154\x6f\162\72\x20\43\x33\x63\x37\66\x33\144\x3b\x62\141\143\153\x67\x72\157\165\x6e\144\55\143\157\154\x6f\162\72\x20\x23\x64\x66\x66\x30\x64\x38\73\x20\160\141\x64\x64\151\x6e\147\72\x32\45\73\155\x61\162\x67\151\x6e\x2d\142\157\x74\164\x6f\x6d\72\62\x30\160\x78\73\x74\145\170\x74\x2d\x61\x6c\151\x67\156\x3a\x63\x65\x6e\x74\x65\x72\73\15\12\x20\40\40\x20\40\x20\x20\x20\40\x20\40\x20\40\40\x20\40\40\x20\x20\40\x20\40\x20\x20\x20\40\40\x20\40\40\40\x20\x20\40\x20\40\142\157\x72\144\x65\162\x3a\x31\x70\170\x20\163\x6f\154\151\x64\40\x23\101\105\x44\102\x39\x41\73\40\x66\157\156\x74\55\163\x69\172\145\72\x31\70\160\x74\x3b\x22\x3e\x54\x45\123\124\40\123\x55\103\x43\105\x53\x53\x46\x55\x4c\15\12\40\40\x20\40\x20\x20\40\40\x20\40\x20\40\40\40\x20\x20\40\40\x20\40\40\x20\40\x20\40\40\x20\x20\x20\40\40\x20\x3c\x2f\144\151\x76\x3e\15\12\x20\x20\40\x20\40\x20\x20\40\40\x20\40\x20\40\40\x20\40\40\40\x20\40\40\x20\40\x20\x20\40\40\x20\40\x20\x20\x20\x3c\x64\151\x76\x20\x73\164\x79\x6c\145\x3d\42\144\151\163\x70\154\141\x79\72\142\x6c\157\143\153\73\x74\x65\x78\x74\x2d\x61\x6c\x69\x67\156\72\x63\x65\x6e\164\x65\x72\73\x6d\141\x72\x67\x69\156\55\x62\x6f\x74\164\157\155\72\64\45\73\42\76\x3c\151\x6d\147\40\x73\164\x79\154\145\75\42\167\x69\144\164\150\x3a\61\65\x25\x3b\42\40\x73\x72\143\x3d\x22\173\173\x72\x69\147\x68\x74\175\175\x22\x3e\x3c\x2f\144\151\x76\x3e";
+    private $noEmailAddress = "\x20\74\144\151\166\x20\x73\164\x79\x6c\x65\x3d\x22\x63\157\x6c\157\162\x3a\40\x23\141\71\x34\64\64\62\73\x62\141\x63\153\147\x72\x6f\x75\156\x64\55\143\157\154\x6f\x72\x3a\40\43\x66\62\144\x65\x64\x65\73\x70\141\144\x64\151\x6e\x67\72\x20\61\65\160\x78\x3b\155\141\162\147\151\x6e\x2d\142\157\x74\x74\157\x6d\72\40\x32\60\160\x78\73\x74\x65\170\164\x2d\141\154\151\x67\x6e\72\x63\145\x6e\x74\x65\x72\73\xd\xa\40\40\40\x20\40\40\40\x20\x20\x20\40\x20\x20\40\40\x20\40\x20\40\x20\40\x20\40\40\40\x20\x20\x20\40\x20\x20\x20\x20\40\40\x20\142\x6f\162\144\145\162\72\x31\160\x78\40\x73\x6f\154\151\144\40\x23\x45\66\102\x33\x42\62\73\146\x6f\x6e\164\55\x73\151\172\x65\x3a\x31\70\160\164\73\42\76\124\x45\123\124\x20\106\x41\111\x4c\105\x44\xd\xa\x20\x20\x20\x20\40\40\x20\x20\40\x20\x20\x20\40\40\40\40\x20\x20\40\x20\x20\40\x20\x20\x20\40\40\x20\x20\x20\x20\x20\74\57\144\151\x76\x3e\15\12\x20\40\x20\40\40\x20\x20\40\x20\40\x20\x20\x20\x20\40\x20\x20\x20\x20\40\x20\x20\x20\40\40\40\x20\x20\40\x20\x20\x20\74\x64\151\166\x20\x73\x74\171\154\145\x3d\42\x63\x6f\x6c\x6f\162\x3a\x20\43\142\x30\x31\62\x31\62\73\x62\x61\x63\153\x67\x72\x6f\x75\156\x64\x2d\143\x6f\x6c\x6f\162\72\x20\x23\144\145\x66\x32\x63\145\x3b\40\x70\x61\x64\x64\x69\x6e\x67\x3a\62\x25\73\155\x61\x72\x67\151\x6e\x2d\x62\x6f\x74\x74\x6f\x6d\72\x31\x30\x70\x78\x3b\164\x65\x78\x74\x2d\141\x6c\151\147\x6e\x3a\143\x65\x6e\164\145\162\x3b\15\12\40\40\40\40\x20\x20\40\40\x20\40\x20\x20\40\40\x20\40\x20\x20\40\x20\x20\40\x20\x20\40\40\x20\x20\x20\x20\40\x20\x20\x20\x20\40\142\157\x72\x64\x65\162\72\61\160\170\40\163\x6f\x6c\151\x64\x20\x23\x41\105\x44\x42\71\x41\x3b\x20\x66\x6f\156\164\55\x73\x69\x7a\145\72\x31\x38\x70\x74\x3b\42\76\x55\x73\x65\162\x20\x45\x6d\x61\151\x6c\40\x6e\x6f\164\x20\146\x6f\x75\x6e\144\40\41\56\x20\120\154\x65\x61\x73\x65\40\163\145\x6e\x64\40\125\x73\145\x72\40\105\x6d\x61\x69\154\x20\146\x72\157\155\40\x49\x64\x65\x6e\164\151\x74\x79\40\160\x72\157\x76\151\144\145\x72\x2e\xd\12\40\40\40\x20\40\x20\x20\x20\x20\40\40\x20\x20\x20\x20\x20\x20\40\40\40\40\x20\x20\x20\40\x20\x20\x20\x20\40\40\x20\x3c\x2f\x64\x69\166\76\xd\xa\x20\x20\40\40\40\x20\x20\x20\40\x20\40\40\x20\40\40\40\40\x20\x20\x20\40\40\40\40\40\x20\x20\x20\x20\40\x20\40\x3c\57\x64\x69\x76\76\74\144\x69\166\x20\x73\x74\x79\154\145\x3d\42\144\151\x73\x70\154\141\171\72\142\154\x6f\x63\153\x3b\164\145\x78\x74\x2d\141\x6c\151\x67\156\72\x63\x65\156\x74\145\x72\73\x6d\x61\162\147\151\x6e\x2d\x62\x6f\x74\x74\157\155\72\x34\x25\73\x22\x3e\x3c\151\x6d\147\x20\x73\x74\x79\154\x65\75\x22\x77\151\144\164\x68\x3a\x31\x35\45\x3b\x22\163\x72\143\75\42\173\x7b\167\x72\x6f\156\x67\175\175\42\x3e\74\57\x64\151\x76\76";
+    private $errorHeader = "\x20\x3c\x64\x69\x76\x20\x73\164\x79\x6c\x65\x3d\x22\143\x6f\x6c\x6f\162\x3a\40\43\x61\71\64\x34\64\62\x3b\142\141\143\153\x67\162\x6f\x75\x6e\x64\55\143\x6f\154\x6f\x72\x3a\x20\43\146\62\144\x65\x64\x65\73\x70\141\144\x64\x69\x6e\147\x3a\x20\x31\x35\160\x78\x3b\x6d\x61\162\147\x69\x6e\55\x62\x6f\x74\164\157\155\x3a\40\x32\x30\160\170\73\164\x65\170\x74\x2d\141\x6c\x69\147\156\72\143\145\156\164\145\x72\x3b\xd\xa\x20\x20\x20\x20\40\40\x20\40\x20\40\x20\x20\40\x20\x20\40\x20\x20\x20\40\40\x20\x20\x20\x20\x20\x20\40\40\x20\40\40\x20\x20\x20\x20\x62\x6f\x72\144\x65\162\x3a\61\160\170\x20\x73\157\x6c\151\x64\x20\43\105\66\102\63\x42\x32\73\146\x6f\156\x74\x2d\x73\151\172\x65\x3a\61\70\160\164\73\x22\76\124\x45\x53\x54\x20\106\101\x49\114\105\x44\xd\xa\x20\40\40\40\x20\x20\x20\x20\x20\x20\40\x20\40\40\x20\x20\40\40\40\x20\x20\40\40\x20\40\x20\x20\x20\40\40\40\40\74\x2f\x64\x69\x76\76\74\x64\x69\x76\40\x73\164\171\154\x65\x3d\42\144\x69\x73\x70\x6c\x61\171\72\142\154\x6f\143\x6b\73\164\x65\x78\164\55\x61\x6c\151\147\156\72\143\145\x6e\x74\145\x72\73\x6d\x61\162\x67\151\156\55\142\x6f\164\x74\157\x6d\x3a\x34\45\73\x22\76\74\151\155\147\x20\x73\164\171\154\145\75\42\x77\151\144\164\150\72\x31\65\45\73\x22\163\162\143\x3d\x22\173\173\167\x72\157\x6e\147\175\175\x22\76\74\x2f\x64\151\x76\76";
+    private $commonBody = "\74\x73\160\141\156\x20\163\x74\x79\x6c\x65\75\x22\146\x6f\x6e\x74\55\x73\151\172\145\72\x31\x34\x70\164\73\42\76\x3c\142\x3e\110\145\x6c\x6c\x6f\74\x2f\x62\76\54\x20\x7b\x7b\145\155\x61\151\x6c\175\x7d\x3c\57\163\160\x61\156\x3e\x3c\x62\162\57\76\15\xa\x20\40\40\40\40\40\40\x20\x20\40\x20\x20\40\x20\x20\x20\x20\x20\40\x20\40\40\40\40\40\40\x20\x20\40\40\40\40\74\160\40\x73\164\171\154\x65\75\42\146\157\x6e\x74\55\x77\145\151\147\150\x74\x3a\x62\x6f\x6c\144\73\x66\x6f\x6e\164\55\163\x69\x7a\145\x3a\x31\64\x70\164\73\x6d\141\162\147\151\156\x2d\154\x65\146\x74\x3a\61\45\x3b\x22\x3e\101\124\x54\x52\111\102\125\x54\x45\x53\40\122\x45\x43\x45\x49\126\x45\104\x3a\74\x2f\160\76\15\xa\x20\40\x20\x20\x20\x20\x20\x20\40\40\40\x20\x20\x20\40\40\40\40\40\x20\x20\x20\40\40\x20\40\x20\x20\x20\40\x20\x20\74\164\x61\x62\154\145\x20\163\164\x79\x6c\x65\x3d\x22\142\x6f\162\144\145\x72\55\x63\x6f\x6c\154\x61\160\163\145\72\x63\x6f\x6c\154\x61\160\x73\145\73\x62\x6f\x72\144\145\x72\x2d\x73\x70\141\143\x69\x6e\147\x3a\x30\73\x20\144\151\163\160\x6c\141\171\72\164\141\142\x6c\145\x3b\x77\x69\x64\164\x68\x3a\x31\x30\60\45\x3b\15\xa\x20\40\40\40\40\x20\40\x20\40\40\40\40\40\40\40\40\x20\40\40\x20\40\x20\40\40\40\x20\x20\40\x20\x20\x20\x20\x20\40\40\x20\x66\x6f\x6e\164\55\x73\x69\172\145\x3a\x31\64\160\x74\73\x62\x61\143\153\x67\162\157\x75\156\x64\x2d\x63\x6f\154\157\x72\x3a\x23\x45\104\105\104\105\104\73\42\76\15\xa\40\x20\x20\40\x20\40\40\x20\x20\x20\x20\40\x20\x20\x20\40\40\40\x20\40\40\x20\x20\x20\x20\x20\x20\x20\40\40\x20\x20\x20\40\x20\x20\74\164\162\x20\x73\x74\171\154\x65\75\x22\x74\145\x78\x74\55\141\x6c\151\x67\156\x3a\143\x65\x6e\x74\145\x72\73\x22\76\15\12\x20\x20\40\40\x20\x20\40\x20\x20\x20\40\x20\40\x20\x20\x20\40\x20\x20\40\40\40\40\x20\40\x20\40\x20\40\x20\40\40\x20\40\x20\x20\x20\x20\x20\x20\x3c\164\144\x20\163\164\x79\x6c\145\x3d\x22\x66\x6f\156\x74\55\167\x65\151\x67\x68\x74\72\x62\x6f\x6c\x64\73\x62\x6f\162\144\x65\x72\72\x32\160\x78\x20\x73\157\154\x69\144\40\x23\71\64\x39\60\71\60\73\x70\x61\144\x64\151\x6e\147\72\x32\x25\73\x22\76\x41\124\124\122\x49\102\125\124\x45\40\116\x41\x4d\105\74\57\164\144\76\xd\xa\x20\40\40\40\40\x20\x20\x20\40\40\40\40\40\x20\40\40\x20\40\40\40\x20\x20\40\x20\x20\40\40\40\40\x20\40\x20\40\40\40\40\x20\40\40\40\74\x74\x64\x20\163\x74\x79\x6c\x65\75\x22\x66\157\x6e\x74\55\x77\x65\151\147\x68\x74\x3a\x62\157\x6c\144\x3b\x70\x61\x64\x64\x69\x6e\x67\x3a\62\45\73\x62\x6f\162\x64\x65\162\x3a\62\160\x78\40\x73\157\x6c\151\144\40\43\x39\x34\71\60\x39\x30\x3b\40\x77\157\162\x64\x2d\x77\162\141\x70\72\142\162\x65\x61\x6b\x2d\x77\157\162\144\x3b\42\x3e\x41\x54\x54\122\x49\x42\x55\x54\x45\x20\x56\x41\114\125\105\x3c\57\164\144\x3e\xd\xa\x20\40\x20\40\40\x20\40\40\40\40\40\40\40\40\40\40\40\x20\40\40\40\x20\40\40\x20\40\40\40\x20\x20\40\x20\x20\40\40\x20\x3c\57\164\162\x3e\173\x7b\x74\x61\142\154\145\x63\x6f\156\x74\x65\x6e\164\175\175\15\xa\40\40\40\x20\x20\x20\40\x20\x20\x20\x20\x20\x20\x20\x20\40\x20\x20\40\x20\40\x20\x20\x20\40\40\40\x20\40\40\40\x20\74\x2f\164\141\x62\x6c\145\x3e";
+    private $exceptionBody = "\74\144\151\x76\40\163\164\171\x6c\145\x3d\42\x6d\141\x72\x67\x69\x6e\72\40\x31\60\x70\x78\40\x30\x3b\x70\x61\x64\144\151\x6e\x67\72\40\61\62\x70\x78\73\143\157\x6c\x6f\162\x3a\x20\43\x44\x38\x30\60\x30\103\73\x62\x61\143\153\147\x72\x6f\x75\156\x64\x2d\143\x6f\154\157\162\x3a\x20\43\106\x46\102\x41\x42\101\73\x66\x6f\156\x74\55\163\151\172\x65\72\x20\61\66\160\170\x3b\15\xa\x20\40\40\x20\40\x20\x20\40\40\40\x20\40\x20\x20\x20\x20\x20\40\x20\x20\40\x20\x20\x20\40\40\40\40\x20\40\x20\40\154\151\x6e\145\x2d\x68\145\151\x67\x68\x74\x3a\40\61\56\66\61\70\x3b\42\76\173\x7b\145\170\143\145\x70\x74\x69\x6f\156\155\x65\x73\x73\x61\x67\145\x7d\x7d\x3c\57\144\151\x76\76\173\x7b\x63\145\162\x74\x45\162\162\x6f\x72\104\x69\x76\175\x7d\173\x7b\163\141\x6d\154\x52\145\163\x70\157\156\x73\x65\104\x69\x76\175\175";
+    private $certError = "\74\160\40\163\164\x79\154\145\x3d\x22\146\157\156\164\55\x77\145\x69\x67\150\164\72\142\x6f\x6c\144\x3b\x66\157\x6e\x74\55\163\x69\172\x65\x3a\x31\64\x70\164\73\155\x61\x72\x67\x69\156\x2d\x6c\145\146\164\72\61\x25\x3b\x22\76\x43\105\122\x54\40\x43\x4f\x4e\106\111\x47\125\122\105\x44\x20\111\x4e\x20\120\x4c\x55\x47\111\x4e\72\74\x2f\x70\76\74\x64\x69\166\40\163\164\x79\154\145\75\x22\143\157\x6c\x6f\162\72\40\43\x33\x37\63\102\64\61\x3b\xd\xa\40\x20\40\40\40\x20\40\40\40\x20\x20\40\40\x20\40\x20\x20\x20\40\x20\x20\40\x20\40\40\x20\x20\40\x20\40\x20\x20\146\157\156\164\55\146\x61\x6d\x69\x6c\171\72\40\x4d\x65\x6e\x6c\157\54\115\157\156\141\x63\x6f\54\x43\157\x6e\x73\x6f\154\141\163\x2c\x6d\157\x6e\157\x73\x70\141\143\145\73\x64\151\x72\145\x63\x74\x69\157\156\72\x20\x6c\164\162\73\164\x65\170\x74\55\141\x6c\151\x67\156\x3a\40\154\x65\146\164\x3b\x77\150\x69\x74\145\55\x73\x70\x61\143\x65\72\x20\x70\162\145\73\15\xa\40\x20\x20\x20\x20\40\40\40\x20\x20\40\40\40\40\40\x20\40\40\40\40\40\40\x20\40\40\x20\40\x20\40\40\x20\x20\167\x6f\162\x64\55\163\160\x61\143\x69\156\x67\72\40\156\157\162\x6d\x61\x6c\73\167\x6f\162\x64\x2d\142\162\x65\x61\153\72\x20\x6e\157\x72\x6d\x61\x6c\x3b\x66\157\x6e\164\55\x73\151\x7a\145\72\40\x31\63\x70\x78\73\x66\x6f\156\164\55\x73\x74\x79\154\x65\x3a\40\156\157\x72\x6d\141\x6c\73\146\157\x6e\x74\x2d\x77\x65\x69\x67\x68\x74\x3a\x20\x34\x30\60\x3b\xd\12\40\40\40\x20\x20\40\40\x20\40\x20\40\x20\40\40\x20\x20\40\40\x20\x20\40\x20\x20\x20\x20\x20\x20\40\x20\x20\x20\40\150\145\151\x67\x68\x74\72\40\141\165\x74\157\x3b\x6c\151\156\145\55\150\x65\151\x67\150\164\72\x20\x31\x39\x2e\65\160\x78\x3b\x62\157\x72\x64\145\x72\x3a\x20\x31\x70\x78\40\163\157\154\x69\144\x20\x23\x64\x64\144\x3b\142\141\x63\153\x67\x72\157\165\x6e\144\x3a\x20\x23\146\141\x66\x61\146\141\73\160\x61\144\x64\x69\x6e\x67\72\x20\61\x65\x6d\x3b\15\xa\40\x20\40\x20\x20\40\x20\40\40\x20\40\x20\40\x20\x20\40\40\40\40\40\x20\40\x20\x20\40\x20\40\40\40\x20\40\x20\155\x61\162\x67\151\156\72\x20\56\65\145\x6d\40\x30\x3b\142\157\162\144\145\x72\55\x72\x61\x64\x69\x75\x73\x3a\40\x34\x70\170\x3b\x22\x3e\173\173\x63\x65\x72\164\151\x6e\x70\154\x75\147\x69\x6e\175\175\74\x2f\x64\151\166\x3e\15\xa\x20\40\40\40\x20\x20\x20\x20\x20\x20\x20\40\x20\x20\40\40\40\x20\40\40\x20\40\x20\40\x20\40\40\40\74\x70\x20\163\164\171\x6c\145\75\42\x66\x6f\156\x74\x2d\167\x65\151\147\x68\164\x3a\x62\x6f\x6c\144\73\x66\157\x6e\x74\x2d\163\x69\x7a\x65\x3a\61\64\160\164\73\155\x61\162\147\x69\156\x2d\154\x65\146\164\x3a\61\x25\73\42\76\x43\x45\x52\x54\x20\106\117\125\116\x44\x20\111\116\x20\122\105\x53\120\x4f\x4e\x53\x45\72\74\57\160\76\74\144\151\x76\40\163\x74\171\154\x65\75\x22\x63\x6f\154\x6f\162\x3a\x20\x23\63\67\63\x42\64\x31\x3b\xd\12\40\40\40\40\40\x20\40\40\x20\40\x20\x20\x20\40\40\40\x20\x20\40\x20\40\x20\x20\x20\40\x20\40\40\x20\x20\x20\x20\146\x6f\x6e\164\55\x66\141\x6d\151\x6c\x79\x3a\x20\x4d\x65\156\154\x6f\54\x4d\157\x6e\x61\x63\x6f\x2c\103\157\x6e\x73\157\154\x61\163\x2c\x6d\x6f\x6e\x6f\163\x70\x61\x63\145\x3b\144\x69\x72\x65\x63\x74\x69\157\x6e\72\40\154\164\x72\x3b\x74\x65\x78\164\55\x61\x6c\x69\147\x6e\72\x20\154\145\146\164\73\167\150\151\x74\x65\55\x73\x70\x61\x63\x65\72\x20\160\x72\145\x3b\15\xa\x20\x20\x20\40\40\x20\x20\x20\x20\40\x20\x20\40\x20\40\x20\x20\40\x20\x20\40\x20\x20\40\x20\40\x20\x20\x20\40\40\x20\x77\x6f\162\x64\55\163\x70\141\143\x69\156\x67\72\40\x6e\x6f\162\x6d\x61\x6c\73\x77\x6f\162\144\x2d\x62\162\145\x61\153\72\x20\156\x6f\x72\155\x61\154\73\146\x6f\x6e\164\x2d\163\x69\172\x65\x3a\x20\61\63\x70\170\x3b\146\157\156\x74\55\163\164\171\154\145\72\40\156\157\162\155\x61\x6c\73\146\157\x6e\x74\x2d\167\x65\151\x67\x68\x74\x3a\40\64\x30\60\73\15\xa\x20\40\x20\40\x20\x20\x20\x20\x20\40\x20\40\x20\40\x20\40\40\40\40\40\40\40\x20\x20\40\40\x20\40\40\40\40\40\150\x65\x69\x67\150\x74\72\40\x61\x75\x74\157\73\x6c\151\156\145\55\x68\145\151\147\x68\164\x3a\40\61\x39\56\65\x70\170\x3b\142\x6f\x72\x64\145\x72\x3a\x20\x31\x70\170\40\163\x6f\154\x69\x64\x20\43\x64\x64\x64\x3b\142\141\x63\x6b\147\162\157\165\156\144\72\x20\x23\146\141\x66\141\146\141\73\x70\141\144\144\x69\x6e\x67\72\x20\x31\x65\155\73\15\12\x20\40\x20\40\x20\x20\x20\40\40\x20\40\x20\40\40\x20\40\x20\40\40\40\40\40\40\x20\x20\40\x20\x20\40\x20\x20\40\155\141\162\x67\151\x6e\72\40\56\x35\145\x6d\40\60\73\142\157\x72\144\x65\162\55\x72\141\144\x69\x75\x73\72\x20\x34\x70\170\x3b\x22\x3e\x7b\173\143\145\162\x74\x66\162\x6f\155\x72\x65\x73\160\x6f\x6e\x73\x65\175\x7d\74\x2f\x64\151\166\76";
+    private $samlResponse = "\x3c\x70\40\x73\x74\171\x6c\x65\75\x22\146\x6f\x6e\x74\55\167\x65\151\x67\150\164\x3a\x62\157\154\144\x3b\146\157\x6e\164\x2d\x73\151\172\x65\72\x31\x34\160\x74\73\155\x61\162\x67\151\156\55\154\x65\146\x74\72\61\x25\73\x22\76\x53\101\115\x4c\x20\122\105\123\120\117\116\123\x45\x20\x46\122\x4f\x4d\x20\111\x44\120\x3a\74\57\x70\x3e\74\x64\151\166\40\163\164\171\154\145\x3d\42\143\157\154\x6f\162\72\x20\43\x33\x37\63\x42\x34\x31\x3b\xd\12\40\40\x20\40\40\x20\x20\x20\x20\40\x20\40\x20\40\x20\40\40\x20\x20\40\x20\x20\x20\40\x20\x20\40\x20\x20\x20\40\40\x66\157\x6e\x74\55\x66\x61\x6d\x69\x6c\171\72\x20\x4d\145\156\154\x6f\54\115\x6f\156\141\x63\157\x2c\103\x6f\156\163\157\x6c\141\x73\x2c\155\157\x6e\157\x73\160\x61\143\145\x3b\144\151\162\145\143\164\x69\157\x6e\72\40\154\x74\162\x3b\164\x65\x78\164\55\141\x6c\x69\147\156\x3a\40\x6c\145\x66\x74\73\x77\150\x69\164\x65\x2d\x73\160\x61\143\145\72\x20\x70\x72\145\73\15\xa\40\x20\40\40\40\40\x20\x20\40\x20\x20\x20\40\40\40\x20\40\40\x20\40\40\40\x20\40\40\x20\40\40\40\40\x20\40\x77\157\162\x64\55\x73\x70\141\x63\x69\156\x67\72\40\x6e\157\162\155\141\154\73\167\157\x72\144\55\142\162\145\141\x6b\72\40\156\157\162\x6d\141\154\x3b\146\x6f\156\164\55\x73\151\x7a\145\72\x20\x31\x33\160\x78\x3b\146\157\156\164\55\163\164\x79\x6c\145\x3a\40\156\x6f\162\155\141\x6c\73\146\x6f\156\164\x2d\167\145\151\147\150\x74\72\40\64\x30\x30\x3b\xd\xa\x20\x20\40\40\x20\x20\x20\40\x20\40\40\x20\x20\40\40\40\40\40\x20\x20\x20\40\x20\x20\40\x20\x20\40\x20\x20\40\40\x68\x65\x69\147\x68\164\x3a\40\141\165\164\157\x3b\x6c\151\x6e\145\55\x68\x65\151\x67\x68\164\72\40\61\x39\x2e\x35\160\170\73\142\x6f\162\144\145\162\x3a\40\x31\x70\170\x20\163\157\x6c\151\144\40\43\144\x64\144\73\142\141\x63\x6b\147\162\x6f\x75\x6e\x64\x3a\40\43\146\x61\146\x61\146\x61\x3b\160\141\144\144\x69\156\x67\x3a\x20\61\x65\155\73\xd\12\x20\40\x20\40\x20\x20\40\x20\40\40\x20\40\x20\40\x20\x20\40\x20\x20\40\40\x20\x20\x20\40\x20\x20\x20\40\40\x20\40\155\x61\x72\147\151\156\72\x20\x2e\x35\x65\155\x20\x30\73\142\x6f\162\144\x65\162\x2d\x72\141\x64\151\165\x73\x3a\x20\64\x70\170\73\x6f\166\x65\162\x66\154\157\x77\72\163\x63\x72\x6f\154\x6c\x22\x3e\173\173\x73\x61\155\x6c\162\145\163\x70\157\156\163\145\175\175\74\57\x64\x69\166\x3e";
+    private $footer = "\40\x3c\144\151\166\x20\x73\x74\x79\x6c\x65\x3d\42\x6d\141\x72\x67\151\x6e\x3a\x33\x25\73\x64\x69\x73\x70\x6c\x61\171\x3a\x62\154\x6f\x63\153\x3b\x74\145\170\164\x2d\141\x6c\x69\147\x6e\x3a\x63\x65\x6e\x74\x65\162\73\42\x3e\xd\12\40\40\40\40\x20\x20\40\x20\x20\x20\40\40\40\x20\40\40\40\40\x20\40\40\40\x20\x20\x20\x20\40\40\74\151\156\x70\165\164\x20\163\164\x79\154\x65\75\x22\x70\141\144\144\151\156\147\72\61\45\x3b\x77\151\x64\164\150\x3a\x31\x30\x30\x70\170\x3b\x62\141\143\x6b\147\162\157\165\156\x64\72\40\43\x30\60\71\61\103\104\40\x6e\x6f\x6e\x65\40\x72\x65\160\145\x61\x74\40\x73\x63\162\x6f\x6c\154\x20\x30\x25\40\x30\x25\73\x63\x75\162\x73\x6f\x72\72\40\x70\x6f\151\156\164\145\162\x3b\xd\xa\40\x20\40\x20\40\x20\x20\40\40\40\x20\x20\x20\x20\x20\40\40\40\40\x20\x20\40\x20\x20\40\x20\40\40\x20\x20\x20\40\x66\x6f\x6e\164\55\163\151\172\x65\x3a\61\x35\160\x78\73\x62\x6f\162\144\x65\x72\x2d\x77\151\x64\x74\150\x3a\40\x31\160\170\x3b\x62\157\x72\144\x65\x72\55\x73\x74\171\x6c\145\72\x20\x73\157\154\x69\144\x3b\x62\x6f\162\x64\145\x72\x2d\162\141\x64\x69\165\163\x3a\x20\x33\160\x78\73\x77\x68\x69\164\x65\x2d\x73\x70\141\143\145\x3a\40\x6e\x6f\167\x72\x61\160\x3b\xd\xa\40\x20\x20\40\40\40\40\40\x20\40\40\40\x20\x20\40\40\40\x20\40\40\x20\x20\40\x20\40\x20\40\x20\x20\x20\x20\x20\x20\40\40\40\x62\x6f\170\55\163\x69\x7a\x69\x6e\x67\72\40\x62\157\162\144\x65\162\x2d\142\x6f\170\x3b\x62\157\x72\144\145\x72\55\x63\157\154\x6f\162\72\40\43\x30\x30\67\63\x41\101\x3b\142\157\x78\x2d\163\150\x61\144\157\x77\x3a\40\60\x70\x78\40\x31\160\170\x20\x30\x70\170\40\x72\x67\x62\x61\50\x31\62\60\54\x20\62\60\x30\54\40\62\63\60\x2c\40\x30\x2e\66\x29\x20\151\x6e\163\x65\x74\73\15\xa\x20\x20\x20\x20\40\40\40\x20\40\x20\40\40\40\40\40\40\x20\x20\x20\x20\40\40\40\40\40\x20\x20\40\40\40\40\x20\40\x20\40\40\143\157\x6c\157\x72\x3a\40\43\x46\106\106\x3b\x22\164\171\160\x65\75\x22\x62\165\164\x74\x6f\x6e\42\x20\166\141\154\165\145\75\x22\104\157\156\x65\42\40\157\x6e\x43\154\x69\143\x6b\x3d\x22\x73\145\x6c\146\56\x63\154\x6f\x73\145\50\51\x3b\42\76\74\57\144\x69\166\x3e";
+    private $tableContent = "\x3c\164\162\76\74\x74\x64\x20\x73\x74\x79\154\145\x3d\x27\x66\x6f\x6e\164\x2d\x77\x65\x69\147\x68\x74\x3a\142\x6f\x6c\144\x3b\142\x6f\162\144\145\162\72\x32\x70\x78\x20\163\x6f\x6c\151\144\x20\x23\x39\64\71\60\x39\x30\x3b\x70\x61\x64\144\x69\x6e\147\x3a\62\x25\73\47\76\173\x7b\153\x65\x79\175\x7d\x3c\x2f\x74\144\76\74\164\144\x20\x73\164\171\154\x65\75\x27\160\x61\x64\x64\x69\x6e\x67\72\x32\x25\x3b\xd\12\x20\x20\40\40\40\40\40\40\x20\40\x20\40\x20\40\x20\40\40\40\x20\x20\x20\x20\40\40\40\x20\x20\40\x20\40\x20\x20\40\40\40\40\142\157\162\x64\x65\x72\x3a\x32\x70\170\40\x73\x6f\x6c\151\x64\40\43\x39\64\71\x30\x39\60\73\x20\167\x6f\162\144\55\x77\162\141\x70\72\142\x72\x65\141\153\x2d\167\157\162\144\x3b\x27\76\x7b\173\x76\141\x6c\165\x65\175\x7d\x3c\x2f\164\144\76\74\57\164\162\x3e";
     public function execute()
     {
-        if (ob_get_contents())
-            ob_end_clean();
+        if (!ob_get_contents()) {
+            goto N0;
+        }
+        ob_end_clean();
+        N0:
         $this->processTemplateHeader();
-        if (!$this->hasExceptionOccurred) $this->processTemplateContent();
+        if ($this->hasExceptionOccurred) {
+            goto DM;
+        }
+        $this->processTemplateContent();
+        DM:
         $this->processTemplateFooter();
         print_r($this->template);
         exit;
     }
-
-
-    /**
-     * Add header to our template variable for echoing on screen.
-     */
     private function processTemplateHeader()
     {
-
         if ($this->nameId == NULL || $this->nameId == '') {
-            $header = $this->noEmailAddress;
-        } else {
-            $header = $this->successHeader;
+            goto A4;
         }
-
-        $header = str_replace("{{right}}", $this->spUtility->getImageUrl(SPConstants::IMAGE_RIGHT), $header);
-        $header = str_replace("{{wrong}}", $this->spUtility->getImageUrl(SPConstants::IMAGE_WRONG), $header);
-        $this->template = str_replace("{{header}}", $header, $this->template);
+        $db = $this->successHeader;
+        goto Nq;
+        A4:
+        $db = $this->noEmailAddress;
+        Nq:
+        $db = str_replace("\x7b\x7b\x72\151\x67\150\x74\175\x7d", $this->spUtility->getImageUrl(SPConstants::IMAGE_RIGHT), $db);
+        $db = str_replace("\173\173\x77\x72\157\x6e\147\175\175", $this->spUtility->getImageUrl(SPConstants::IMAGE_WRONG), $db);
+        $this->template = str_replace("\173\x7b\x68\145\141\144\145\x72\175\x7d", $db, $this->template);
     }
-
-    /**
-     * Add Content to our template variable for echoing on screen.
-     */
     private function processTemplateContent()
     {
-        $this->commonBody = str_replace("{{email}}", $this->nameId, $this->commonBody);
-        $tableContent = !array_filter($this->attrs) ? "No Attributes Received." : $this->getTableContent();
-        $this->commonBody = str_replace("{{tablecontent}}", $tableContent, $this->commonBody);
-        $this->template = str_replace("{{commonbody}}", $this->commonBody, $this->template);
+        $this->commonBody = str_replace("\x7b\173\x65\155\x61\x69\154\175\175", $this->nameId, $this->commonBody);
+        $Cy = !array_filter($this->attrs) ? "\116\x6f\40\x41\x74\x74\162\151\142\x75\x74\x65\163\40\122\x65\143\x65\151\166\145\x64\56" : $this->getTableContent();
+        $this->commonBody = str_replace("\x7b\x7b\164\x61\x62\154\x65\x63\x6f\x6e\x74\145\x6e\x74\175\x7d", $Cy, $this->commonBody);
+        $this->template = str_replace("\x7b\173\143\157\x6d\155\157\x6e\142\157\144\x79\x7d\175", $this->commonBody, $this->template);
     }
-
-    /**
-     * Append Attributes in the SAML response to the table
-     * content to be shown to the user.
-     */
     private function getTableContent()
     {
-        $tableContent = '';
-        foreach ($this->attrs as $key => $value) {
-            if (!in_array(null, $value))
-                $tableContent .= str_replace("{{key}}", $key, str_replace("{{value}}",
-                    implode("<br/>", $value), $this->tableContent));
+        $Cy = '';
+        foreach ($this->attrs as $On => $VP) {
+            if (in_array(null, $VP)) {
+                goto vt;
+            }
+            $Cy .= str_replace("\173\173\x6b\x65\x79\x7d\175", $On, str_replace("\x7b\x7b\x76\141\x6c\x75\145\x7d\x7d", implode("\x3c\x62\x72\x2f\x3e", $VP), $this->tableContent));
+            vt:
+            Gw:
         }
-        return $tableContent;
+        O3:
+        return $Cy;
     }
-
-    /**
-     * Add footer to our template variable for echoing on screen.
-     */
     private function processTemplateFooter()
     {
-        $this->template = str_replace("{{footer}}", $this->footer, $this->template);
+        $this->template = str_replace("\173\173\146\157\157\164\x65\162\x7d\175", $this->footer, $this->template);
     }
-
-    /** Setter for the Attribute Parameter */
-    public function setAttrs($attrs)
+    public function setAttrs($q_)
     {
-        $this->attrs = $attrs;
+        $this->attrs = $q_;
         return $this;
     }
-
-    /** Setter for the Attribute Parameter */
-    public function setSamlException($exception)
+    public function setSamlException($cA)
     {
-        $this->samlException = $exception;
+        $this->samlException = $cA;
         return $this;
     }
-
-    /** Setter for the Attribute Parameter */
-    public function setHasExceptionOccurred($hasExceptionOccurred)
+    public function setHasExceptionOccurred($Cz)
     {
-        $this->hasExceptionOccurred = $hasExceptionOccurred;
+        $this->hasExceptionOccurred = $Cz;
         return $this;
     }
-
-    /** Setter for the Attribute Parameter */
-    public function setNameId($nameId)
+    public function setNameId($Au)
     {
-        $this->nameId = $nameId;
+        $this->nameId = $Au;
         return $this;
     }
-
-    /**
-     * Add exception Content to our template variable for echoing on screen.
-     */
     private function processExceptionTemplate()
     {
-        $this->exceptionBody = str_replace("{{exceptionmessage}}", $this->samlException->getMessage(), $this->exceptionBody);
-        $this->exceptionBody = str_replace("{{certErrorDiv}}", $this->processCertErrors(), $this->exceptionBody);
-        $response = $this->samlResponse instanceof SAMLResponseException ? $this->samlException->getSamlResponse() : "";
-        $this->samlResponse = str_replace("{{samlresponse}}", $response, $this->samlResponse);
-        $this->exceptionBody = str_replace("{{samlResponseDiv}}", $this->samlResponse, $this->exceptionBody);
-        $this->template = str_replace("{{commonbody}}", $this->exceptionBody, $this->template);
+        $this->exceptionBody = str_replace("\x7b\x7b\x65\170\143\x65\160\164\151\x6f\156\155\145\x73\x73\141\x67\x65\x7d\x7d", $this->samlException->getMessage(), $this->exceptionBody);
+        $this->exceptionBody = str_replace("\173\x7b\x63\145\x72\x74\x45\162\162\157\x72\x44\x69\166\175\175", $this->processCertErrors(), $this->exceptionBody);
+        $J_ = $this->samlResponse instanceof SAMLResponseException ? $this->samlException->getSamlResponse() : '';
+        $this->samlResponse = str_replace("\x7b\x7b\163\141\x6d\154\162\x65\x73\160\157\156\x73\x65\175\x7d", $J_, $this->samlResponse);
+        $this->exceptionBody = str_replace("\173\173\163\141\x6d\x6c\x52\145\x73\x70\157\x6e\163\145\104\151\166\175\x7d", $this->samlResponse, $this->exceptionBody);
+        $this->template = str_replace("\173\173\143\157\x6d\155\157\x6e\x62\x6f\144\171\175\175", $this->exceptionBody, $this->template);
     }
-
-    /**
-     * Add cert error and certificates for echoing on screen.
-     */
     private function processCertErrors()
     {
-        if ($this->samlResponse instanceof SAMLResponseException && $this->samlException->isCertError()) {
-            $pluginCert = $this->spUtility->sanitizeCert($this->samlException->getPluginCert());
-            $certFromIDP = $this->spUtility->sanitizeCert($this->samlException->getCertInResponse());
-            $this->certError = str_replace("{{certinplugin}}", $pluginCert, $this->certError);
-            $this->certError = str_replace("{{certfromresponse}}", $certFromIDP, $this->certError);
-            return $this->certError;
+        if (!($this->samlResponse instanceof SAMLResponseException && $this->samlException->isCertError())) {
+            goto ru;
         }
-        return "";
+        $Cg = $this->spUtility->sanitizeCert($this->samlException->getPluginCert());
+        $aN = $this->spUtility->sanitizeCert($this->samlException->getCertInResponse());
+        $this->certError = str_replace("\173\173\143\145\x72\x74\x69\x6e\x70\x6c\x75\147\151\x6e\175\x7d", $Cg, $this->certError);
+        $this->certError = str_replace("\x7b\173\x63\145\x72\x74\146\x72\x6f\x6d\x72\145\x73\x70\x6f\156\163\145\x7d\x7d", $aN, $this->certError);
+        return $this->certError;
+        ru:
+        return '';
     }
 }

@@ -1,83 +1,45 @@
-<!--Multisite Tab-->
 <?php
- $webstore= null;
- $websitelink= null;
- $websiteCount = 0;
- $websites=$this->getWebsiteCollection();
- $isEnabled = $this->isEnabled();
-$disabled = !$isEnabled ? "disabled" : "";
-if($this->isTrialExpired()){
-	$disabled = "disabled";
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
+
+echo "\74\41\55\55\115\165\x6c\x74\151\x73\x69\x74\145\x20\x54\141\142\x2d\x2d\76\xd\12";
+$vO = null;
+$jN = null;
+$A6 = 0;
+$ZB = $this->getWebsiteCollection();
+$A5 = $this->isEnabled();
+$FL = !$A5 ? "\144\151\x73\141\x62\154\x65\144" : '';
+if (!$this->isTrialExpired()) {
+    goto za;
 }
- $formKey = $this->getBlockHtml('formkey');
- $allWebsites=array();
-foreach($this->getWebsiteCollection() as $website) {
-	$allWebsites[$website->getId()]=$website->getName();
-	$showWebsite[$website->getId()] = $this->showWebsite($website->getId())==1 ?'checked':'';
-	$allStores= $this->getStoreIds($website->getId());
-	foreach($allStores as $stores)
-	{
-		$showStores[$this->getStoreName($stores)]=$this->showWebsite($website->getId())==1 ?'checked':'';
-	}
-	$websiteCount++;
+$FL = "\144\x69\163\x61\x62\x6c\x65\x64";
+za:
+$ld = $this->getBlockHtml("\146\x6f\162\x6d\153\145\171");
+$qm = array();
+foreach ($this->getWebsiteCollection() as $Kt) {
+    $qm[$Kt->getId()] = $Kt->getName();
+    $BD[$Kt->getId()] = $this->showWebsite($Kt->getId()) == 1 ? "\143\150\x65\x63\153\145\144" : '';
+    $m7 = $this->getStoreIds($Kt->getId());
+    foreach ($m7 as $kk) {
+        $do[$this->getStoreName($kk)] = $this->showWebsite($Kt->getId()) == 1 ? "\143\x68\x65\x63\x6b\145\x64" : '';
+        Uz:
+    }
+    bG:
+    $A6++;
+    Rp:
 }
-	$showWebsite[$website->getId()] = $this->showWebsite($website->getId())==1 ?'checked':'';
-
-echo' 
-<form name="multisite" id="multisite" method="post" action="">
-	  <input type="hidden" name="check_count" id="check_count" value="">
-	  <input type="hidden" name="option" value="multisiteSettings" >
-	  <input type="hidden" name="website_count" id="website_count" value='.$websiteCount.'';
-foreach($this->getWebsiteCollection() as $website)
-{
-	$websiteId = $website->getId();
-
-echo'
-        '.$formKey.'
-		<style>
-			.hide {
-		  	display: none;
-			}
-
-			.myDIV:hover + .hide {
-		  	display: block;
-		  	color: green;
-			}
-        	.tab {
-            	display: inline-block;
-            	margin-left: 40px;
-        	}
-    	</style>
-		<input type="checkbox" '.$disabled.' name='.$websiteId.' '.$showWebsite[$websiteId].' id="check1_'.$websiteId.'"  class="check1" value="true" style="margin-left:15px"> <b style="margin-left:5px">'.$website->getName().'</b><br><br><br>
-
-		';
-	$allstores= $this->getStoreIds($websiteId);
+GE:
+$BD[$Kt->getId()] = $this->showWebsite($Kt->getId()) == 1 ? "\x63\x68\x65\143\x6b\x65\x64" : '';
+echo "\x20\15\12\74\x66\157\162\x6d\x20\156\x61\x6d\x65\x3d\x22\155\x75\x6c\164\151\163\x69\164\x65\x22\x20\151\144\x3d\42\155\165\x6c\x74\x69\x73\151\x74\145\42\x20\x6d\x65\x74\x68\x6f\x64\75\42\x70\157\163\164\42\40\x61\143\164\x69\x6f\156\x3d\42\42\76\xd\12\x9\40\x20\74\151\x6e\x70\165\164\x20\164\171\x70\145\x3d\x22\150\x69\144\144\145\156\42\x20\156\x61\155\145\x3d\42\x63\x68\145\x63\153\x5f\143\x6f\165\x6e\164\x22\x20\151\x64\x3d\42\143\150\145\x63\153\137\x63\x6f\x75\156\164\42\x20\166\x61\x6c\165\x65\75\x22\42\76\xd\12\x9\40\x20\x3c\x69\x6e\x70\165\164\x20\164\x79\160\145\x3d\x22\150\x69\x64\x64\145\156\x22\40\x6e\141\155\x65\x3d\42\157\160\164\151\157\x6e\x22\x20\166\x61\x6c\x75\145\75\42\x6d\x75\x6c\x74\151\163\x69\164\145\x53\145\x74\x74\151\x6e\x67\x73\x22\40\x3e\xd\xa\11\x20\40\74\151\x6e\160\165\164\x20\x74\x79\x70\145\75\x22\150\x69\144\144\x65\x6e\42\x20\156\141\x6d\x65\75\x22\x77\145\x62\163\x69\164\145\137\143\x6f\165\156\x74\42\40\151\144\75\x22\x77\x65\142\x73\x69\164\x65\x5f\x63\x6f\x75\156\x74\x22\x20\166\x61\x6c\x75\145\x3d" . $A6 . '';
+foreach ($this->getWebsiteCollection() as $Kt) {
+    $Ed = $Kt->getId();
+    echo "\xd\xa\x20\x20\x20\40\40\40\40\x20" . $ld . "\15\12\x9\11\x3c\163\x74\171\x6c\145\x3e\xd\xa\x9\x9\11\56\x68\x69\144\x65\x20\x7b\15\12\11\11\40\x20\11\144\x69\163\x70\154\x61\x79\72\x20\156\157\156\145\x3b\15\xa\11\11\x9\x7d\xd\12\15\xa\x9\11\x9\x2e\155\x79\x44\x49\126\72\150\x6f\166\145\x72\x20\x2b\40\x2e\150\x69\x64\145\40\173\15\12\11\11\x20\x20\x9\x64\151\x73\160\154\141\171\72\x20\142\154\x6f\143\153\73\15\xa\11\11\40\x20\11\x63\x6f\x6c\x6f\x72\72\40\147\x72\x65\x65\156\x3b\xd\xa\x9\11\x9\175\xd\12\x20\x20\x20\x20\x20\40\40\x20\x9\x2e\x74\141\142\40\x7b\xd\12\40\40\x20\40\40\40\x20\x20\40\x20\40\40\11\x64\x69\163\160\x6c\x61\171\72\x20\151\156\x6c\151\156\x65\x2d\x62\154\x6f\143\153\73\xd\12\40\x20\40\40\40\40\40\x20\x20\40\40\x20\11\155\x61\x72\x67\151\156\x2d\x6c\145\146\164\x3a\x20\x34\60\160\170\73\xd\12\40\40\x20\40\40\x20\x20\x20\11\175\15\12\x20\40\40\40\11\74\x2f\163\164\171\154\x65\x3e\xd\12\11\11\x3c\151\x6e\x70\x75\164\x20\164\x79\x70\x65\75\42\x63\150\x65\x63\x6b\x62\x6f\x78\x22\x20" . $FL . "\x20\156\x61\155\x65\x3d" . $Ed . "\x20" . $BD[$Ed] . "\x20\x69\x64\x3d\x22\143\150\145\143\153\61\x5f" . $Ed . "\42\40\40\143\154\x61\163\x73\75\42\x63\x68\x65\x63\x6b\x31\42\40\166\x61\x6c\x75\145\75\x22\164\162\x75\145\42\40\163\164\171\x6c\145\75\42\x6d\141\162\147\151\156\55\154\145\146\x74\x3a\61\x35\160\170\x22\x3e\x20\x3c\142\x20\x73\164\x79\154\x65\75\x22\x6d\x61\162\147\151\156\55\x6c\145\146\164\x3a\x35\160\170\x22\x3e" . $Kt->getName() . "\x3c\x2f\142\x3e\74\142\x72\76\x3c\x62\x72\76\x3c\x62\162\x3e\15\xa\15\xa\x9\11";
+    $T7 = $this->getStoreIds($Ed);
+    Ri:
 }
-
-echo '<tr><td>
-
-
-		<td>
-		<br>
-			<input type="submit" class="btn-round" '.$disabled.' name="submit" style="width:100px;" value="Save" class="button button-primary button-large" onClick="afterClick()"/> &nbsp;
-		</td>
-	</form>
-	<div class="row">
-	<div class="col-sm-8">
-<script>
-
-	function afterClick()
-	{
-		var cont = jQuery(".check1:checkbox");
-		var count=0;
-		for (var i = 0; i < cont.length; i++) {
-            if (cont[i].tagName == "INPUT" && cont[i].type == "checkbox") {
-                if (cont[i].checked) {		
-                    count++;
-                }
-            }
-        }
-		jQuery("#check_count").attr("value",count);
-	}
-</script>
-';
+Oe:
+echo "\74\164\x72\x3e\74\x74\x64\x3e\15\xa\15\12\xd\xa\x9\x9\x3c\164\x64\x3e\15\xa\11\11\74\142\162\76\15\12\11\11\x9\74\x69\156\160\165\x74\40\164\171\160\x65\75\42\x73\165\x62\x6d\x69\x74\42\40\143\x6c\141\163\163\x3d\x22\x62\x74\156\x2d\162\157\165\156\x64\42\40" . $FL . "\x20\156\x61\x6d\145\75\x22\163\165\142\x6d\x69\164\42\40\163\164\x79\154\145\75\42\167\x69\x64\x74\150\72\x31\60\x30\x70\x78\73\42\x20\166\x61\x6c\x75\x65\x3d\x22\123\x61\x76\x65\42\40\143\154\141\163\163\x3d\42\142\x75\x74\x74\157\x6e\40\142\165\164\164\157\156\55\160\162\x69\155\x61\162\171\x20\x62\x75\x74\x74\157\156\55\154\141\x72\147\145\x22\x20\x6f\156\103\x6c\x69\143\153\75\42\x61\146\x74\145\x72\103\x6c\151\143\x6b\50\51\x22\57\x3e\40\x26\156\142\x73\x70\x3b\xd\12\11\x9\74\57\164\x64\x3e\xd\xa\11\74\x2f\146\x6f\162\x6d\x3e\15\xa\11\x3c\144\151\x76\40\x63\154\x61\x73\163\75\x22\x72\x6f\167\42\76\xd\xa\x9\x3c\144\x69\x76\x20\x63\154\141\163\x73\x3d\x22\x63\x6f\x6c\55\163\x6d\55\x38\42\x3e\15\xa\x3c\x73\143\162\x69\x70\x74\x3e\xd\12\xd\12\11\x66\165\x6e\x63\164\x69\157\x6e\40\141\146\164\145\162\x43\154\151\143\153\x28\x29\xd\xa\x9\173\15\12\11\11\166\x61\x72\40\x63\157\156\x74\40\75\40\x6a\121\x75\x65\162\x79\50\42\56\143\x68\145\143\x6b\61\72\143\x68\145\x63\x6b\142\157\170\42\51\73\15\xa\x9\11\166\141\x72\40\143\157\165\156\164\x3d\60\x3b\xd\xa\11\x9\x66\157\162\40\50\166\x61\162\x20\x69\40\75\x20\60\x3b\x20\x69\40\x3c\40\x63\157\156\164\x2e\x6c\x65\x6e\147\164\150\x3b\x20\151\53\x2b\51\40\x7b\xd\xa\40\x20\x20\x20\x20\x20\x20\40\40\40\40\40\x69\x66\40\50\x63\157\x6e\164\133\x69\135\x2e\164\x61\x67\x4e\141\x6d\x65\x20\75\75\x20\x22\x49\x4e\x50\x55\x54\x22\40\46\46\40\x63\157\x6e\x74\133\x69\135\x2e\164\171\x70\145\x20\x3d\75\40\42\x63\150\145\x63\x6b\142\x6f\170\x22\x29\40\173\15\xa\x20\x20\40\x20\40\40\40\x20\40\x20\x20\40\x20\x20\40\40\x69\x66\x20\50\143\157\156\164\133\151\x5d\56\143\x68\145\143\153\x65\x64\51\40\173\11\x9\xd\12\40\x20\40\x20\40\x20\40\x20\40\x20\40\40\40\40\x20\x20\40\x20\x20\40\x63\157\165\156\164\x2b\53\73\xd\xa\x20\40\x20\40\x20\40\x20\x20\x20\40\40\40\40\40\40\x20\175\xd\xa\40\40\x20\40\40\x20\x20\40\40\40\x20\40\x7d\15\xa\40\x20\x20\x20\x20\40\40\40\x7d\15\xa\11\11\x6a\x51\x75\145\x72\x79\x28\42\x23\x63\150\145\x63\x6b\137\143\x6f\165\156\164\x22\51\x2e\141\164\164\x72\50\x22\x76\x61\x6c\165\x65\42\x2c\143\x6f\x75\x6e\164\51\73\xd\12\x9\x7d\15\12\74\x2f\x73\x63\162\x69\160\164\x3e\xd\12";

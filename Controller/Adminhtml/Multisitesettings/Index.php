@@ -1,5 +1,6 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Adminhtml\Multisitesettings;
 
 use Magento\Backend\App\Action\Context;
@@ -10,125 +11,119 @@ use MiniOrange\SP\Helper\Curl;
 use MiniOrange\SP\Helper\Saml2\Lib\AESEncryption;
 use MiniOrange\SP\Helper\SPConstants;
 use MiniOrange\SP\Helper\SPMessages;
-
-/**
- * This class handles the action for endpoint: mospsaml/multisitesettings/Index
- * Extends the \Magento\Backend\App\Action for Admin Actions which
- * inturn extends the \Magento\Framework\App\Action\Action class necessary
- * for each Controller class
- */
 class Index extends BaseAdminAction implements HttpGetActionInterface, HttpPostActionInterface
 {
-    /**
-     * The first function to be called when a Controller class is invoked.
-     * Usually, has all our controller logic. Returns a view/page/template
-     * to be shown to the users.
-     * This function gets and prepares all our upgrade /license page.
-     * It's called when you visis the moasaml/upgrade/Index
-     * URL. It prepares all the values required on the license upgrade
-     * page in the backend and returns the block to be displayed.
-     *
-     * @return \Magento\Framework\View\Result\Page
-     */
-
     public function execute()
     {
-        if ($this->spUtility->check_license_plan(4)) {
-            $this->spUtility->setStoreConfig(SPConstants::WEBSITES_LIMIT, AESEncryption::encrypt_data(2, SPConstants::DEFAULT_TOKEN_VALUE));
-            $send_email = $this->spUtility->getStoreConfig(SPConstants::SEND_EMAIL);
-            if ($send_email == NULL) {
-                $currentAdminUser = $this->spUtility->getCurrentAdminUser()->getData();
-                $magentoVersion = $this->spUtility->getMagnetoVersion();
-                $userEmail = $currentAdminUser['email'];
-                $firstName = $currentAdminUser['firstname'];
-                $lastName = $currentAdminUser['lastname'];
-                $site = $this->spUtility->getBaseUrl();
-                $values = array($firstName, $lastName, $magentoVersion, $site);
-                $this->spUtility->setStoreConfig(SPConstants::SEND_EMAIL, 1);
-                Curl::submit_to_magento_team($userEmail, 'Installed Successfully-Account Tab', $values);
-                $this->spUtility->flushCache();
-            }
+        if (!$this->spUtility->check_license_plan(4)) {
+            goto O4;
         }
-
+        $this->spUtility->setStoreConfig(SPConstants::WEBSITES_LIMIT, AESEncryption::encrypt_data(2, SPConstants::DEFAULT_TOKEN_VALUE));
+        $Az = $this->spUtility->getStoreConfig(SPConstants::SEND_EMAIL);
+        if (!($Az == NULL)) {
+            goto uv;
+        }
+        $fU = $this->spUtility->getCurrentAdminUser()->getData();
+        $RH = $this->spUtility->getMagnetoVersion();
+        $ii = $fU["\x65\x6d\141\x69\x6c"];
+        $FO = $fU["\x66\x69\162\163\164\156\141\x6d\x65"];
+        $Fo = $fU["\x6c\x61\163\x74\x6e\x61\155\x65"];
+        $kz = $this->spUtility->getBaseUrl();
+        $jT = array($FO, $Fo, $RH, $kz);
+        $this->spUtility->setStoreConfig(SPConstants::SEND_EMAIL, 1);
+        Curl::submit_to_magento_team($ii, "\111\156\163\x74\141\x6c\x6c\145\144\40\123\x75\x63\143\x65\x73\163\146\x75\x6c\154\171\55\x41\143\x63\x6f\165\156\x74\40\124\x61\x62", $jT);
+        $this->spUtility->flushCache();
+        uv:
+        O4:
         try {
-            $this->checkIfValidPlugin(); //check if user has registered himself
-            $params = $this->getRequest()->getParams();
-            if ($this->isFormOptionBeingSaved($params)) {
-
-                $websiteCount = $params['website_count'];
-                $count = $params['check_count'];
-                $websites = null;
-                $websiteLimit = $this->spUtility->getWebsiteLimit();
-                if ($count <= $websiteLimit) {
-
-                    foreach ($params as $key => $value) {
-                        if ($value == 'true') {
-                            $websites[$key] = $value;
-                        }
-                    }
-                    $this->messageManager->addSuccessMessage(SPMessages::SETTINGS_SAVED);
-                    $this->processValuesAndSaveData($count, $websites, $params, $websiteCount);
-                } else {
-                    $this->messageManager->addErrorMessage(SPMessages::WEBSITE_ERROR);
-                    $this->clearData();
-                }
-                $this->spUtility->flushCache();
-                $this->spUtility->reinitConfig();
+            $this->checkIfValidPlugin();
+            $Te = $this->getRequest()->getParams();
+            if (!$this->isFormOptionBeingSaved($Te)) {
+                goto PN;
             }
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            $this->logger->debug($e->getMessage());
-        }
-
-        $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu(SPConstants::MODULE_DIR . SPConstants::MODULE_BASE);
-        $resultPage->addBreadcrumb(__('Multisite Settings'), __('Multisite Settings'));
-        $resultPage->getConfig()->getTitle()->prepend(__(SPConstants::MODULE_TITLE));
-        return $resultPage;
-    }
-
-    private function processValuesAndSaveData($count, $websites, $params, $websiteCount)
-    {
-        foreach ($this->sp->getWebsiteCollection() as $website) {
-            $key = $website->getId();
-            $this->spUtility->setStoreConfig($key, 0);
-        }
-        if (empty($websites) || $count == 0) {
+            $A6 = $Te["\167\x65\x62\x73\151\x74\145\137\x63\x6f\x75\156\x74"];
+            $ov = $Te["\x63\x68\145\143\x6b\137\x63\157\165\156\164"];
+            $ZB = null;
+            $lx = $this->spUtility->getWebsiteLimit();
+            if ($ov <= $lx) {
+                goto wM;
+            }
+            $this->messageManager->addErrorMessage(SPMessages::WEBSITE_ERROR);
             $this->clearData();
-        } else
-            foreach ($websites as $key => $value) {
-                foreach ($this->sp->getWebsiteCollection() as $website) {
-                    $id = $website->getId();
-
-                    if ($key == $id) {
-                        $this->spUtility->log_debug("matched: " . $id);
-                        $this->spUtility->setStoreConfig($key, 1);
-                        break;
-                    } else {
-                        $this->spUtility->setStoreConfig($key, 0);
-                    }
+            goto fM;
+            wM:
+            foreach ($Te as $On => $VP) {
+                if (!($VP == "\164\162\x75\145")) {
+                    goto Eq;
                 }
+                $ZB[$On] = $VP;
+                Eq:
+                zB:
             }
-        $this->spUtility->setStoreConfig(SPConstants::WEBSITE_COUNT, $count);
-        $this->spUtility->setStoreConfig(SPConstants::WEBSITE_IDS, json_encode($websites));
+            Pz:
+            $this->messageManager->addSuccessMessage(SPMessages::SETTINGS_SAVED);
+            $this->processValuesAndSaveData($ov, $ZB, $Te, $A6);
+            fM:
+            $this->spUtility->flushCache();
+            $this->spUtility->reinitConfig();
+            PN:
+        } catch (\Exception $IR) {
+            $this->messageManager->addErrorMessage($IR->getMessage());
+            $this->logger->debug($IR->getMessage());
+        }
+        $Vy = $this->resultPageFactory->create();
+        $Vy->setActiveMenu(SPConstants::MODULE_DIR . SPConstants::MODULE_BASE);
+        $Vy->addBreadcrumb(__("\115\x75\x6c\x74\x69\163\151\164\x65\40\123\x65\x74\x74\x69\156\147\163"), __("\115\x75\x6c\164\151\x73\x69\x74\x65\x20\123\x65\x74\x74\x69\x6e\x67\x73"));
+        $Vy->getConfig()->getTitle()->prepend(__(SPConstants::MODULE_TITLE));
+        return $Vy;
     }
-
+    private function processValuesAndSaveData($ov, $ZB, $Te, $A6)
+    {
+        foreach ($this->sp->getWebsiteCollection() as $Kt) {
+            $On = $Kt->getId();
+            $this->spUtility->setStoreConfig($On, 0);
+            Rc:
+        }
+        oZ:
+        if (empty($ZB) || $ov == 0) {
+            goto zV;
+        }
+        foreach ($ZB as $On => $VP) {
+            foreach ($this->sp->getWebsiteCollection() as $Kt) {
+                $Gh = $Kt->getId();
+                if ($On == $Gh) {
+                    goto zN;
+                }
+                $this->spUtility->setStoreConfig($On, 0);
+                goto to;
+                zN:
+                $this->spUtility->log_debug("\155\141\x74\143\150\x65\x64\72\40" . $Gh);
+                $this->spUtility->setStoreConfig($On, 1);
+                goto AT;
+                to:
+                cj:
+            }
+            AT:
+            hs:
+        }
+        bv:
+        goto GP;
+        zV:
+        $this->clearData();
+        GP:
+        $this->spUtility->setStoreConfig(SPConstants::WEBSITE_COUNT, $ov);
+        $this->spUtility->setStoreConfig(SPConstants::WEBSITE_IDS, json_encode($ZB));
+    }
     public function clearData()
     {
-        foreach ($this->sp->getWebsiteCollection() as $website) {
-            $key = $website->getId();
-            $this->spUtility->setStoreConfig($key, 0);
-            $this->spUtility->setStoreConfig(SPConstants::WEBSITE_IDS,null);
+        foreach ($this->sp->getWebsiteCollection() as $Kt) {
+            $On = $Kt->getId();
+            $this->spUtility->setStoreConfig($On, 0);
+            $this->spUtility->setStoreConfig(SPConstants::WEBSITE_IDS, null);
+            u1:
         }
+        os:
     }
-
-    /**
-     * Is the user allowed to view the Identity Provider settings.
-     * This is based on the ACL set by the admin in the backend.
-     * Works in conjugation with acl.xml
-     *
-     * @return bool
-     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(SPConstants::MODULE_DIR . SPConstants::MODULE_MULTISITE);

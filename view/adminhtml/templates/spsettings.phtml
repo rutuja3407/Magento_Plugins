@@ -1,284 +1,259 @@
-<!--
-	This template file is for the SAML Service Provider settings.
-	File acts as a view file for our Service Provider settings.
--->
 <?php
-// initialize all values
-$isEnabled = $this->isEnabled() ? "" : "disabled";
-if ($this->isTrialExpired()) {
-    $isEnabled = "disabled";
-}
-$idps = $this->getExtensionPageUrl('idps');
-$testUrl = $this->getTestUrl();
-$formKey = $this->getBlockHtml('formkey');
+/*   __________________________________________________
+    |  Obfuscated by YAK Pro - Php Obfuscator  2.0.14  |
+    |              on 2024-02-27 07:58:44              |
+    |    GitHub: https://github.com/pk-fr/yakpro-po    |
+    |__________________________________________________|
+*/
 
-$default_provider = $this->getProvider();
-$selected_provider = null;
-$params = $this->getRequest()->getParams();
-if (!empty($default_provider)) {
-    $count = 0;
-    $collection = $this->getAllIdpConfiguration();
-    $defaultConfigurations = null;
-    foreach ($collection as $item) {
-        $count++;
-        if ($item->getData()["idp_name"] === $default_provider) {
-            $defaultConfigurations = $item->getData();
-        }
+echo "\x3c\41\55\x2d\xd\12\x9\124\x68\151\163\x20\x74\145\x6d\160\154\141\x74\x65\40\146\x69\154\x65\x20\x69\x73\x20\146\157\162\x20\164\150\x65\40\123\x41\x4d\x4c\40\123\145\162\x76\151\x63\x65\x20\120\x72\157\x76\151\x64\145\162\40\163\145\x74\x74\151\x6e\x67\163\x2e\xd\12\11\106\151\154\145\x20\141\x63\164\163\40\141\x73\x20\141\x20\x76\151\x65\167\x20\146\151\154\x65\x20\x66\x6f\x72\x20\x6f\165\162\40\123\x65\x72\166\151\143\145\x20\x50\x72\157\x76\151\144\145\162\x20\x73\145\x74\x74\x69\x6e\147\x73\56\xd\12\55\55\x3e\15\xa";
+$A5 = $this->isEnabled() ? '' : "\144\151\163\x61\x62\x6c\145\144";
+if (!$this->isTrialExpired()) {
+    goto HG;
+}
+$A5 = "\144\151\x73\141\x62\154\145\144";
+HG:
+$JQ = $this->getExtensionPageUrl("\x69\144\x70\x73");
+$u4 = $this->getTestUrl();
+$ld = $this->getBlockHtml("\x66\x6f\162\x6d\153\145\x79");
+$Yh = $this->getProvider();
+$px = null;
+$Te = $this->getRequest()->getParams();
+if (empty($Yh)) {
+    goto li;
+}
+$ov = 0;
+$yG = $this->getAllIdpConfiguration();
+$di = null;
+foreach ($yG as $ub) {
+    $ov++;
+    if (!($ub->getData()["\151\x64\x70\137\x6e\x61\x6d\x65"] === $Yh)) {
+        goto J2;
     }
-    if (!empty($defaultConfigurations)) {
-        $idp_name = !empty($defaultConfigurations['idp_name']) ? $defaultConfigurations['idp_name'] : null;
-        $httpLogoutRedirect = !empty($defaultConfigurations['saml_logout_binding']) && $defaultConfigurations['saml_logout_binding'] == 'HttpRedirect' || empty($defaultConfigurations['saml_logout_binding']) ? 'checked="checked"' : '';
-        $httpLoginRedirect = !empty($defaultConfigurations['saml_login_binding']) && $defaultConfigurations['saml_login_binding'] == 'HttpRedirect' || $defaultConfigurations['saml_login_binding'] ? 'checked="checked"' : '';
-        $httpLogoutPost = !empty($defaultConfigurations['saml_logout_binding']) && $defaultConfigurations['saml_logout_binding'] == 'HttpPost' ? 'checked="checked"' : '';
-        $httpLoginPost = !empty($defaultConfigurations['saml_login_binding']) && $defaultConfigurations['saml_login_binding'] == 'HttpPost' ? 'checked="checked"' : '';
-        $testUrl = !empty($idp_name) ? $this->getTestUrl($idp_name) : null;
-        $isResponseSigned = !empty($defaultConfigurations['response_signed']) && $defaultConfigurations['response_signed'] == 1 ? "checked" : "";
-        $isAssertionSigned = !empty($defaultConfigurations['assertion_signed']) && $defaultConfigurations['assertion_signed'] == 1 ? "checked" : "";
-    } else
-        $default_provider = '';
+    $di = $ub->getData();
+    J2:
+    yR:
 }
-if (!empty($params['edit'])) {
-    $selected_provider = $params['idp_name'];
-
-    $collection = $this->getAllIdpConfiguration();
-    $idpDetails = null;
-    foreach ($collection as $item) {
-        if ($item->getData()["idp_name"] === $selected_provider) {
-            $idpDetails = $item->getData();
-        }
+Xs:
+if (!empty($di)) {
+    goto Gn;
+}
+$Yh = '';
+goto gd;
+Gn:
+$rq = !empty($di["\151\144\x70\x5f\156\141\x6d\145"]) ? $di["\151\144\160\x5f\x6e\141\x6d\x65"] : null;
+$fh = !empty($di["\x73\141\x6d\154\x5f\154\x6f\147\x6f\165\x74\x5f\142\151\156\144\x69\156\147"]) && $di["\163\141\x6d\154\137\x6c\157\x67\x6f\165\x74\137\142\x69\x6e\x64\151\x6e\x67"] == "\110\x74\x74\x70\x52\x65\x64\x69\x72\145\x63\x74" || empty($di["\x73\141\155\154\137\x6c\x6f\147\157\x75\164\137\142\x69\x6e\144\x69\156\x67"]) ? "\143\150\x65\x63\153\x65\144\75\x22\x63\150\145\143\x6b\145\x64\42" : '';
+$K6 = !empty($di["\x73\x61\155\x6c\137\154\157\x67\x69\x6e\x5f\x62\x69\156\144\x69\x6e\147"]) && $di["\163\141\x6d\154\137\x6c\157\x67\151\x6e\137\x62\151\156\x64\x69\156\147"] == "\110\x74\x74\160\x52\145\x64\151\x72\145\143\164" || $di["\x73\x61\x6d\154\137\x6c\157\147\151\156\137\142\x69\x6e\x64\x69\x6e\147"] ? "\143\x68\145\x63\x6b\145\144\x3d\x22\x63\x68\145\x63\x6b\145\x64\x22" : '';
+$bz = !empty($di["\x73\x61\155\154\x5f\x6c\x6f\147\x6f\x75\x74\x5f\142\151\x6e\x64\x69\x6e\x67"]) && $di["\x73\x61\155\154\137\x6c\x6f\147\x6f\165\x74\x5f\x62\x69\156\144\151\156\x67"] == "\110\x74\x74\160\x50\x6f\163\x74" ? "\143\150\145\143\153\145\x64\x3d\42\143\150\x65\x63\153\x65\144\42" : '';
+$w9 = !empty($di["\x73\141\155\x6c\x5f\154\157\x67\x69\156\137\x62\x69\x6e\x64\151\x6e\147"]) && $di["\163\141\155\x6c\x5f\154\x6f\147\151\x6e\137\x62\151\156\x64\151\156\x67"] == "\110\x74\164\x70\x50\x6f\163\x74" ? "\x63\x68\x65\143\153\x65\144\x3d\42\x63\x68\x65\x63\153\x65\x64\42" : '';
+$u4 = !empty($rq) ? $this->getTestUrl($rq) : null;
+$pg = !empty($di["\x72\145\163\x70\x6f\156\163\145\x5f\163\x69\x67\156\x65\x64"]) && $di["\162\145\163\x70\157\156\x73\145\x5f\163\x69\147\156\x65\x64"] == 1 ? "\143\150\145\143\153\x65\x64" : '';
+$R5 = !empty($di["\x61\163\163\145\x72\164\x69\157\156\137\x73\151\x67\156\145\x64"]) && $di["\141\163\x73\x65\x72\x74\x69\x6f\x6e\x5f\163\x69\x67\156\145\144"] == 1 ? "\143\x68\x65\x63\153\145\144" : '';
+gd:
+li:
+if (!empty($Te["\145\x64\x69\164"])) {
+    goto bb;
+}
+if (!empty($Te["\141\x64\x64"])) {
+    goto SZ;
+}
+$px = null;
+$pg = null;
+$R5 = null;
+if (!empty($bz)) {
+    goto TN;
+}
+$bz = null;
+TN:
+if (!empty($w9)) {
+    goto GW;
+}
+$w9 = null;
+GW:
+if (!empty($K6)) {
+    goto fu;
+}
+$K6 = null;
+fu:
+if (!empty($fh)) {
+    goto ln;
+}
+$fh = null;
+ln:
+goto ef;
+bb:
+$px = $Te["\151\x64\160\137\156\141\155\145"];
+$yG = $this->getAllIdpConfiguration();
+$hR = null;
+foreach ($yG as $ub) {
+    if (!($ub->getData()["\151\144\x70\x5f\x6e\141\155\145"] === $px)) {
+        goto vL;
     }
-    $idp_name = !empty($idpDetails['idp_name']) ? $idpDetails['idp_name'] : null;
-    $httpLogoutRedirect = !empty($idpDetails['saml_logout_binding']) && $idpDetails['saml_logout_binding'] == 'HttpRedirect' || empty($idpDetails['saml_logout_binding']) ? 'checked="checked"' : '';
-    $httpLoginRedirect = !empty($idpDetails['saml_login_binding']) && $idpDetails['saml_login_binding'] == 'HttpRedirect' || $idpDetails['saml_login_binding'] ? 'checked="checked"' : '';
-    $httpLogoutPost = !empty($idpDetails['saml_logout_binding']) && $idpDetails['saml_logout_binding'] == 'HttpPost' ? 'checked="checked"' : '';
-    $httpLoginPost = !empty($idpDetails['saml_login_binding']) && $idpDetails['saml_login_binding'] == 'HttpPost' ? 'checked="checked"' : '';
-    $testUrl = !empty($idp_name) ? $this->getTestUrl($idp_name) : '';
-    $isResponseSigned = !empty($idpDetails['response_signed']) && $idpDetails['response_signed'] == 1 ? "checked" : "";
-    $isAssertionSigned = !empty($idpDetails['assertion_signed']) && $idpDetails['assertion_signed'] == 1 ? "checked" : "";
-} elseif (!empty($params['add'])) {
-    $selected_provider = null;
-    $isResponseSigned = null;
-    $isAssertionSigned = null;
-
-    $httpLogoutPost = null;
-
-    $httpLoginPost = null;
-
-    $httpLoginRedirect = null;
-
-    $httpLogoutRedirect = null;
-} else {
-    $selected_provider = null;
-    $isResponseSigned = null;
-    $isAssertionSigned = null;
-
-    if (empty($httpLogoutPost))
-        $httpLogoutPost = null;
-
-    if (empty($httpLoginPost))
-        $httpLoginPost = null;
-
-    if (empty($httpLoginRedirect))
-        $httpLoginRedirect = null;
-
-    if (empty($httpLogoutRedirect))
-        $httpLogoutRedirect = null;
+    $hR = $ub->getData();
+    vL:
+    dA:
 }
-
-echo '
-	<script>
-		var testURL = "' . $testUrl . '";
-	</script>
-	<div class="row">
-<div class="col-sm-8">
-	<div class="page" id="serviceprovider">
-	<div class="upload_metadata_div"">
-
-		<form method="post" id="upload_metadata_form" class="upload_metadata_form" enctype="multipart/form-data">
-		' . $formKey . '
-			<input type="hidden" name="option" value="upload_metadata_file">
-			';
-if ($selected_provider != null) {
-    echo '
-			<input type="hidden" name="selected_provider" value=' . $idpDetails['idp_name'] . '>';
+iv:
+$rq = !empty($hR["\151\144\x70\137\x6e\141\x6d\x65"]) ? $hR["\x69\144\160\x5f\156\x61\155\145"] : null;
+$fh = !empty($hR["\x73\x61\x6d\x6c\x5f\x6c\157\x67\157\165\164\x5f\x62\x69\x6e\144\x69\156\147"]) && $hR["\x73\x61\155\154\137\154\x6f\147\x6f\x75\164\x5f\x62\x69\156\144\151\156\x67"] == "\110\164\164\160\x52\x65\x64\x69\162\x65\143\164" || empty($hR["\163\x61\155\154\137\154\x6f\147\157\165\x74\x5f\x62\151\156\x64\x69\x6e\147"]) ? "\x63\x68\x65\x63\x6b\145\144\x3d\x22\143\x68\145\x63\153\x65\x64\42" : '';
+$K6 = !empty($hR["\x73\141\x6d\154\x5f\x6c\157\x67\x69\x6e\x5f\x62\151\156\x64\151\x6e\147"]) && $hR["\x73\x61\x6d\154\137\154\x6f\x67\151\156\137\x62\x69\156\x64\151\x6e\x67"] == "\110\x74\164\160\x52\x65\144\151\162\x65\143\164" || $hR["\163\x61\155\154\x5f\154\x6f\147\151\156\x5f\x62\151\x6e\144\151\x6e\147"] ? "\x63\x68\145\143\153\145\144\x3d\x22\143\150\145\143\x6b\145\144\42" : '';
+$bz = !empty($hR["\x73\x61\x6d\x6c\137\154\157\147\x6f\x75\164\x5f\142\151\156\x64\151\156\147"]) && $hR["\x73\141\155\154\x5f\154\x6f\147\157\165\x74\137\x62\151\x6e\144\x69\156\x67"] == "\110\x74\164\x70\x50\157\163\164" ? "\x63\150\x65\143\153\145\144\x3d\42\143\x68\145\143\x6b\x65\144\x22" : '';
+$w9 = !empty($hR["\163\141\x6d\x6c\x5f\x6c\x6f\x67\x69\x6e\137\142\151\156\144\151\156\x67"]) && $hR["\x73\x61\x6d\x6c\x5f\154\157\x67\151\156\137\x62\x69\156\x64\151\x6e\x67"] == "\x48\x74\x74\160\x50\157\163\164" ? "\143\x68\x65\x63\x6b\145\144\75\x22\143\150\145\x63\x6b\145\144\x22" : '';
+$u4 = !empty($rq) ? $this->getTestUrl($rq) : '';
+$pg = !empty($hR["\162\x65\x73\160\x6f\156\x73\145\137\163\151\147\x6e\x65\x64"]) && $hR["\x72\145\163\160\x6f\x6e\x73\145\137\x73\x69\x67\x6e\x65\144"] == 1 ? "\143\x68\x65\x63\153\x65\x64" : '';
+$R5 = !empty($hR["\x61\x73\163\145\162\164\151\157\x6e\137\163\x69\147\156\145\x64"]) && $hR["\141\x73\163\x65\x72\x74\x69\x6f\156\137\163\x69\147\x6e\x65\x64"] == 1 ? "\x63\x68\145\143\153\x65\144" : '';
+goto ef;
+SZ:
+$px = null;
+$pg = null;
+$R5 = null;
+$bz = null;
+$w9 = null;
+$K6 = null;
+$fh = null;
+ef:
+echo "\15\12\11\x3c\163\x63\162\x69\x70\x74\x3e\15\xa\11\x9\166\x61\162\x20\x74\145\x73\164\x55\122\114\x20\x3d\x20\42" . $u4 . "\x22\73\15\12\11\74\57\163\143\x72\151\160\x74\76\xd\12\x9\x3c\x64\x69\x76\x20\x63\x6c\x61\163\x73\75\42\162\x6f\x77\x22\x3e\xd\xa\74\144\151\x76\x20\143\154\x61\163\163\x3d\42\143\x6f\x6c\55\x73\155\55\x38\x22\76\xd\xa\11\x3c\144\x69\166\x20\143\x6c\x61\163\163\x3d\x22\x70\x61\147\x65\x22\40\x69\x64\75\42\x73\x65\162\166\151\143\x65\x70\x72\157\166\151\144\145\x72\42\76\15\xa\x9\74\x64\x69\x76\40\x63\x6c\x61\x73\x73\x3d\42\165\160\x6c\157\141\144\137\155\145\164\x61\144\x61\x74\x61\x5f\144\151\166\x22\x22\76\15\xa\xd\xa\11\x9\74\146\x6f\x72\155\x20\155\145\164\x68\x6f\144\75\x22\x70\x6f\x73\x74\42\40\x69\x64\75\42\x75\160\154\x6f\x61\144\x5f\x6d\145\x74\141\x64\141\x74\x61\137\x66\x6f\x72\155\x22\x20\x63\x6c\141\163\163\75\x22\x75\160\x6c\x6f\x61\144\x5f\x6d\x65\164\141\144\141\x74\141\x5f\146\x6f\162\155\42\40\x65\156\x63\x74\x79\x70\145\x3d\x22\155\165\x6c\x74\151\160\141\162\164\57\x66\x6f\162\155\x2d\144\141\164\x61\x22\76\xd\12\x9\11" . $ld . "\xd\xa\x9\x9\x9\74\x69\x6e\160\165\164\40\164\171\x70\x65\75\x22\x68\151\144\x64\145\x6e\x22\x20\156\x61\x6d\x65\75\42\x6f\x70\164\x69\x6f\156\42\x20\x76\x61\x6c\x75\145\x3d\x22\165\x70\x6c\x6f\x61\x64\137\x6d\x65\x74\x61\144\141\x74\x61\137\146\x69\x6c\145\42\76\15\xa\x9\x9\11";
+if (!($px != null)) {
+    goto E0;
 }
-echo '
-			<div style="display:inline">
-				<label for="idp_name"><b>Identity Provider Name: </b></label>
-				<input type="text" id="upload_identity_name" name="saml_identity_name" placeholder="Identity Provider name like ADFS, Salesforce" ';
-if ($selected_provider != null && !empty($idpDetails['idp_name'])) {
-    echo "disabled value=" . $idpDetails['idp_name'];
-} else if (!empty($params['add'])) {
-    echo " value=''";
-} else if (!empty($default_provider) && !empty($defaultConfigurations['idp_name'])) {
-    echo " value=" . $defaultConfigurations['idp_name'];
+echo "\xd\xa\11\11\11\x3c\x69\x6e\160\x75\x74\x20\164\x79\x70\x65\x3d\42\150\x69\x64\144\145\x6e\x22\40\156\141\x6d\x65\75\x22\x73\145\154\x65\x63\x74\x65\x64\x5f\x70\x72\x6f\166\x69\x64\x65\162\42\x20\166\141\154\x75\145\75" . $hR["\x69\x64\160\x5f\x6e\141\155\x65"] . "\x3e";
+E0:
+echo "\15\xa\x9\x9\x9\74\x64\151\166\x20\163\x74\x79\x6c\145\75\x22\x64\x69\163\160\x6c\x61\171\x3a\x69\x6e\154\151\156\145\x22\76\15\xa\x9\11\11\x9\74\154\141\142\x65\154\x20\x66\157\162\75\x22\151\x64\160\137\x6e\141\155\x65\42\x3e\x3c\142\x3e\x49\144\145\x6e\x74\151\164\x79\40\120\162\x6f\166\151\144\145\162\40\x4e\x61\155\x65\x3a\40\x3c\57\142\76\x3c\x2f\x6c\141\142\145\154\x3e\15\12\x9\11\11\x9\74\151\x6e\x70\x75\x74\x20\164\171\160\x65\75\x22\164\x65\170\164\x22\40\x69\144\x3d\x22\165\160\154\157\141\x64\137\151\x64\x65\156\x74\151\164\x79\x5f\x6e\141\155\x65\42\40\x6e\141\155\x65\75\42\163\x61\155\154\137\x69\x64\x65\x6e\x74\151\x74\x79\x5f\x6e\x61\x6d\145\42\x20\160\154\x61\143\x65\x68\157\x6c\x64\145\x72\x3d\x22\111\144\x65\x6e\x74\151\164\171\x20\x50\162\157\166\x69\x64\x65\x72\40\x6e\x61\x6d\x65\x20\154\x69\x6b\x65\x20\101\x44\106\123\54\40\x53\141\154\x65\x73\x66\157\x72\x63\145\42\40";
+if ($px != null && !empty($hR["\x69\x64\160\137\x6e\141\155\x65"])) {
+    goto ZK;
 }
-echo " required " . $isEnabled;
-echo 'pattern="^\w*$" title="Only alphabets, numbers and underscore is allowed" style="width: 350px;">
-			</div>
-			<div style="display:inline">
-				<h4><strong>Upload IDP XML Metadata</strong></h4>
-			</div>
-				<hr style="border: 1px solid rgb(131, 128, 128)">
-			<br>
-			<div>
-					<label for="metadata"><b>Upload File: </b></label>
-					<input class="form-control" id="metadata_file" type="file" name="metadata_file" data-validate="{required:true}">
-			</div>
-			<h4 style="text-align:center;">OR</h4>
-			<div>
-				<label for="upload_url"><b>Upload URL: </b></label>
-				<input class="form-control" type="url" name="upload_url">
-			</div>
-			<br>
-			<br>
-			<div style="text-align:center;">
-			<input type="submit" name="upload_file" onClick="uploadFile()" id="upload_file" class="btn-round" name="submit" style="width:19%; margin-left: -2%" value="Save" ' . $isEnabled . '>
-			<a class="btn btn-primary cancel btn-round" style="background-color:#b82727; color:white; padding:2%" type="button"  name="cancel" id="cancel" onClick="cancel()">Cancel</a>
-			</form>
-			</div>
-		</div>
-		<div class="mosp_table_layout">
-
-
-			<form name="f" id="spsettings" method="post" action="">
-				' . $formKey . '
-				<input type="hidden" name="option" value="saveIDPSettings">
-				';
-if ($selected_provider != null) {
-    echo '
-			<input type="hidden" name="selected_provider" value=' . $idpDetails['idp_name'] . '>';
+if (!empty($Te["\141\x64\x64"])) {
+    goto Tw;
 }
-echo '
-				<h3>CONFIGURE SERVICE PROVIDER</h3>
-				<hr>
-				Enter the information gathered from your Identity Provider
-				<input class="btn-round" type="button" name="upload_idp_metadata" onclick="upload_metadata();" style="float:right; margin-right:20%; margin-top:1%; width:20%;" ' . $isEnabled . '   value="Upload IDP Metadata"/>
-
-				<table style="width:200%;">
-					<tr>
-						<td style="width:35%;"><strong>Identity Provider Name<span style="color:red;">*</span>:</strong></td>
-						<td style="width:170%;"><input type="text" name="saml_identity_name" placeholder="Identity Provider name like ADFS, SimpleSAML, Salesforce"
-								';
-if ($selected_provider != null && !empty($idpDetails['idp_name'])) {
-    echo "disabled value=" . $idpDetails['idp_name'];
-} else if (!empty($params['add'])) {
-    echo " value=''";
-} else if (!empty($default_provider) && !empty($defaultConfigurations['idp_name'])) {
-    echo " value=" . $defaultConfigurations['idp_name'];
+if (!(!empty($Yh) && !empty($di["\151\x64\160\137\156\x61\155\x65"]))) {
+    goto qC;
 }
-echo " required " . $isEnabled;
-echo ' pattern="^\w*$" title="Only alphabets, numbers and underscore is allowed"></td>
-					</tr>
-					<tr>
-						<td><strong>IdP Entity ID or Issuer <span style="color:red;width:30%;">*</span>:</strong></td>
-						<td><input type="text" name="saml_issuer" placeholder="Identity Provider Entity ID or Issuer"
-						';
-if ($selected_provider != null && !empty($idpDetails['idp_entity_id'])) {
-    echo "value=" . $idpDetails['idp_entity_id'];
-} else if (!empty($params['add'])) {
-    echo " value=''";
-} else if (!empty($default_provider) && !empty($defaultConfigurations['idp_entity_id'])) {
-    echo " value=" . $defaultConfigurations['idp_entity_id'];
+echo "\x20\x76\x61\154\x75\145\75" . $di["\x69\x64\x70\x5f\x6e\x61\155\145"];
+qC:
+goto Sz;
+Tw:
+echo "\x20\x76\x61\x6c\165\x65\x3d\47\x27";
+Sz:
+goto un;
+ZK:
+echo "\144\151\163\x61\142\x6c\x65\144\40\166\x61\x6c\x75\x65\x3d" . $hR["\x69\x64\160\x5f\156\141\155\145"];
+un:
+echo "\40\x72\x65\161\165\x69\x72\x65\x64\40" . $A5;
+echo "\x70\x61\164\x74\x65\x72\x6e\x3d\x22\x5e\134\167\x2a\44\x22\40\x74\x69\x74\x6c\145\x3d\x22\x4f\x6e\x6c\171\x20\x61\x6c\x70\x68\x61\x62\x65\164\x73\x2c\40\156\165\x6d\x62\x65\x72\x73\40\x61\x6e\x64\40\165\x6e\x64\145\x72\163\x63\157\x72\145\40\151\x73\40\x61\154\x6c\157\x77\145\x64\42\x20\163\164\171\154\145\x3d\x22\167\x69\x64\164\150\72\x20\x33\65\x30\x70\x78\73\x22\76\xd\xa\11\x9\x9\x3c\57\144\151\166\x3e\xd\xa\x9\x9\11\74\144\151\x76\40\x73\164\x79\154\x65\75\42\144\151\163\160\x6c\x61\171\x3a\x69\156\x6c\x69\x6e\x65\x22\x3e\xd\12\11\x9\x9\11\74\150\64\76\x3c\x73\x74\162\x6f\x6e\x67\x3e\125\160\x6c\x6f\x61\x64\x20\111\x44\x50\x20\x58\x4d\114\x20\x4d\145\x74\x61\144\141\x74\141\x3c\x2f\x73\164\x72\157\156\x67\x3e\74\x2f\x68\x34\76\15\12\x9\11\11\74\x2f\x64\151\x76\76\xd\xa\11\11\11\x9\x3c\150\x72\x20\x73\x74\x79\x6c\145\x3d\x22\142\x6f\162\x64\145\x72\72\40\x31\x70\x78\x20\163\x6f\x6c\151\x64\40\162\147\x62\x28\61\63\x31\x2c\40\61\62\70\54\40\61\x32\70\x29\42\x3e\xd\12\11\x9\11\x3c\142\162\76\15\12\11\x9\11\x3c\144\151\166\76\xd\12\x9\x9\11\11\x9\74\154\141\142\x65\x6c\40\x66\x6f\x72\x3d\42\155\145\x74\141\x64\x61\x74\141\42\76\x3c\142\76\125\160\x6c\x6f\x61\144\40\106\151\x6c\145\72\40\74\57\142\x3e\x3c\x2f\154\141\x62\145\x6c\76\xd\12\x9\11\x9\11\11\x3c\x69\x6e\x70\165\x74\40\x63\154\141\163\x73\75\42\x66\x6f\162\x6d\55\143\x6f\156\164\x72\157\x6c\x22\40\151\x64\x3d\42\155\145\164\141\144\141\164\x61\137\146\151\154\145\42\40\164\x79\x70\145\75\x22\x66\x69\154\x65\x22\40\156\x61\x6d\x65\x3d\x22\155\145\164\x61\144\x61\x74\x61\137\146\x69\154\x65\42\40\144\x61\x74\x61\55\166\141\154\x69\x64\141\164\x65\75\42\x7b\162\145\x71\x75\x69\162\145\144\x3a\164\162\x75\x65\x7d\x22\x3e\15\xa\11\11\11\74\x2f\144\x69\166\76\xd\12\x9\11\11\x3c\150\x34\x20\163\x74\x79\154\x65\75\42\x74\x65\170\164\x2d\x61\x6c\151\x67\x6e\x3a\x63\145\x6e\164\x65\x72\x3b\42\76\117\x52\74\57\150\x34\x3e\xd\12\x9\x9\x9\x3c\x64\151\166\x3e\xd\xa\x9\11\11\x9\x3c\154\141\x62\x65\154\40\x66\157\x72\75\x22\165\160\x6c\x6f\x61\x64\137\165\x72\154\42\x3e\x3c\142\x3e\125\x70\154\x6f\x61\x64\x20\125\122\x4c\x3a\40\74\57\142\x3e\x3c\x2f\x6c\x61\x62\x65\154\x3e\xd\12\x9\x9\x9\x9\74\x69\156\160\165\x74\40\x63\154\141\163\x73\75\x22\x66\x6f\x72\x6d\x2d\x63\x6f\156\164\162\157\x6c\42\40\164\x79\160\145\75\42\165\x72\x6c\42\x20\156\141\x6d\145\75\x22\x75\x70\154\157\141\144\137\x75\x72\154\42\x3e\xd\xa\11\11\11\x3c\x2f\x64\151\x76\x3e\xd\12\x9\11\x9\74\x62\162\76\15\xa\11\x9\11\74\142\162\x3e\xd\12\11\x9\x9\x3c\144\x69\x76\40\x73\x74\171\154\x65\x3d\x22\164\x65\170\x74\55\141\x6c\x69\x67\156\72\143\145\x6e\x74\x65\x72\x3b\42\x3e\15\12\11\11\x9\74\151\156\160\x75\164\40\x74\x79\160\x65\x3d\42\163\165\x62\x6d\x69\x74\x22\40\x6e\141\x6d\x65\75\42\165\x70\154\157\x61\144\x5f\x66\x69\154\x65\42\40\x6f\x6e\103\154\x69\143\153\x3d\42\x75\x70\x6c\157\x61\144\106\151\x6c\145\x28\x29\42\x20\151\x64\75\x22\165\x70\x6c\x6f\141\x64\x5f\x66\x69\154\x65\x22\x20\x63\x6c\141\163\163\75\x22\x62\x74\156\x2d\162\157\x75\x6e\144\42\x20\156\141\x6d\145\x3d\x22\163\x75\142\x6d\151\x74\42\40\x73\164\x79\x6c\x65\x3d\42\x77\151\144\x74\x68\72\61\x39\x25\x3b\x20\155\x61\x72\147\151\x6e\x2d\154\145\146\164\x3a\40\x2d\x32\45\42\x20\166\141\154\165\145\x3d\x22\x53\141\x76\145\42\40" . $A5 . "\76\15\xa\11\x9\11\x3c\x61\40\143\x6c\141\x73\163\75\42\x62\x74\x6e\40\x62\x74\x6e\55\x70\x72\151\155\x61\162\x79\x20\143\x61\x6e\143\145\x6c\40\x62\164\x6e\x2d\x72\157\165\156\144\x22\40\163\x74\171\154\145\75\x22\142\141\x63\x6b\x67\x72\x6f\x75\156\x64\x2d\143\157\x6c\157\162\x3a\43\x62\x38\x32\x37\62\x37\73\40\143\x6f\x6c\x6f\162\72\x77\150\x69\164\x65\73\40\160\141\x64\x64\x69\156\147\x3a\x32\45\42\40\x74\x79\160\x65\x3d\x22\142\165\x74\x74\157\x6e\x22\40\40\156\141\155\x65\75\x22\143\141\156\x63\x65\x6c\x22\x20\151\x64\x3d\x22\x63\141\156\143\145\154\x22\x20\x6f\x6e\x43\154\151\143\x6b\x3d\x22\143\141\156\143\145\154\x28\x29\x22\76\x43\141\156\x63\x65\154\x3c\x2f\x61\76\15\12\x9\11\11\74\x2f\x66\157\x72\x6d\76\15\12\11\x9\11\74\x2f\144\151\x76\x3e\15\xa\x9\11\74\x2f\x64\x69\x76\76\15\xa\x9\11\74\x64\151\166\x20\143\154\141\163\x73\75\x22\x6d\157\x73\160\137\x74\141\142\154\x65\137\x6c\x61\x79\x6f\165\164\x22\76\15\12\15\12\15\xa\11\x9\11\x3c\x66\157\162\155\40\156\x61\155\145\75\x22\146\x22\x20\x69\144\75\42\163\160\163\145\x74\x74\151\156\x67\x73\x22\x20\155\x65\164\x68\157\144\x3d\42\x70\x6f\x73\164\42\40\141\143\164\151\x6f\x6e\x3d\42\42\76\xd\xa\x9\11\x9\11" . $ld . "\xd\xa\x9\x9\11\x9\74\151\x6e\160\x75\x74\40\x74\171\160\x65\75\42\150\x69\x64\144\x65\x6e\x22\x20\156\x61\155\145\75\x22\157\160\164\151\157\156\42\40\x76\x61\x6c\x75\145\75\42\x73\141\x76\145\x49\x44\x50\x53\145\164\x74\151\156\x67\163\x22\76\xd\xa\11\x9\11\x9";
+if (!($px != null)) {
+    goto r3;
 }
-echo " required " . $isEnabled;
-echo ' required ' . $isEnabled . '></td>
-					</tr>
-					<tr>
-						<td><strong>SAML Login URL<span style="color:red;">*</span>:</strong></td>
-						<td><input type="url" name="saml_login_url" placeholder="Single Sign On Service URL of your IdP"
-						';
-if ($selected_provider != null && !empty($idpDetails['saml_login_url'])) {
-    echo "value=" . $idpDetails['saml_login_url'];
-} else if (!empty($params['add'])) {
-    echo " value=''";
-} else if (!empty($default_provider) && !empty($defaultConfigurations['saml_login_url'])) {
-    echo " value=" . $defaultConfigurations['saml_login_url'];
+echo "\xd\xa\11\11\x9\x3c\151\156\x70\165\x74\x20\x74\x79\160\x65\75\42\x68\x69\144\x64\145\x6e\42\x20\156\x61\155\145\75\42\x73\x65\154\x65\143\164\145\144\x5f\160\x72\157\166\151\x64\145\x72\x22\x20\166\141\154\165\145\75" . $hR["\151\x64\x70\137\x6e\141\x6d\x65"] . "\x3e";
+r3:
+echo "\xd\xa\11\x9\11\x9\x3c\x68\63\76\103\117\116\106\x49\107\x55\122\x45\x20\x53\x45\x52\126\x49\x43\x45\40\120\x52\x4f\126\111\104\x45\x52\74\57\x68\x33\x3e\xd\12\11\x9\11\11\74\150\x72\76\xd\12\11\x9\11\11\105\156\x74\x65\162\x20\x74\150\x65\x20\151\x6e\146\157\x72\x6d\141\164\151\157\156\40\x67\x61\x74\150\145\x72\x65\x64\40\x66\162\x6f\155\40\x79\157\x75\x72\x20\111\x64\145\156\164\x69\x74\x79\x20\120\x72\x6f\x76\x69\144\x65\x72\xd\12\11\11\x9\11\x3c\x69\156\x70\165\164\x20\143\x6c\x61\163\163\x3d\42\142\164\156\55\162\x6f\165\156\x64\x22\x20\164\x79\160\x65\x3d\x22\142\x75\164\164\x6f\x6e\42\x20\156\x61\155\x65\x3d\42\165\x70\154\157\x61\144\137\x69\144\x70\x5f\x6d\145\x74\x61\144\x61\x74\x61\42\40\x6f\x6e\143\154\x69\x63\x6b\x3d\42\x75\160\154\x6f\141\x64\137\155\145\164\141\x64\x61\164\141\x28\51\73\x22\40\163\164\171\x6c\145\x3d\42\x66\x6c\x6f\x61\x74\72\162\151\x67\150\x74\73\40\155\x61\x72\147\x69\x6e\x2d\x72\x69\147\150\x74\72\62\x30\x25\x3b\40\x6d\x61\162\x67\x69\156\x2d\x74\x6f\160\72\x31\x25\73\x20\x77\151\144\164\x68\72\62\60\x25\73\42\x20" . $A5 . "\x20\x20\x20\166\141\154\165\x65\x3d\x22\125\160\154\x6f\x61\144\40\111\x44\120\x20\115\145\x74\141\144\x61\164\141\42\x2f\x3e\xd\xa\xd\xa\11\x9\x9\11\x3c\x74\141\x62\154\x65\40\163\x74\x79\x6c\145\75\x22\167\x69\144\164\150\72\62\60\60\x25\x3b\x22\76\15\12\x9\x9\x9\11\11\x3c\164\x72\76\xd\xa\x9\11\x9\11\x9\11\74\164\x64\40\163\164\171\154\145\75\42\167\151\x64\x74\x68\72\63\65\45\x3b\42\76\74\163\x74\162\x6f\156\x67\x3e\111\x64\x65\x6e\x74\x69\x74\171\x20\x50\x72\157\166\151\144\145\x72\x20\116\x61\x6d\145\x3c\163\x70\x61\x6e\x20\x73\164\171\154\145\x3d\x22\x63\157\154\x6f\x72\x3a\x72\145\x64\x3b\x22\76\x2a\74\57\163\160\141\156\76\x3a\x3c\57\x73\x74\162\x6f\156\147\76\74\57\x74\144\76\xd\xa\x9\x9\11\11\11\11\x3c\x74\x64\40\163\164\x79\x6c\145\75\x22\x77\x69\144\164\150\72\x31\x37\x30\45\x3b\x22\x3e\x3c\x69\156\x70\x75\x74\x20\x74\x79\x70\145\x3d\x22\164\145\170\x74\42\x20\x6e\x61\x6d\145\x3d\x22\x73\x61\x6d\x6c\x5f\151\144\x65\156\x74\151\164\171\137\156\141\155\145\x22\x20\x70\x6c\x61\x63\145\150\157\154\144\x65\x72\x3d\42\x49\x64\x65\x6e\164\x69\x74\171\x20\120\x72\x6f\166\x69\x64\145\x72\x20\156\141\155\x65\x20\154\x69\x6b\x65\40\101\104\x46\123\x2c\x20\x53\151\x6d\x70\x6c\145\123\x41\115\x4c\x2c\x20\123\x61\154\145\x73\x66\x6f\162\143\x65\x22\15\xa\11\x9\x9\11\x9\x9\x9\x9";
+if ($px != null && !empty($hR["\x69\144\x70\137\x6e\x61\155\145"])) {
+    goto S9;
 }
-echo " required " . $isEnabled;
-echo ' required ' . $isEnabled . '></td>
-					</tr>
-					<tr>
-						<td><strong>SAML Login Binding :</strong></td>
-
-						<td><input style="width:5%;" type="radio" name="saml_login_binding_type" id="sli-http-redirect" value="HttpRedirect"
-						' . $httpLoginRedirect . ' ' . $isEnabled . '>HTTP-Redirect Binding</input>
-						<input style="width:5%; margin-left: 5%" type="radio" name="saml_login_binding_type" id="sli-http-post"
-						value="HttpPost" ' . $httpLoginPost . ' ' . $isEnabled . '>HTTP-POST Binding</input>
-						<br></td>
-					</tr>
-					<tr>
-						<td><strong>SAML Logout URL :</strong></td>
-						<td><input type="url" name="saml_logout_url" placeholder="Single Logout Service URL of your IdP"
-						';
-if ($selected_provider != null && !empty($idpDetails['saml_logout_url'])) {
-    echo "value=" . $idpDetails['saml_logout_url'];
-} else if (!empty($params['add'])) {
-    echo " value=''";
-} else if (!empty($default_provider) && !empty($defaultConfigurations['saml_logout_url'])) {
-    echo "value=" . $defaultConfigurations['saml_logout_url'];
+if (!empty($Te["\141\144\144"])) {
+    goto hT;
 }
-echo "" . $isEnabled;
-echo ' ' . $isEnabled . '></td>
-					</tr>
-					<tr>
-						<td><strong>SAML Logout Binding : </strong></td>
-						<td><input style="width:5%;" type="radio" name="saml_logout_binding_type" id="slo-http-redirect" value="HttpRedirect"
-							' . $httpLogoutRedirect . ' ' . $isEnabled . '>HTTP-Redirect Binding</input>
-						<input style="width:5%;margin-left: 5%" type="radio" name="saml_logout_binding_type" id="slo-http-post"
-							value="HttpPost" ' . $httpLogoutPost . ' ' . $isEnabled . '>HTTP-POST Binding</input>
-						<br></td>
-
-					</tr>
-
-					<tr>
-						<td><strong>X.509 Certificate <span style="color:red;">*</span>:</strong></td>
-						<td>
-							<textarea required style="height:30%" rows="4" cols="5" name="saml_x509_certificate"
-								placeholder="Copy and Paste the content from the downloaded certificate or copy the content enclosed in
-									\'X509Certificate\' tag (has parent tag \'KeyDescriptor use=signing\') in IdP-Metadata XML file"
-								 ' . $isEnabled . ' >';
-if ($selected_provider != null && !empty($idpDetails['x509_certificate'])) {
-    echo $idpDetails['x509_certificate'];
-} else if (!empty($params['add'])) {
-    echo '';
-} else if (!empty($default_provider) && !empty($defaultConfigurations['x509_certificate'])) {
-    echo $defaultConfigurations['x509_certificate'];
+if (!(!empty($Yh) && !empty($di["\151\x64\160\x5f\x6e\141\155\145"]))) {
+    goto Zq;
 }
-echo $isEnabled;
-echo '
-							</textarea>
-						</td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td>
-							<b>NOTE:</b> Format of the certificate:<br/><b>-----BEGIN CERTIFICATE-----<br/>XXXXXXXXXXXXXXXXXXXXXXXXXXX
-								<br/>-----END CERTIFICATE-----</b></i><br/>
-						</td>
-					</tr>
-
-					<tr>
-						<td>&nbsp;</td>
-						<td>
-							<br><input type="submit" class="btn-round" name="submit" style="width:19%; margin-left: -2%" value="Save"
-							' . $isEnabled . '> &nbsp;
-							<input class="btn-round" type="button" name="test" title="You can only test your Configuration after saving your Service Provider Settings."
-								onclick="showTestWindow();"' . $isEnabled . ' value="Test configuration" style="width:45%;">
-						</td>
-					</tr>
-				</table>
-			</form>
-			';
-if ($this->check_license_plan(3)) {
-    echo '
-			<form method="post" id="add-identity-provider-form" action="' . $idps . '">
-        ' . $formKey . '
-        <input id= ""type="hidden" name="option" value="goBack">
-
-        <input type="submit" ' . $isEnabled . ' value="Go Back" style="width:11%; margin-right:37%; float:right; margin-top: -5%" class="btn btn-small btn-danger btn-round"/></form>
-		';
+echo "\x20\166\x61\x6c\x75\145\75" . $di["\151\144\x70\x5f\x6e\x61\x6d\x65"];
+Zq:
+goto qj;
+hT:
+echo "\x20\166\x61\x6c\x75\x65\75\x27\47";
+qj:
+goto Ze;
+S9:
+echo "\x64\151\x73\141\x62\x6c\x65\144\x20\x76\141\x6c\x75\x65\x3d" . $hR["\x69\x64\160\137\x6e\x61\155\x65"];
+Ze:
+echo "\x20\x72\x65\161\165\151\x72\145\144\x20" . $A5;
+echo "\40\160\x61\164\x74\145\x72\156\x3d\x22\136\134\x77\x2a\44\42\x20\164\x69\x74\154\145\75\x22\117\x6e\x6c\x79\40\x61\154\160\150\x61\x62\x65\x74\163\x2c\x20\156\x75\x6d\142\145\162\x73\x20\141\x6e\x64\40\165\x6e\x64\x65\x72\x73\x63\x6f\x72\145\x20\151\x73\x20\x61\154\x6c\157\167\x65\144\42\76\x3c\57\x74\x64\76\15\xa\11\11\x9\11\11\x3c\57\164\162\x3e\15\xa\11\x9\x9\x9\x9\x3c\164\162\76\15\xa\x9\11\11\x9\11\11\74\164\x64\x3e\x3c\163\x74\162\157\x6e\147\x3e\111\144\120\x20\105\x6e\x74\151\x74\171\40\111\x44\40\x6f\162\40\111\163\163\165\x65\x72\40\74\x73\160\141\x6e\40\163\x74\171\154\145\75\42\x63\x6f\154\x6f\162\72\162\x65\x64\73\167\x69\144\x74\x68\x3a\x33\60\x25\73\x22\x3e\52\x3c\57\163\x70\x61\x6e\x3e\x3a\74\x2f\163\x74\162\x6f\x6e\x67\x3e\x3c\x2f\164\x64\x3e\xd\xa\x9\11\x9\x9\x9\x9\74\164\144\76\74\151\x6e\x70\x75\x74\40\164\171\160\x65\75\42\x74\145\x78\x74\x22\x20\156\x61\x6d\x65\x3d\x22\163\x61\x6d\x6c\137\x69\163\163\x75\x65\162\x22\40\160\x6c\x61\143\x65\150\157\x6c\x64\145\x72\75\x22\111\144\145\156\164\151\x74\171\x20\120\x72\x6f\166\151\x64\x65\162\x20\x45\156\164\151\x74\171\x20\111\104\x20\157\162\40\111\163\163\x75\x65\162\42\xd\xa\11\x9\11\x9\11\11";
+if ($px != null && !empty($hR["\151\144\x70\x5f\145\156\x74\151\x74\x79\137\151\144"])) {
+    goto RQ;
 }
-echo '
-		</div>
-	</div>';
+if (!empty($Te["\x61\x64\x64"])) {
+    goto H5;
+}
+if (!(!empty($Yh) && !empty($di["\x69\144\x70\x5f\x65\x6e\x74\x69\164\171\137\151\144"]))) {
+    goto JK;
+}
+echo "\x20\166\141\x6c\165\145\x3d" . $di["\x69\144\160\137\145\156\x74\x69\x74\x79\x5f\x69\144"];
+JK:
+goto tM;
+H5:
+echo "\40\x76\x61\154\x75\x65\x3d\x27\x27";
+tM:
+goto G2;
+RQ:
+echo "\x76\x61\154\165\x65\x3d" . $hR["\151\x64\160\137\145\x6e\164\x69\x74\171\x5f\151\x64"];
+G2:
+echo "\x20\162\x65\161\165\151\162\145\x64\40" . $A5;
+echo "\40\162\145\x71\165\x69\x72\145\x64\x20" . $A5 . "\x3e\x3c\57\164\x64\x3e\15\xa\x9\x9\x9\11\11\74\x2f\x74\162\76\xd\xa\11\x9\11\11\x9\74\x74\x72\76\xd\12\x9\11\11\11\x9\11\x3c\x74\x64\x3e\x3c\163\x74\162\x6f\156\147\x3e\x53\x41\x4d\x4c\x20\114\157\x67\151\156\40\x55\122\x4c\74\163\x70\141\x6e\x20\x73\164\171\x6c\145\x3d\42\x63\x6f\x6c\157\x72\x3a\162\145\x64\73\x22\76\x2a\x3c\x2f\x73\x70\141\x6e\x3e\x3a\x3c\57\x73\x74\x72\157\x6e\147\x3e\74\57\164\144\76\15\12\11\x9\11\11\x9\x9\x3c\164\144\x3e\74\x69\156\160\165\x74\40\164\x79\160\145\x3d\42\165\x72\x6c\x22\x20\x6e\141\155\x65\x3d\42\163\x61\x6d\x6c\x5f\x6c\157\x67\x69\156\137\165\x72\154\42\40\x70\x6c\141\x63\145\x68\157\154\144\145\x72\x3d\x22\123\151\x6e\147\x6c\145\40\123\151\147\x6e\40\x4f\156\40\123\145\162\166\151\x63\x65\x20\x55\x52\114\40\x6f\x66\40\171\157\165\162\x20\111\144\x50\42\xd\xa\x9\11\x9\x9\x9\11";
+if ($px != null && !empty($hR["\x73\141\155\x6c\137\154\x6f\x67\151\x6e\137\165\x72\x6c"])) {
+    goto j8;
+}
+if (!empty($Te["\x61\144\x64"])) {
+    goto Ps;
+}
+if (!(!empty($Yh) && !empty($di["\163\141\x6d\x6c\x5f\154\x6f\x67\151\x6e\137\165\x72\x6c"]))) {
+    goto Rd;
+}
+echo "\40\x76\141\154\x75\x65\75" . $di["\163\141\155\x6c\137\154\157\x67\151\156\x5f\165\162\x6c"];
+Rd:
+goto qf;
+Ps:
+echo "\x20\x76\x61\x6c\x75\x65\75\x27\x27";
+qf:
+goto e4;
+j8:
+echo "\x76\x61\x6c\165\x65\x3d" . $hR["\163\141\155\154\x5f\x6c\x6f\x67\x69\x6e\137\x75\162\154"];
+e4:
+echo "\x20\162\x65\161\165\151\162\145\x64\40" . $A5;
+echo "\40\162\145\x71\165\151\x72\145\144\x20" . $A5 . "\x3e\x3c\57\x74\x64\76\15\12\11\11\x9\x9\11\74\57\x74\162\76\15\12\11\x9\x9\11\x9\x3c\164\162\x3e\15\12\11\11\11\11\x9\11\x3c\x74\144\76\x3c\163\164\162\x6f\x6e\x67\76\x53\x41\115\x4c\x20\x4c\x6f\147\x69\x6e\40\x42\x69\x6e\144\151\x6e\x67\x20\x3a\74\57\x73\164\x72\157\x6e\147\x3e\x3c\57\164\x64\76\15\xa\xd\12\11\11\x9\11\11\11\x3c\164\144\76\x3c\151\x6e\x70\x75\x74\40\x73\164\x79\154\x65\75\42\x77\151\x64\x74\x68\x3a\x35\45\73\x22\40\x74\x79\x70\145\x3d\x22\x72\x61\144\x69\157\42\40\x6e\x61\155\x65\x3d\42\163\x61\x6d\154\137\x6c\x6f\147\151\x6e\x5f\x62\x69\156\x64\x69\156\147\x5f\164\x79\160\145\42\x20\151\x64\75\42\163\154\151\55\150\164\164\160\x2d\162\145\x64\151\x72\145\x63\x74\42\x20\x76\141\154\x75\x65\75\42\110\x74\x74\160\122\145\x64\151\162\145\x63\x74\x22\xd\12\x9\11\11\x9\11\11" . $K6 . "\40" . $A5 . "\x3e\x48\x54\124\120\x2d\x52\145\x64\x69\162\x65\143\164\40\x42\151\x6e\x64\151\156\147\x3c\57\151\x6e\160\165\x74\x3e\xd\xa\11\x9\11\11\x9\x9\74\x69\x6e\160\x75\x74\x20\x73\x74\x79\154\145\x3d\x22\167\151\x64\164\150\72\x35\45\73\x20\155\x61\162\x67\x69\x6e\x2d\x6c\145\x66\164\72\40\65\45\42\40\x74\x79\160\145\x3d\x22\x72\141\x64\151\157\x22\x20\x6e\x61\x6d\x65\75\42\x73\141\155\x6c\x5f\154\x6f\x67\151\x6e\137\x62\151\156\x64\x69\156\147\x5f\164\x79\160\x65\x22\x20\151\x64\x3d\42\163\154\151\x2d\150\164\164\160\x2d\x70\x6f\x73\x74\42\15\12\11\11\11\x9\11\x9\x76\141\154\165\145\x3d\42\x48\164\164\160\x50\x6f\x73\x74\x22\x20" . $w9 . "\x20" . $A5 . "\x3e\x48\124\124\x50\55\120\117\x53\124\40\x42\x69\156\144\x69\x6e\147\74\57\151\156\160\165\164\76\15\12\11\x9\x9\11\x9\x9\x3c\x62\162\76\74\57\x74\x64\x3e\xd\12\11\11\x9\x9\11\74\x2f\x74\162\x3e\15\xa\11\11\x9\x9\11\74\164\x72\76\xd\xa\x9\x9\x9\11\x9\11\74\164\x64\x3e\x3c\x73\x74\162\x6f\156\147\x3e\x53\101\115\x4c\40\x4c\x6f\147\157\165\164\x20\125\122\114\x20\72\x3c\57\x73\164\x72\x6f\x6e\x67\x3e\x3c\x2f\x74\x64\76\15\xa\11\11\11\11\11\x9\x3c\164\144\x3e\x3c\151\156\160\165\164\40\x74\171\160\145\75\42\165\x72\x6c\42\x20\x6e\x61\155\x65\75\x22\163\141\x6d\154\x5f\154\x6f\x67\157\x75\x74\137\x75\162\x6c\x22\x20\160\154\141\x63\x65\x68\x6f\x6c\144\145\162\75\x22\123\x69\x6e\147\154\145\x20\x4c\x6f\147\157\165\164\40\123\145\x72\166\x69\x63\x65\x20\125\x52\x4c\x20\x6f\x66\40\171\x6f\165\x72\40\x49\x64\x50\x22\15\xa\11\x9\11\11\11\x9";
+if ($px != null && !empty($hR["\163\x61\x6d\x6c\137\x6c\x6f\147\157\165\164\137\165\162\x6c"])) {
+    goto Te;
+}
+if (!empty($Te["\141\x64\x64"])) {
+    goto It;
+}
+if (!(!empty($Yh) && !empty($di["\x73\x61\x6d\154\137\x6c\x6f\x67\x6f\165\x74\x5f\x75\162\154"]))) {
+    goto TG;
+}
+echo "\x76\141\154\x75\145\75" . $di["\x73\141\x6d\154\137\x6c\x6f\147\157\165\164\137\x75\162\x6c"];
+TG:
+goto G7;
+It:
+echo "\40\166\x61\154\165\x65\75\47\x27";
+G7:
+goto im;
+Te:
+echo "\x76\141\154\x75\x65\x3d" . $hR["\x73\x61\x6d\154\137\x6c\x6f\x67\x6f\165\x74\x5f\x75\162\x6c"];
+im:
+echo '' . $A5;
+echo "\x20" . $A5 . "\x3e\74\57\164\x64\x3e\xd\12\x9\11\11\x9\11\x3c\x2f\164\162\x3e\xd\xa\x9\11\x9\x9\x9\x3c\x74\x72\x3e\15\12\x9\x9\x9\x9\x9\x9\x3c\x74\x64\x3e\74\x73\x74\162\x6f\x6e\147\x3e\x53\101\x4d\x4c\x20\x4c\157\x67\157\x75\164\x20\x42\x69\156\144\x69\156\x67\x20\x3a\40\x3c\57\163\164\162\157\x6e\147\76\74\57\x74\x64\x3e\15\xa\x9\11\11\11\11\x9\x3c\164\x64\x3e\74\151\x6e\160\x75\x74\40\163\x74\171\154\x65\75\x22\x77\151\144\x74\x68\x3a\65\x25\x3b\42\40\x74\171\160\x65\x3d\x22\162\141\x64\151\x6f\42\40\x6e\x61\155\145\75\x22\x73\x61\x6d\x6c\x5f\x6c\x6f\147\157\x75\164\137\x62\151\156\144\151\x6e\x67\137\x74\171\160\145\42\40\x69\x64\75\42\x73\154\157\x2d\150\164\164\x70\x2d\x72\x65\x64\x69\162\145\x63\164\42\x20\x76\x61\x6c\165\x65\75\x22\110\x74\x74\160\x52\145\144\x69\162\x65\x63\164\x22\xd\xa\11\x9\11\11\11\11\x9" . $fh . "\x20" . $A5 . "\x3e\x48\x54\124\120\55\x52\145\144\151\x72\145\x63\x74\40\x42\151\156\144\x69\156\x67\x3c\x2f\151\156\160\x75\164\x3e\xd\12\x9\x9\11\11\x9\x9\74\151\x6e\x70\165\x74\x20\x73\x74\171\154\145\x3d\42\167\151\144\x74\150\72\x35\45\x3b\155\x61\x72\x67\151\x6e\55\154\145\x66\x74\72\40\x35\x25\42\40\164\171\x70\145\75\x22\x72\x61\144\151\x6f\42\x20\156\x61\x6d\145\75\42\x73\141\x6d\x6c\137\x6c\157\x67\157\165\164\x5f\x62\x69\x6e\144\x69\x6e\147\137\x74\x79\160\145\x22\40\x69\x64\x3d\x22\163\154\157\x2d\x68\164\x74\160\55\x70\157\163\164\x22\15\12\11\x9\x9\11\11\x9\11\x76\x61\x6c\x75\145\75\42\110\164\164\160\x50\x6f\x73\x74\42\40" . $bz . "\40" . $A5 . "\76\x48\x54\x54\x50\55\120\x4f\123\x54\40\x42\151\x6e\x64\x69\x6e\147\74\x2f\151\x6e\160\x75\164\x3e\xd\xa\x9\x9\x9\x9\x9\11\74\142\162\x3e\74\x2f\164\x64\x3e\xd\12\15\12\11\11\x9\x9\11\74\x2f\164\x72\x3e\15\xa\xd\12\x9\11\11\11\11\x3c\164\x72\76\xd\xa\11\11\11\x9\11\11\x3c\x74\144\76\x3c\163\164\x72\x6f\x6e\x67\x3e\x58\56\x35\60\71\x20\x43\145\x72\164\151\146\151\x63\141\x74\145\40\x3c\163\160\x61\156\40\x73\164\171\x6c\145\75\42\x63\x6f\x6c\157\x72\72\162\145\x64\73\42\x3e\x2a\74\x2f\x73\x70\x61\x6e\x3e\72\74\57\163\164\x72\157\156\x67\x3e\x3c\57\x74\144\76\15\12\x9\x9\x9\x9\x9\x9\x3c\x74\144\76\xd\12\11\x9\11\x9\x9\x9\11\x3c\164\145\170\164\x61\x72\x65\141\x20\x72\x65\x71\x75\151\x72\x65\144\40\x73\164\x79\154\145\x3d\42\x68\145\x69\147\150\x74\x3a\63\x30\x25\x22\x20\162\x6f\x77\x73\75\x22\64\42\x20\143\x6f\x6c\x73\x3d\42\x35\42\40\156\x61\x6d\145\75\x22\x73\141\155\x6c\137\x78\65\60\71\137\x63\145\162\x74\x69\x66\151\143\x61\x74\145\x22\xd\12\x9\x9\11\x9\11\11\11\x9\160\x6c\x61\x63\x65\150\157\x6c\x64\145\x72\75\x22\x43\157\160\x79\x20\141\x6e\x64\40\x50\141\163\164\x65\40\164\x68\145\40\x63\x6f\x6e\164\x65\156\x74\x20\x66\x72\157\x6d\40\164\x68\145\x20\144\x6f\x77\x6e\x6c\x6f\x61\x64\145\144\40\143\145\162\x74\151\x66\151\x63\141\164\145\x20\x6f\x72\40\143\x6f\160\x79\40\x74\x68\x65\x20\143\157\x6e\164\x65\156\164\x20\145\x6e\x63\154\157\x73\x65\144\40\x69\x6e\15\xa\11\11\11\x9\11\x9\x9\x9\x9\x27\x58\65\60\x39\103\x65\x72\164\x69\146\x69\143\141\164\145\47\40\x74\x61\147\40\50\x68\141\x73\x20\x70\141\162\x65\156\164\x20\x74\x61\x67\x20\47\113\145\171\x44\145\x73\x63\162\x69\160\164\157\x72\40\165\x73\145\75\x73\x69\147\x6e\x69\156\147\47\x29\40\x69\x6e\40\111\x64\120\55\115\145\164\x61\x64\141\164\141\x20\130\x4d\x4c\40\146\x69\x6c\x65\42\xd\12\11\x9\x9\11\11\x9\11\x9\x20" . $A5 . "\40\76";
+if ($px != null && !empty($hR["\x78\65\x30\x39\137\x63\x65\x72\x74\151\x66\x69\x63\141\164\145"])) {
+    goto sX;
+}
+if (!empty($Te["\141\144\x64"])) {
+    goto Lu;
+}
+if (!(!empty($Yh) && !empty($di["\170\65\60\x39\x5f\x63\x65\x72\x74\x69\146\151\143\x61\x74\x65"]))) {
+    goto gI;
+}
+echo $di["\170\x35\x30\71\137\x63\145\162\164\x69\146\151\143\141\164\x65"];
+gI:
+goto mr;
+Lu:
+echo '';
+mr:
+goto tB;
+sX:
+echo $hR["\x78\65\x30\71\x5f\x63\145\162\164\151\x66\151\x63\141\164\x65"];
+tB:
+echo $A5;
+echo "\15\12\11\11\11\x9\11\x9\11\x3c\57\164\x65\170\x74\x61\x72\x65\141\x3e\xd\12\x9\x9\x9\11\11\x9\x3c\57\164\x64\76\15\12\x9\11\11\11\x9\74\x2f\x74\162\76\15\xa\11\x9\11\x9\x9\x3c\x74\x72\76\xd\xa\11\11\x9\x9\x9\x9\x3c\164\x64\76\x26\x6e\x62\163\x70\x3b\74\x2f\164\144\76\xd\12\11\x9\11\x9\11\x9\x3c\164\144\x3e\xd\xa\11\x9\11\x9\11\x9\x9\74\142\x3e\116\117\x54\105\72\74\57\x62\76\40\106\x6f\162\155\141\x74\x20\157\x66\x20\x74\150\145\40\x63\145\162\x74\x69\x66\151\143\x61\x74\x65\x3a\x3c\x62\162\x2f\76\x3c\x62\76\x2d\55\55\55\55\x42\x45\x47\x49\116\40\103\x45\122\124\x49\x46\111\103\101\x54\x45\x2d\x2d\x2d\55\55\x3c\142\162\x2f\x3e\130\130\x58\x58\x58\x58\130\x58\x58\130\x58\130\130\130\x58\x58\130\130\130\x58\x58\x58\130\130\x58\130\130\15\xa\11\11\11\x9\11\11\11\11\x3c\x62\162\x2f\x3e\x2d\55\55\x2d\55\105\x4e\x44\x20\103\x45\122\124\111\106\x49\x43\x41\124\x45\x2d\x2d\x2d\55\55\x3c\57\x62\76\74\x2f\x69\76\74\142\162\x2f\76\xd\xa\x9\11\x9\11\11\x9\x3c\x2f\x74\x64\76\xd\12\11\11\11\x9\11\x3c\57\x74\x72\76\15\xa\xd\xa\11\x9\11\x9\11\x3c\x74\162\76\15\12\11\11\x9\x9\x9\11\x3c\164\144\76\x26\156\142\x73\x70\73\x3c\x2f\x74\x64\x3e\15\12\11\11\x9\11\x9\11\74\164\144\76\15\12\x9\11\11\11\11\x9\11\x3c\142\x72\76\x3c\x69\156\x70\165\164\40\164\171\x70\145\75\42\x73\x75\x62\155\151\x74\42\40\143\154\141\x73\163\x3d\42\142\164\156\55\162\x6f\165\x6e\144\x22\x20\x6e\x61\155\145\75\42\x73\x75\142\155\151\164\x22\x20\163\164\x79\154\x65\x3d\x22\167\151\x64\x74\150\x3a\61\71\45\73\40\x6d\x61\162\147\151\156\55\154\x65\x66\164\x3a\x20\x2d\x32\45\x22\40\x76\x61\154\x75\x65\x3d\x22\123\141\166\x65\42\15\12\x9\11\11\x9\x9\11\x9" . $A5 . "\76\x20\46\x6e\142\x73\160\73\xd\12\x9\x9\11\x9\x9\x9\11\x3c\151\x6e\x70\165\164\40\143\x6c\141\x73\163\75\x22\142\164\156\x2d\162\157\x75\156\x64\42\40\164\171\x70\x65\x3d\x22\x62\x75\x74\164\157\156\x22\40\x6e\141\x6d\x65\x3d\x22\x74\145\163\164\x22\40\x74\151\x74\154\x65\x3d\42\131\x6f\165\x20\143\x61\156\40\157\156\x6c\171\40\x74\x65\163\164\40\171\x6f\x75\162\40\x43\157\x6e\146\151\147\x75\x72\141\164\x69\x6f\156\40\x61\x66\x74\145\162\40\163\x61\166\151\x6e\147\40\x79\x6f\x75\162\x20\x53\x65\162\x76\151\x63\x65\x20\x50\x72\157\166\x69\144\145\x72\x20\x53\145\164\164\x69\156\147\163\x2e\42\15\12\x9\11\x9\x9\11\x9\11\11\157\x6e\143\154\x69\143\153\75\x22\x73\150\157\167\x54\145\x73\x74\127\x69\156\x64\x6f\x77\x28\51\x3b\x22" . $A5 . "\40\166\x61\154\165\x65\75\42\x54\145\163\x74\40\x63\x6f\x6e\146\x69\147\165\162\141\x74\151\157\x6e\x22\40\x73\164\x79\154\145\75\42\167\151\x64\x74\150\x3a\64\65\x25\x3b\42\76\xd\12\x9\x9\11\11\11\11\74\57\164\x64\x3e\xd\12\x9\11\11\11\11\74\57\x74\x72\76\15\12\11\x9\11\x9\74\57\164\141\142\154\145\76\15\xa\11\x9\11\x3c\57\146\x6f\162\155\x3e\15\12\11\11\11";
+if (!$this->check_license_plan(3)) {
+    goto N3;
+}
+echo "\xd\12\11\x9\11\74\x66\157\x72\155\40\x6d\x65\164\x68\x6f\x64\x3d\42\160\157\x73\164\x22\x20\151\144\x3d\x22\141\x64\144\55\x69\144\145\x6e\x74\151\x74\171\x2d\160\162\157\166\x69\x64\x65\162\x2d\x66\157\x72\x6d\x22\40\x61\x63\x74\151\157\156\x3d\x22" . $JQ . "\x22\x3e\15\12\x20\x20\x20\40\40\x20\40\40" . $ld . "\15\12\40\x20\x20\40\40\40\x20\40\x3c\151\x6e\160\x75\164\40\151\144\75\40\42\42\164\171\160\145\x3d\42\x68\x69\144\144\x65\x6e\42\40\x6e\x61\x6d\x65\75\x22\157\x70\164\x69\x6f\x6e\x22\40\x76\x61\154\165\145\x3d\42\x67\157\x42\x61\143\x6b\42\76\xd\12\xd\12\x20\40\x20\x20\40\x20\x20\40\x3c\151\x6e\x70\165\164\x20\164\x79\160\x65\x3d\x22\163\165\142\x6d\151\x74\42\40" . $A5 . "\x20\x76\141\x6c\165\x65\75\42\x47\x6f\40\102\x61\143\153\x22\x20\x73\x74\x79\x6c\145\75\x22\x77\151\x64\164\x68\72\x31\x31\45\73\40\155\141\x72\147\x69\156\x2d\x72\x69\x67\150\x74\x3a\63\x37\x25\73\x20\146\154\x6f\x61\x74\x3a\162\151\147\x68\164\73\40\x6d\141\162\147\x69\x6e\x2d\164\x6f\160\x3a\40\x2d\65\45\x22\40\143\154\141\x73\x73\75\42\142\x74\x6e\40\142\x74\x6e\x2d\x73\155\141\154\x6c\x20\142\164\x6e\55\144\141\x6e\147\x65\162\x20\142\x74\x6e\55\162\x6f\165\156\x64\42\57\76\x3c\57\x66\157\162\155\x3e\xd\12\11\11";
+N3:
+echo "\xd\12\11\11\74\57\x64\x69\166\x3e\15\xa\x9\x3c\x2f\x64\151\x76\76";

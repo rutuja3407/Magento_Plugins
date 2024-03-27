@@ -1,43 +1,45 @@
 <?php
 
+
 namespace MiniOrange\SP\Helper\Saml2\Lib;
 
-/**
- * @package    miniOrange
- * @author     miniOrange Security Software Pvt. Ltd.
- * @license    GNU/GPLv3
- * @copyright  Copyright 2015 miniOrange. All Rights Reserved.
- *
- *
- * This file is part of miniOrange plugin.
- */
 class AESEncryption
 {
-    public static function encrypt_data($string, $pass)
+    public static function encrypt_data($Ee, $q4)
     {
-        $result = '';
-        for ($i = 0; $i < strlen($string); $i++) {
-            $char = substr($string, $i, 1);
-            $keychar = substr($pass, ($i % strlen($pass)) - 1, 1);
-            $char = chr(ord($char) + ord($keychar));
-            $result .= $char;
+        $bs = '';
+        $nO = 0;
+        LD:
+        if (!($nO < strlen($Ee))) {
+            goto GI;
         }
-
-        return base64_encode($result);
+        $qP = substr($Ee, $nO, 1);
+        $qF = substr($q4, $nO % strlen($q4) - 1, 1);
+        $qP = chr(ord($qP) + ord($qF));
+        $bs .= $qP;
+        Fz:
+        $nO++;
+        goto LD;
+        GI:
+        return base64_encode($bs);
     }
-
-    public static function decrypt_data($string, $pass)
+    public static function decrypt_data($Ee, $q4)
     {
-        $result = '';
-        $string = base64_decode((string)$string);
-
-        for ($i = 0; $i < strlen($string); $i++) {
-            $char = substr($string, $i, 1);
-            $keychar = substr($pass, ($i % strlen($pass)) - 1, 1);
-            $char = chr(ord($char) - ord($keychar));
-            $result .= $char;
+        $bs = '';
+        $Ee = base64_decode((string) $Ee);
+        $nO = 0;
+        GX:
+        if (!($nO < strlen($Ee))) {
+            goto TW;
         }
-
-        return $result;
+        $qP = substr($Ee, $nO, 1);
+        $qF = substr($q4, $nO % strlen($q4) - 1, 1);
+        $qP = chr(ord($qP) - ord($qF));
+        $bs .= $qP;
+        pl:
+        $nO++;
+        goto GX;
+        TW:
+        return $bs;
     }
 }

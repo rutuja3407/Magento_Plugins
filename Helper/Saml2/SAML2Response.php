@@ -1,30 +1,10 @@
 <?php
-/**
- * This file is part of miniOrange SAML plugin.
- *
- * miniOrange SAML plugin is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * miniOrange SAML plugin is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with miniOrange SAML plugin.  If not, see <http://www.gnu.org/licenses/>.
- */
+
 
 namespace MiniOrange\SP\Helper\Saml2;
 
 use DOMElement;
 use MiniOrange\SP\Helper\SPUtility;
-
-/**
- * Class for SAML2 Response messages.
- * @todo - This class needs to be modified and optimized.
- */
 class SAML2Response
 {
     public $ownerDocument;
@@ -35,100 +15,76 @@ class SAML2Response
     private $spUtility;
     private $statusCode;
     private $xml;
-    /**
-     * The assertions in this response.
-     */
-    /**
-     * The destination URL in this response.
-     */
-
     private $assertionNotBefore;
     private $assertionNotOnOrAfter;
-
-    /**
-     * Constructor for SAML 2 response messages.
-     *
-     * @param DOMElement|NULL $xml The input message.
-     */
-    public function __construct(\DOMElement $xml = NULL, SPUtility $spUtility)
+    public function __construct(\DOMElement $xa = NULL, SPUtility $fR)
     {
         $this->assertions = array();
         $this->certificates = array();
-        $this->spUtility = $spUtility;
-
-
-        if ($xml === NULL) {
-            return;
+        $this->spUtility = $fR;
+        if (!($xa === NULL)) {
+            goto hA;
         }
-
-        $sig = SAML2Utilities::validateElement($xml);
-        if ($sig !== FALSE) {
-            $this->certificates = $sig['Certificates'];
-            $this->signatureData = $sig;
+        return;
+        hA:
+        $Ud = SAML2Utilities::validateElement($xa);
+        if (!($Ud !== FALSE)) {
+            goto VE;
         }
-
-        /* set the destination from saml response */
-        if ($xml->hasAttribute('Destination')) {
-            $this->destination = $xml->getAttribute('Destination');
+        $this->certificates = $Ud["\103\x65\162\x74\151\146\x69\x63\x61\x74\145\x73"];
+        $this->signatureData = $Ud;
+        VE:
+        if (!$xa->hasAttribute("\104\145\163\x74\151\156\x61\164\151\x6f\x6e")) {
+            goto CT;
         }
-        for ($node = $xml->firstChild; $node !== NULL; $node = $node->nextSibling) {
-
-            if ($node->namespaceURI !== 'urn:oasis:names:tc:SAML:2.0:assertion') {
-                continue;
-            }
-
-            if ($node->localName === 'Assertion' || $node->localName === 'EncryptedAssertion') {
-                $this->assertions[] = new SAML2Assertion($node, $this->spUtility);
-                /* Conditions is children node of Assertion, which contains info about expiry */
-                $this->assertionNotOnOrAfter = current($this->assertions)->getNotOnOrAfter();
-                $this->assertionNotBefore = current($this->assertions)->getNotBefore();
-            }
-
-
+        $this->destination = $xa->getAttribute("\x44\x65\x73\164\151\x6e\x61\164\151\x6f\156");
+        CT:
+        $zN = $xa->firstChild;
+        Nh:
+        if (!($zN !== NULL)) {
+            goto fq;
         }
+        if (!($zN->namespaceURI !== "\x75\162\x6e\x3a\x6f\x61\163\151\163\x3a\x6e\141\x6d\x65\x73\72\164\143\x3a\123\x41\x4d\x4c\72\x32\56\x30\72\141\x73\x73\x65\x72\164\x69\157\156")) {
+            goto pD;
+        }
+        goto Fh;
+        pD:
+        if (!($zN->localName === "\x41\x73\163\145\x72\x74\x69\x6f\x6e" || $zN->localName === "\x45\x6e\143\x72\171\x70\164\145\x64\x41\163\x73\x65\162\164\151\x6f\x6e")) {
+            goto Rx;
+        }
+        $this->assertions[] = new SAML2Assertion($zN, $this->spUtility);
+        $this->assertionNotOnOrAfter = current($this->assertions)->getNotOnOrAfter();
+        $this->assertionNotBefore = current($this->assertions)->getNotBefore();
+        Rx:
+        Fh:
+        $zN = $zN->nextSibling;
+        goto Nh;
+        fq:
     }
-
-    /**
-     * Retrieve the assertions in this response.
-     *
-     * @return SAML2Assertion[]|SAML2_EncryptedAssertion[]
-     */
     public function getAssertions()
     {
         return $this->assertions;
     }
-
-    /**
-     * Set the assertions that should be included in this response.
-     *
-     * @param SAML2Assertion[]|SAML2_EncryptedAssertion[] The assertions.
-     */
-    public function setAssertions(array $assertions)
+    public function setAssertions(array $tE)
     {
-        $this->assertions = $assertions;
+        $this->assertions = $tE;
     }
-
     public function getDestination()
     {
         return $this->destination;
     }
-
-
     public function getCertificates()
     {
         return $this->certificates;
     }
-
     public function getSignatureData()
     {
         return $this->signatureData;
     }
-
     public function getAssertionNotOnOrAfter()
     {
         return $this->assertionNotOnOrAfter;
     }
-
     public function getAssertionNotBefore()
     {
         return $this->assertionNotBefore;

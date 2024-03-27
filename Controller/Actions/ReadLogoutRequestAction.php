@@ -1,79 +1,48 @@
 <?php
 
+
 namespace MiniOrange\SP\Controller\Actions;
 
 use MiniOrange\SP\Helper\Saml2\LogoutRequest;
 use MiniOrange\SP\Helper\SPConstants;
-
-/**
- * Handles reading of SAML Logout Request from the IDP. Read the SAML Request
- * from the IDP and process it to detect if it's a valid logout Request.
- * Generate a SAML Logout Response Object and logs the user out.
- */
 class ReadLogoutRequestAction extends BaseAction
 {
     private $REQUEST;
     private $POST;
-
-    /**
-     * Execute function to execute the classes function.
-     * @throws NotRegisteredException
-     * @throws MissingIDException;
-     * @throws InvalidRequestVersionException;
-     * @throws MissingNameIdException;
-     * @throws InvalidNumberOfNameIDsException;
-     * @throws \Exception
-     */
     public function execute()
     {
         $this->checkIfValidPlugin();
-        // read the request
-        $samlRequest = $this->REQUEST['SAMLRequest'];
-        $relayState = !empty($this->REQUEST['RelayState']) ? $this->REQUEST['RelayState'] : '';
-        $samlRequest = base64_decode((string)$samlRequest);
-        if (empty($this->POST['SAMLRequest'])) {
-            $samlRequest = gzinflate($samlRequest);
+        $ML = $this->REQUEST["\123\101\x4d\x4c\122\145\x71\165\145\163\x74"];
+        $Nf = !empty($this->REQUEST["\122\145\154\x61\x79\123\164\x61\x74\145"]) ? $this->REQUEST["\122\x65\x6c\141\171\x53\x74\x61\164\x65"] : '';
+        $ML = base64_decode((string) $ML);
+        if (!empty($this->POST["\x53\x41\115\114\122\145\x71\x75\x65\163\164"])) {
+            goto Dg;
         }
-        $document = new \DOMDocument();
-        $document->loadXML($samlRequest);
-        $samlRequestXML = $document->firstChild;
-        if ($samlRequestXML->localName == 'LogoutRequest') {
-            $logoutRequest = new LogoutRequest($samlRequestXML);
-            return $this->logoutUser($logoutRequest, $relayState);
+        $ML = gzinflate($ML);
+        Dg:
+        $rT = new \DOMDocument();
+        $rT->loadXML($ML);
+        $DJ = $rT->firstChild;
+        if (!($DJ->localName == "\114\157\x67\157\165\x74\122\145\161\165\x65\163\164")) {
+            goto gs;
         }
+        $Uh = new LogoutRequest($DJ);
+        return $this->logoutUser($Uh, $Nf);
+        gs:
     }
-
-
-    /**
-     * Function checks if there's an active session of the user in the
-     * frontend or backend and redirect the user to the appropriate
-     * logout URL for sending SAML Logout Response.
-     *
-     * @param $logoutRequest
-     * @param $relayState
-     */
-    private function logoutUser($logoutRequest, $relayState)
+    private function logoutUser($Uh, $Nf)
     {
         $this->spUtility->setSessionData(SPConstants::SEND_RESPONSE, TRUE);
         $this->spUtility->setAdminSessionData(SPConstants::SEND_RESPONSE, TRUE);
-
-        $this->spUtility->setSessionData(SPConstants::LOGOUT_REQUEST_ID, $logoutRequest->getId());
-        $this->spUtility->setAdminSessionData(SPConstants::LOGOUT_REQUEST_ID, $logoutRequest->getId());
-
-        // redirect the user to appropriate logout url
+        $this->spUtility->setSessionData(SPConstants::LOGOUT_REQUEST_ID, $Uh->getId());
+        $this->spUtility->setAdminSessionData(SPConstants::LOGOUT_REQUEST_ID, $Uh->getId());
         return $this->resultRedirectFactory->create()->setUrl($this->spUtility->getLogoutUrl());
     }
-
-
-    /** Setter for the request Parameter */
-    public function setRequestParam($request)
+    public function setRequestParam($E1)
     {
-        $this->REQUEST = $request;
+        $this->REQUEST = $E1;
         return $this;
     }
-
-
-    /** Setter for the post Parameter */
     public function setPostParam($post)
     {
         $this->POST = $post;
